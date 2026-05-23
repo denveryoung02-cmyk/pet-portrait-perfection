@@ -58,8 +58,9 @@ function QueueTab() {
     },
   });
 
+  type GenStatus = "pending" | "processing" | "completed" | "failed" | "rejected";
   const update = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+    mutationFn: async ({ id, status }: { id: string; status: GenStatus }) => {
       await supabase.from("generations").update({ status, reviewed_at: new Date().toISOString() }).eq("id", id);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-generations"] }),
