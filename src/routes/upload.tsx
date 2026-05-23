@@ -27,7 +27,7 @@ type Personality = { id: string; name: string; emoji: string; desc: string; reco
 type Theme = { id: string; name: string; tag: string; img: string; emoji: string; gradient: string; personalities: Personality[] };
 
 const themes: Theme[] = [
-  { id: "royal", name: "Royal", tag: "Crown jewels included", img: royal, emoji: "👑",
+  { id: "royal", name: "Royal", tag: "Crown jewels included", img: royalV1, emoji: "👑",
     gradient: "from-amber-200 via-rose-200 to-purple-300",
     personalities: [
       { id: "noble-king", name: "Noble King", emoji: "👑", desc: "Wise, regal, slightly stuck-up.", recommended: true },
@@ -354,12 +354,12 @@ function CreateWizard() {
 function stepHeadline(s: number) {
   return {
     1: "Drop in your best pet pic.",
-    2: "Pick a universe for your pet.",
+    2: "Pick your pet's cinematic universe.",
     3: "Who are they, really?",
-    4: "Add a sprinkle of personality.",
-    5: "Cooking up your Pawtoon ✨",
-    6: "Pick where it lives.",
-    7: "One last look.",
+    4: "Add a sprinkle of chaos.",
+    5: "Painting their movie poster moment ✨",
+    6: "Pick where the magic lives.",
+    7: "One last look before glory.",
   }[s as 1 | 2 | 3 | 4 | 5 | 6 | 7];
 }
 
