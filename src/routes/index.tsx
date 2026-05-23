@@ -68,12 +68,12 @@ function Home() {
               AI-powered • Made in 60 seconds
             </div>
             <h1 className="mt-6 font-display text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight">
-              Your pet,<br />
-              <span className="italic text-primary">reimagined</span> as a<br />
-              legend.
+              Every pet deserves a<br />
+              <span className="italic text-primary">movie poster</span><br />
+              moment.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-md leading-relaxed">
-              Upload a photo. Our AI turns your pet into a hilarious caricature — royalty, superhero, viking, you name it. Printed on premium gifts.
+              Upload one photo. Our AI turns your pet into a cinematic caricature — royal, viking, superhero, whatever they secretly think they are. Printed on stuff worth gifting.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -81,10 +81,10 @@ function Home() {
                 className="group relative rounded-full px-7 py-4 text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
                 style={{ background: "var(--gradient-primary)" }}
               >
-                📸 Upload Your Pet Photo
+                ✨ Start Creating — it's free to try
               </Link>
               <a href="#how" className="rounded-full px-7 py-4 text-base font-semibold border border-foreground/15 hover:bg-card transition">
-                How it works
+                See it in action
               </a>
             </div>
             <div className="mt-8 flex items-center gap-4 text-sm text-muted-foreground">
