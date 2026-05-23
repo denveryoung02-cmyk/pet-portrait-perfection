@@ -102,13 +102,16 @@ function Home() {
 
           <div className="relative">
             <div className="relative rounded-[2rem] overflow-hidden bg-card shadow-[var(--shadow-card)] aspect-[7/6]">
-              <img src={heroImg} alt="Pet caricature transformation" className="w-full h-full object-cover" width={1400} height={1200} />
+              <img src={royalV1} alt="Pet caricature transformation" className="w-full h-full object-cover" width={1400} height={1200} />
+              <div className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" /> AI generated · 58s
+              </div>
             </div>
             <div className="absolute -bottom-6 -left-6 size-32 md:size-40 rounded-3xl overflow-hidden border-4 border-background shadow-[var(--shadow-card)] animate-[float_6s_ease-in-out_infinite]">
-              <img src={royal} alt="" className="w-full h-full object-cover" loading="lazy" />
+              <img src={royalV2} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="absolute -top-6 -right-4 size-28 md:size-32 rounded-3xl overflow-hidden border-4 border-background shadow-[var(--shadow-card)] animate-[float_7s_ease-in-out_infinite_reverse]">
-              <img src={astronaut} alt="" className="w-full h-full object-cover" loading="lazy" />
+              <img src={royalV3} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
         </div>
