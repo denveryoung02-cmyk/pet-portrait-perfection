@@ -7,6 +7,7 @@ import superhero from "@/assets/pet-superhero.jpg";
 import mafia from "@/assets/pet-mafia.jpg";
 import astronaut from "@/assets/pet-astronaut.jpg";
 import viking from "@/assets/pet-viking.jpg";
+import pirate from "@/assets/pet-pirate.jpg";
 import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
@@ -17,9 +18,10 @@ export const Route = createFileRoute("/")({ component: Home });
 const themes = [
   { name: "Royal Pet", img: royal, tag: "Crown jewels" },
   { name: "Superhero Pet", img: superhero, tag: "Cape included" },
-  { name: "Mafia Pet", img: mafia, tag: "Don't mess" },
-  { name: "Astronaut Pet", img: astronaut, tag: "To infinity" },
-  { name: "Viking Pet", img: viking, tag: "Battle ready" },
+  { name: "Mafia Boss", img: mafia, tag: "Don't mess" },
+  { name: "Viking Warrior", img: viking, tag: "Battle ready" },
+  { name: "Astronaut Explorer", img: astronaut, tag: "To infinity" },
+  { name: "Pirate Captain", img: pirate, tag: "Arrr-mazing" },
 ];
 
 const products = [
