@@ -1058,25 +1058,85 @@ function Row({ k, v }: { k: string; v: string }) {
 
 /* ---------------- Social Showcase ---------------- */
 
+const FEED = [
+  { img: royalV1, user: "@bella.thecorgi", handle: "Bella, 4yo", caption: "She demanded the throne. We obliged. 👑", likes: "12.4k", comments: 284, theme: "Royal" },
+  { img: mafia, user: "@loki_themobster", handle: "Loki, 6yo", caption: "Don't make him ask twice for the treats.", likes: "8.9k", comments: 167, theme: "Mafia" },
+  { img: astronaut, user: "@mochi.in.space", handle: "Mochi, 2yo", caption: "Houston, we have a chonk. 🚀", likes: "21.2k", comments: 532, theme: "Astronaut" },
+  { img: superhero, user: "@captain_biscuit", handle: "Biscuit, 5yo", caption: "Saves the day. Naps for the rest.", likes: "6.7k", comments: 98, theme: "Superhero" },
+  { img: viking, user: "@thor.the.frenchie", handle: "Thor, 3yo", caption: "Sleepy warrior. Mighty after 14h.", likes: "9.3k", comments: 211, theme: "Viking" },
+  { img: pirate, user: "@captain.barknacle", handle: "Barknacle, 7yo", caption: "Treasure = his dinner bowl. Arrr.", likes: "5.1k", comments: 74, theme: "Pirate" },
+  { img: royalV3, user: "@cleo.princess", handle: "Cleo, 1yo", caption: "Tiny tyrant in flower-crown era. 🌸", likes: "14.8k", comments: 312, theme: "Royal" },
+  { img: royalV2, user: "@duke_thegrump", handle: "Duke, 8yo", caption: "Permanent side-eye. Iconic.", likes: "11.0k", comments: 245, theme: "Royal" },
+];
+
 function SocialShowcase() {
   return (
-    <section className="mt-16">
-      <div className="text-center mb-8">
+    <section className="mt-20">
+      <div className="text-center mb-10">
         <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">#Pawtoons</span>
-        <h2 className="mt-2 font-display text-3xl md:text-4xl">People love sharing their Pawtoons</h2>
-        <p className="text-muted-foreground text-sm mt-2">Over 47K posts and counting on TikTok & Instagram.</p>
+        <h2 className="mt-2 font-display text-3xl md:text-5xl">Pets gone viral.</h2>
+        <p className="text-muted-foreground text-sm md:text-base mt-3 max-w-lg mx-auto">
+          47K+ posts. Counting. Every pet deserves their movie poster moment.
+        </p>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[royal, mafia, viking, astronaut, superhero, pirate, royal, mafia].map((img, i) => (
-          <div key={i} className={`group relative aspect-[3/4] rounded-2xl overflow-hidden ${i % 3 === 0 ? "md:row-span-2 md:aspect-[3/8]" : ""}`}>
-            <img src={img} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3 text-white text-xs flex items-center justify-between">
-              <span className="font-semibold">@petparent_{i + 1}</span>
-              <span>♥ {(2.4 + i * 0.7).toFixed(1)}k</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+        {FEED.map((p, i) => (
+          <article
+            key={i}
+            className="group rounded-3xl overflow-hidden bg-card border border-border hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1"
+          >
+            <div className="relative aspect-square overflow-hidden">
+              <img src={p.img} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110" loading="lazy" />
+              <span className="absolute top-3 left-3 rounded-full bg-background/85 backdrop-blur px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">
+                {p.theme}
+              </span>
             </div>
-          </div>
+            <div className="p-3.5">
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="size-7 rounded-full grid place-items-center text-[10px] font-bold text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>
+                  {p.user.charAt(1).toUpperCase()}
+                </div>
+                <div className="text-xs">
+                  <div className="font-semibold leading-tight">{p.user}</div>
+                  <div className="text-muted-foreground leading-tight">{p.handle}</div>
+                </div>
+              </div>
+              <p className="text-xs leading-snug">{p.caption}</p>
+              <div className="mt-2.5 flex items-center gap-3 text-[11px] text-muted-foreground">
+                <span className="flex items-center gap-1"><span className="text-rose-500">♥</span> {p.likes}</span>
+                <span className="flex items-center gap-1">💬 {p.comments}</span>
+                <span className="ml-auto text-primary font-semibold">↗ Share</span>
+              </div>
+            </div>
+          </article>
         ))}
+      </div>
+
+      {/* Live reaction ticker */}
+      <div className="mt-8 overflow-hidden rounded-2xl bg-secondary/60 border border-border py-3">
+        <div className="flex gap-8 whitespace-nowrap animate-[marquee_28s_linear_infinite]">
+          {[
+            "💬 @mia_p: 'I cried laughing'",
+            "♥ 312 just liked Cleo's Pawtoon",
+            "🎉 New Pawtoon every 7 seconds",
+            "💬 @james: 'Bought 4 mugs. No regrets.'",
+            "🔥 Trending: Mafia theme",
+            "💬 @nina: 'Better than my actual headshots'",
+            "♥ 1.2k loved Thor's portrait",
+            "🎁 92% buy as a gift",
+          ].concat([
+            "💬 @mia_p: 'I cried laughing'",
+            "♥ 312 just liked Cleo's Pawtoon",
+            "🎉 New Pawtoon every 7 seconds",
+            "💬 @james: 'Bought 4 mugs. No regrets.'",
+            "🔥 Trending: Mafia theme",
+            "💬 @nina: 'Better than my actual headshots'",
+            "♥ 1.2k loved Thor's portrait",
+            "🎁 92% buy as a gift",
+          ]).map((t, i) => (
+            <span key={i} className="text-sm font-medium">{t}</span>
+          ))}
+        </div>
       </div>
     </section>
   );
