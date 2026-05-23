@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import heroImg from "@/assets/hero-main.jpg";
+
 import royal from "@/assets/pet-royal.jpg";
 import superhero from "@/assets/pet-superhero.jpg";
 import mafia from "@/assets/pet-mafia.jpg";
