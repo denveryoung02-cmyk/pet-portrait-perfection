@@ -218,6 +218,46 @@ function Home() {
         </div>
       </section>
 
+      {/* LIFESTYLE / PACKAGING — TRUST */}
+      <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20 md:pb-28">
+        <div className="grid lg:grid-cols-2 gap-5 md:gap-6">
+          <div className="relative rounded-[2rem] overflow-hidden bg-secondary group">
+            <img src={lifestyleMug} alt="Customer holding their Pawtoon mug" className="w-full h-[420px] md:h-[520px] object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+            <div className="absolute bottom-0 inset-x-0 p-7 text-white">
+              <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">In the wild</span>
+              <h3 className="font-display text-2xl md:text-3xl mt-1">Real prints. Real morning coffee.</h3>
+              <p className="text-sm opacity-85 mt-1.5 max-w-sm">Heavy-weight ceramic. Dishwasher safe. Survives the Monday-morning grip.</p>
+            </div>
+          </div>
+          <div className="grid grid-rows-2 gap-5 md:gap-6">
+            <div className="relative rounded-[2rem] overflow-hidden bg-secondary group">
+              <img src={packagingUnbox} alt="Premium Pawtoons unboxing" className="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+              <div className="absolute bottom-0 inset-x-0 p-6 text-white">
+                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">Unboxing</span>
+                <h3 className="font-display text-xl md:text-2xl mt-1">Wrapped like a gift, because it is.</h3>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-5 md:gap-6">
+              {[
+                { icon: "🚚", title: "Tracked shipping", sub: "Door-to-door in 5–7 days" },
+                { icon: "💝", title: "Free gift wrap", sub: "Add a note at checkout" },
+              ].map((b) => (
+                <div key={b.title} className="rounded-[2rem] bg-card border border-border p-6 flex flex-col justify-center">
+                  <div className="text-3xl mb-2">{b.icon}</div>
+                  <div className="font-display text-lg">{b.title}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">{b.sub}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="mt-8 text-center text-sm text-muted-foreground italic font-display">
+          "Turn chaos into art. The most fun your pet will ever have."
+        </p>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="py-20 md:py-28 bg-secondary/40">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
