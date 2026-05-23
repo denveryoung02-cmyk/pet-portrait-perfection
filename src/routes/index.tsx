@@ -21,12 +21,19 @@ import mousemat from "@/assets/product-mousemat.jpg";
 export const Route = createFileRoute("/")({ component: Home });
 
 const themes = [
-  { name: "Royal Pet", img: royal, tag: "Crown jewels" },
+  { name: "Royal Pet", img: royalV1, tag: "Crown jewels" },
   { name: "Superhero Pet", img: superhero, tag: "Cape included" },
   { name: "Mafia Boss", img: mafia, tag: "Don't mess" },
   { name: "Viking Warrior", img: viking, tag: "Battle ready" },
   { name: "Astronaut Explorer", img: astronaut, tag: "To infinity" },
   { name: "Pirate Captain", img: pirate, tag: "Arrr-mazing" },
+];
+
+const products = [
+  { name: "Ceramic Mug", price: "$24", img: mug },
+  { name: "Premium Tee", price: "$32", img: tshirt },
+  { name: "Framed Poster", price: "$45", img: poster },
+  { name: "Mouse Mat", price: "$19", img: mousemat },
 ];
 
 const products = [
