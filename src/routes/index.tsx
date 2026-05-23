@@ -108,6 +108,26 @@ function Home() {
         </div>
       </section>
 
+      {/* TRUST STRIP */}
+      <section className="border-y border-border bg-card/60">
+        <div className="mx-auto max-w-7xl px-5 md:px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {[
+            { icon: "⚡", label: "Generated in", bold: "Under 60 seconds" },
+            { icon: "🌍", label: "Printed & shipped", bold: "Worldwide" },
+            { icon: "💝", label: "Happiness", bold: "30-day guarantee" },
+            { icon: "⭐", label: "Loved by", bold: "12,400+ pet parents" },
+          ].map((t) => (
+            <div key={t.bold} className="flex items-center justify-center gap-3">
+              <div className="text-2xl">{t.icon}</div>
+              <div className="text-left">
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t.label}</div>
+                <div className="font-display text-sm md:text-base font-semibold">{t.bold}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* HOW IT WORKS */}
       <section id="how" className="mx-auto max-w-7xl px-5 md:px-8 py-20 md:py-28">
         <div className="text-center max-w-2xl mx-auto">
@@ -145,7 +165,7 @@ function Home() {
               Start Creating →
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
             {themes.map((t, i) => (
               <Link
                 to="/upload"
