@@ -10,7 +10,7 @@ import viking from "@/assets/pet-viking.jpg";
 import pirate from "@/assets/pet-pirate.jpg";
 
 export const Route = createFileRoute("/upload")({
-  head: () => ({ meta: [{ title: "Upload your pet — Pawtraits" }] }),
+  head: () => ({ meta: [{ title: "Upload your pet — Pawtoons" }] }),
   component: Upload,
 });
 

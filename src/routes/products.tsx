@@ -9,7 +9,7 @@ import mousemat from "@/assets/product-mousemat.jpg";
 import royal from "@/assets/pet-royal.jpg";
 
 export const Route = createFileRoute("/products")({
-  head: () => ({ meta: [{ title: "Pick your product — Pawtraits" }] }),
+  head: () => ({ meta: [{ title: "Pick your product — Pawtoons" }] }),
   component: Products,
 });
 

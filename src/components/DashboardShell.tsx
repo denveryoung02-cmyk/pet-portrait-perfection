@@ -24,7 +24,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           <div className="p-5 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
               <div className="size-9 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground">🐾</div>
-              <span className="font-display text-lg">Pawtraits<span className="text-primary">.</span></span>
+              <span className="font-display text-lg">Pawtoons<span className="text-primary">.</span></span>
             </Link>
             <button onClick={() => setOpen(false)} className="lg:hidden p-2"><X className="size-5" /></button>
           </div>
@@ -65,7 +65,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <main className="min-h-screen">
           <div className="lg:hidden sticky top-0 z-20 backdrop-blur-xl bg-background/80 border-b border-border px-4 h-14 flex items-center justify-between">
             <button onClick={() => setOpen(true)} className="p-2"><Menu className="size-5" /></button>
-            <span className="font-display">Pawtraits<span className="text-primary">.</span></span>
+            <span className="font-display">Pawtoons<span className="text-primary">.</span></span>
             <Link to="/upload" className="text-sm font-semibold text-primary">+ New</Link>
           </div>
           <div className="p-5 md:p-8 lg:p-10">{children}</div>

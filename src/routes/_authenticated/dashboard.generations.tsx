@@ -5,7 +5,7 @@ import { StatusPill } from "./dashboard";
 import { Heart } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/generations")({
-  head: () => ({ meta: [{ title: "Generations — Pawtraits" }] }),
+  head: () => ({ meta: [{ title: "Generations — Pawtoons" }] }),
   component: Generations,
 });
 

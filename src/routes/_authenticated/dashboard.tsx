@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Sparkles, Image as ImageIcon, ShoppingBag, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Pawtraits" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — Pawtoons" }] }),
   component: Dashboard,
 });
 
@@ -117,7 +117,7 @@ function EmptyState() {
   return (
     <div className="rounded-3xl border border-dashed border-border bg-card p-10 text-center">
       <div className="text-5xl mb-3">🐶</div>
-      <h3 className="font-display text-xl">No pawtraits yet</h3>
+      <h3 className="font-display text-xl">No pawtoons yet</h3>
       <p className="text-sm text-muted-foreground mt-1">Upload a photo of your pet to generate your first caricature.</p>
       <Link to="/upload" className="mt-5 inline-block rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>
         Start creating
