@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -7,8 +7,11 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
+import { AuthProvider } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -52,10 +55,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Pawtraits — Turn your pet into legendary art" },
-      { name: "description", content: "AI-powered custom caricatures of your pet on premium mugs, tees, posters and mouse mats. Royal, Superhero, Mafia and more." },
-      { property: "og:title", content: "Pawtraits — Turn your pet into legendary art" },
-      { property: "og:description", content: "AI caricatures on premium merch. Upload your pet, pick a theme, we print & ship." },
-      { property: "og:type", content: "website" },
+      { name: "description", content: "AI-powered custom caricatures of your pet on premium mugs, tees, posters and mouse mats." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -79,11 +79,27 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function AuthSync() {
+  const router = useRouter();
+  const qc = useQueryClient();
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange(() => {
+      router.invalidate();
+      qc.invalidateQueries();
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [router, qc]);
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AuthProvider>
+        <AuthSync />
+        <Outlet />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
