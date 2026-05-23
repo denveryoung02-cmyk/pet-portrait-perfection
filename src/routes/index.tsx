@@ -36,12 +36,6 @@ const products = [
   { name: "Mouse Mat", price: "$19", img: mousemat },
 ];
 
-const products = [
-  { name: "Ceramic Mug", price: "$24", img: mug },
-  { name: "Premium Tee", price: "$32", img: tshirt },
-  { name: "Framed Poster", price: "$45", img: poster },
-  { name: "Mouse Mat", price: "$19", img: mousemat },
-];
 
 const testimonials = [
   { name: "Sarah K.", role: "Bella's mum", text: "I cried laughing. My dog as a royal king now lives on my favourite mug.", rating: 5 },
