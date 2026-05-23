@@ -629,7 +629,7 @@ function StepGenerate({
       <div className="rounded-3xl border border-border bg-card p-10 text-center max-w-xl mx-auto">
         <div className="text-5xl mb-4">😿</div>
         <h3 className="font-display text-2xl">Generation hiccup</h3>
-        <p className="text-muted-foreground text-sm mt-2 mb-6">Our AI tripped over its own paws. Let's try again — usually works second time.</p>
+        <p className="text-muted-foreground text-sm mt-2 mb-6">Our AI tripped over its own paws. Let's try again — usually nails it second time.</p>
         <button onClick={retryGen} className="rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
           Retry generation
         </button>
@@ -684,36 +684,78 @@ function StepGenerate({
     );
   }
 
-  /* RESULTS — 3 variation cards */
+  /* RESULTS — 3 variation cards with realistic per-theme images */
+  const royalImgs = [royalV1, royalV2, royalV3];
+  const isRoyal = theme.id === "royal";
   const variations = [
-    { id: 0, badge: "Most popular", tone: "Original take", filter: "" },
-    { id: 1, badge: "Staff favourite", tone: "Dramatic edition", filter: "saturate(1.3) contrast(1.1)" },
-    { id: 2, badge: null, tone: "Soft pastel", filter: "saturate(0.85) brightness(1.05)" },
+    { id: 0, badge: "Most popular", tone: "Heroic edition", filter: "", img: isRoyal ? royalImgs[0] : theme.img, sub: "Cinematic studio lighting" },
+    { id: 1, badge: "Staff pick", tone: "Dramatic edition", filter: isRoyal ? "" : "saturate(1.35) contrast(1.12) brightness(0.97)", img: isRoyal ? royalImgs[1] : theme.img, sub: "Bold expression, deep shadows" },
+    { id: 2, badge: null, tone: "Pastel dream", filter: isRoyal ? "" : "saturate(0.78) brightness(1.08) hue-rotate(-8deg)", img: isRoyal ? royalImgs[2] : theme.img, sub: "Soft glow, dreamy palette" },
   ];
 
   return (
-    <div>
-      <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 mb-6 flex items-center gap-3 text-sm">
-        <span className="text-2xl">🎉</span>
-        <div className="flex-1">
-          <div className="font-semibold text-emerald-900">Done! Pick your favourite.</div>
-          <div className="text-emerald-800/70 text-xs">3 unique variations — tap the heart to lock one in.</div>
+    <div className="relative">
+      {/* CONFETTI BURST */}
+      <div className="pointer-events-none absolute inset-x-0 -top-6 h-40 overflow-hidden">
+        {Array.from({ length: 28 }).map((_, i) => {
+          const colors = ["#ff8a4c", "#f8b5c9", "#ffd166", "#9b72cf", "#67e8f9", "#ff6b6b"];
+          return (
+            <span
+              key={i}
+              className="absolute top-0 block rounded-sm animate-[confetti_2.4s_ease-out_forwards]"
+              style={{
+                left: `${(i * 3.6) % 100}%`,
+                background: colors[i % colors.length],
+                width: i % 3 === 0 ? 8 : 6,
+                height: i % 3 === 0 ? 14 : 10,
+                transform: `rotate(${i * 23}deg)`,
+                animationDelay: `${(i % 8) * 60}ms`,
+                opacity: 0.95,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* CELEBRATION BANNER */}
+      <div className="relative overflow-hidden rounded-3xl p-6 md:p-8 mb-7 text-center animate-[fade-up_0.6s_ease-out]" style={{ background: "var(--gradient-primary)" }}>
+        <div className="absolute -top-10 -left-10 size-40 rounded-full bg-white/15 blur-3xl" />
+        <div className="absolute -bottom-10 -right-10 size-52 rounded-full bg-white/15 blur-3xl" />
+        <div className="relative">
+          <div className="text-4xl md:text-5xl mb-2 animate-[bounce-soft_1.8s_ease-in-out_infinite]">🎉</div>
+          <h2 className="font-display text-3xl md:text-5xl text-primary-foreground leading-tight">
+            Your Pawtoon is ready.
+          </h2>
+          <p className="mt-2 text-primary-foreground/85 text-sm md:text-base">
+            Main character energy unlocked. Pick your favourite cut below.
+          </p>
         </div>
       </div>
 
+      {/* VARIATIONS GRID */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {variations.map((v) => {
+        {variations.map((v, i) => {
           const isFav = favourite === v.id;
           return (
             <div
               key={v.id}
-              className={`group relative rounded-3xl overflow-hidden bg-card border-2 transition-all ${
-                isFav ? "border-primary shadow-[var(--shadow-card)] scale-[1.02]" : "border-transparent hover:border-border"
+              className={`group relative rounded-3xl overflow-hidden bg-card border-2 transition-all duration-500 animate-[fade-up_0.7s_ease-out_both] ${
+                isFav ? "border-primary shadow-[var(--shadow-card)] scale-[1.02]" : "border-transparent hover:border-border hover:-translate-y-1"
               }`}
+              style={{ animationDelay: `${200 + i * 140}ms` }}
             >
-              <div className="relative aspect-[4/5] bg-secondary">
-                <img src={theme.img} alt={v.tone} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" style={{ filter: v.filter }} />
-                <div className={`absolute inset-0 bg-gradient-to-t ${theme.gradient} mix-blend-overlay opacity-40`} />
+              <div className="relative aspect-[4/5] bg-secondary overflow-hidden">
+                <img
+                  src={v.img}
+                  alt={v.tone}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
+                  style={{ filter: v.filter }}
+                  loading="lazy"
+                  width={1024}
+                  height={1024}
+                />
+                {!isRoyal && <div className={`absolute inset-0 bg-gradient-to-t ${theme.gradient} mix-blend-overlay opacity-35`} />}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
                 {v.badge && (
                   <span className={`absolute top-3 left-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur ${
@@ -725,31 +767,105 @@ function StepGenerate({
 
                 <button
                   onClick={() => setFavourite(v.id)}
-                  className={`absolute top-3 right-3 size-10 rounded-full grid place-items-center backdrop-blur transition ${
-                    isFav ? "bg-primary text-primary-foreground scale-110" : "bg-background/80 hover:bg-background"
+                  className={`absolute top-3 right-3 size-10 rounded-full grid place-items-center backdrop-blur transition-all ${
+                    isFav ? "bg-primary text-primary-foreground scale-110 shadow-[var(--shadow-glow)]" : "bg-background/85 hover:bg-background hover:scale-110"
                   }`}
                   aria-label="Favourite"
                 >
-                  {isFav ? "♥" : "♡"}
+                  <span className={isFav ? "animate-[bounce-soft_0.6s_ease-out]" : ""}>{isFav ? "♥" : "♡"}</span>
                 </button>
 
-                <div className="absolute bottom-3 inset-x-3 flex gap-2 opacity-0 group-hover:opacity-100 transition">
-                  <button onClick={() => setZoom(v.id)} className="flex-1 rounded-full bg-background/90 backdrop-blur px-3 py-2 text-xs font-semibold hover:bg-background">🔍 Zoom</button>
-                  <button className="flex-1 rounded-full bg-background/90 backdrop-blur px-3 py-2 text-xs font-semibold hover:bg-background">⇆ Compare</button>
+                <div className="absolute bottom-3 inset-x-3 flex gap-2 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                  <button onClick={() => setZoom(v.id)} className="flex-1 rounded-full bg-background/95 backdrop-blur px-3 py-2 text-xs font-semibold hover:bg-background">🔍 Zoom</button>
+                  <button className="flex-1 rounded-full bg-background/95 backdrop-blur px-3 py-2 text-xs font-semibold hover:bg-background">⇆ Compare</button>
                 </div>
               </div>
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="font-display text-lg">{personality.name}</div>
-                  <span className="text-xs text-muted-foreground">v{v.id + 1}</span>
+                  <span className="text-[10px] text-muted-foreground font-mono">v{v.id + 1}</span>
                 </div>
-                <div className="text-xs text-muted-foreground">{v.tone}</div>
+                <div className="text-xs text-muted-foreground">{v.sub}</div>
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* SHARE STRIP */}
+      <ShareStrip theme={theme} personality={personality} img={isRoyal ? royalImgs[favourite] ?? royalImgs[0] : theme.img} />
     </div>
+  );
+}
+
+/* ---------------- Share Experience ---------------- */
+
+function ShareStrip({ theme, personality, img }: any) {
+  return (
+    <section className="mt-10 rounded-3xl bg-card border border-border overflow-hidden">
+      <div className="grid lg:grid-cols-[1fr_1.2fr]">
+        {/* Mock Instagram story / TikTok preview */}
+        <div className="relative p-6 md:p-8 bg-gradient-to-br from-fuchsia-500 via-rose-500 to-orange-400">
+          <div className="flex items-center gap-3 text-white">
+            <div className="size-9 rounded-full bg-white/20 backdrop-blur grid place-items-center text-sm">@you</div>
+            <div>
+              <div className="text-sm font-semibold">your_story · now</div>
+              <div className="text-[11px] opacity-80">Pawtoons · tap to share</div>
+            </div>
+            <span className="ml-auto text-xs opacity-80">···</span>
+          </div>
+          <div className="mt-5 relative mx-auto w-full max-w-[260px] aspect-[9/16] rounded-3xl overflow-hidden bg-black shadow-2xl ring-4 ring-white/30">
+            <img src={img} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+            <div className="absolute top-4 inset-x-4 flex gap-1">
+              {[0,1,2].map(i => <div key={i} className={`flex-1 h-0.5 rounded-full ${i===0 ? "bg-white" : "bg-white/40"}`} />)}
+            </div>
+            <div className="absolute bottom-5 inset-x-4 text-white text-center">
+              <div className="text-[11px] uppercase tracking-widest opacity-80">my pet but make it</div>
+              <div className="font-display text-2xl leading-tight">{personality.name.toUpperCase()}</div>
+              <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur px-3 py-1 text-[10px] font-semibold">
+                ✨ made with Pawtoons
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Share actions + copy */}
+        <div className="p-6 md:p-8">
+          <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Share the chaos</span>
+          <h3 className="font-display text-2xl md:text-3xl mt-2">Turn it loose on the internet.</h3>
+          <p className="text-sm text-muted-foreground mt-2">Everyone needs to see this. It's the law now.</p>
+
+          <div className="mt-5 grid grid-cols-2 gap-2.5">
+            <ShareBtn icon="📸" label="Instagram Story" tone="from-fuchsia-500 to-orange-400" />
+            <ShareBtn icon="🎵" label="TikTok" tone="from-black to-rose-500" />
+            <ShareBtn icon="🐦" label="Post on X" tone="from-slate-900 to-slate-700" />
+            <ShareBtn icon="💬" label="Send to friend" tone="from-emerald-500 to-teal-500" />
+          </div>
+
+          <div className="mt-5 flex gap-2">
+            <button className="flex-1 rounded-full px-5 py-3 text-sm font-semibold border border-border hover:bg-secondary transition flex items-center justify-center gap-2">
+              ⬇ Download preview
+            </button>
+            <button className="rounded-full size-12 grid place-items-center border border-border hover:bg-secondary transition" aria-label="Copy link">🔗</button>
+          </div>
+
+          <div className="mt-5 p-3 rounded-2xl bg-secondary/60 flex items-center gap-3 text-xs">
+            <span className="text-base">💡</span>
+            <span><b>Pro tip:</b> Pawtoons posted as Reels get 3× the reach. Just saying.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ShareBtn({ icon, label, tone }: { icon: string; label: string; tone: string }) {
+  return (
+    <button className={`relative overflow-hidden rounded-2xl p-3 text-left text-white bg-gradient-to-br ${tone} transition-transform hover:scale-[1.03] hover:-translate-y-0.5`}>
+      <div className="text-xl">{icon}</div>
+      <div className="text-xs font-semibold mt-1">{label}</div>
+    </button>
   );
 }
 
