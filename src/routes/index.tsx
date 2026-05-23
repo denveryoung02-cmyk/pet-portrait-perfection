@@ -1,13 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import heroImg from "@/assets/hero-main.jpg";
+
 import royal from "@/assets/pet-royal.jpg";
 import superhero from "@/assets/pet-superhero.jpg";
 import mafia from "@/assets/pet-mafia.jpg";
 import astronaut from "@/assets/pet-astronaut.jpg";
 import viking from "@/assets/pet-viking.jpg";
 import pirate from "@/assets/pet-pirate.jpg";
+import royalV1 from "@/assets/gen-royal-v1.jpg";
+import royalV2 from "@/assets/gen-royal-v2.jpg";
+import royalV3 from "@/assets/gen-royal-v3.jpg";
+import lifestyleMug from "@/assets/lifestyle-mug.jpg";
+import packagingUnbox from "@/assets/packaging-unbox.jpg";
 import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
@@ -16,7 +21,7 @@ import mousemat from "@/assets/product-mousemat.jpg";
 export const Route = createFileRoute("/")({ component: Home });
 
 const themes = [
-  { name: "Royal Pet", img: royal, tag: "Crown jewels" },
+  { name: "Royal Pet", img: royalV1, tag: "Crown jewels" },
   { name: "Superhero Pet", img: superhero, tag: "Cape included" },
   { name: "Mafia Boss", img: mafia, tag: "Don't mess" },
   { name: "Viking Warrior", img: viking, tag: "Battle ready" },
@@ -30,6 +35,7 @@ const products = [
   { name: "Framed Poster", price: "$45", img: poster },
   { name: "Mouse Mat", price: "$19", img: mousemat },
 ];
+
 
 const testimonials = [
   { name: "Sarah K.", role: "Bella's mum", text: "I cried laughing. My dog as a royal king now lives on my favourite mug.", rating: 5 },
@@ -62,12 +68,12 @@ function Home() {
               AI-powered • Made in 60 seconds
             </div>
             <h1 className="mt-6 font-display text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight">
-              Your pet,<br />
-              <span className="italic text-primary">reimagined</span> as a<br />
-              legend.
+              Every pet deserves a<br />
+              <span className="italic text-primary">movie poster</span><br />
+              moment.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-md leading-relaxed">
-              Upload a photo. Our AI turns your pet into a hilarious caricature — royalty, superhero, viking, you name it. Printed on premium gifts.
+              Upload one photo. Our AI turns your pet into a cinematic caricature — royal, viking, superhero, whatever they secretly think they are. Printed on stuff worth gifting.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -75,10 +81,10 @@ function Home() {
                 className="group relative rounded-full px-7 py-4 text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
                 style={{ background: "var(--gradient-primary)" }}
               >
-                📸 Upload Your Pet Photo
+                ✨ Start Creating — it's free to try
               </Link>
               <a href="#how" className="rounded-full px-7 py-4 text-base font-semibold border border-foreground/15 hover:bg-card transition">
-                How it works
+                See it in action
               </a>
             </div>
             <div className="mt-8 flex items-center gap-4 text-sm text-muted-foreground">
@@ -96,13 +102,16 @@ function Home() {
 
           <div className="relative">
             <div className="relative rounded-[2rem] overflow-hidden bg-card shadow-[var(--shadow-card)] aspect-[7/6]">
-              <img src={heroImg} alt="Pet caricature transformation" className="w-full h-full object-cover" width={1400} height={1200} />
+              <img src={royalV1} alt="Pet caricature transformation" className="w-full h-full object-cover" width={1400} height={1200} />
+              <div className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" /> AI generated · 58s
+              </div>
             </div>
             <div className="absolute -bottom-6 -left-6 size-32 md:size-40 rounded-3xl overflow-hidden border-4 border-background shadow-[var(--shadow-card)] animate-[float_6s_ease-in-out_infinite]">
-              <img src={royal} alt="" className="w-full h-full object-cover" loading="lazy" />
+              <img src={royalV2} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="absolute -top-6 -right-4 size-28 md:size-32 rounded-3xl overflow-hidden border-4 border-background shadow-[var(--shadow-card)] animate-[float_7s_ease-in-out_infinite_reverse]">
-              <img src={astronaut} alt="" className="w-full h-full object-cover" loading="lazy" />
+              <img src={royalV3} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
         </div>
@@ -207,6 +216,46 @@ function Home() {
             </Link>
           ))}
         </div>
+      </section>
+
+      {/* LIFESTYLE / PACKAGING — TRUST */}
+      <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20 md:pb-28">
+        <div className="grid lg:grid-cols-2 gap-5 md:gap-6">
+          <div className="relative rounded-[2rem] overflow-hidden bg-secondary group">
+            <img src={lifestyleMug} alt="Customer holding their Pawtoon mug" className="w-full h-[420px] md:h-[520px] object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+            <div className="absolute bottom-0 inset-x-0 p-7 text-white">
+              <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">In the wild</span>
+              <h3 className="font-display text-2xl md:text-3xl mt-1">Real prints. Real morning coffee.</h3>
+              <p className="text-sm opacity-85 mt-1.5 max-w-sm">Heavy-weight ceramic. Dishwasher safe. Survives the Monday-morning grip.</p>
+            </div>
+          </div>
+          <div className="grid grid-rows-2 gap-5 md:gap-6">
+            <div className="relative rounded-[2rem] overflow-hidden bg-secondary group">
+              <img src={packagingUnbox} alt="Premium Pawtoons unboxing" className="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+              <div className="absolute bottom-0 inset-x-0 p-6 text-white">
+                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">Unboxing</span>
+                <h3 className="font-display text-xl md:text-2xl mt-1">Wrapped like a gift, because it is.</h3>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-5 md:gap-6">
+              {[
+                { icon: "🚚", title: "Tracked shipping", sub: "Door-to-door in 5–7 days" },
+                { icon: "💝", title: "Free gift wrap", sub: "Add a note at checkout" },
+              ].map((b) => (
+                <div key={b.title} className="rounded-[2rem] bg-card border border-border p-6 flex flex-col justify-center">
+                  <div className="text-3xl mb-2">{b.icon}</div>
+                  <div className="font-display text-lg">{b.title}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">{b.sub}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="mt-8 text-center text-sm text-muted-foreground italic font-display">
+          "Turn chaos into art. The most fun your pet will ever have."
+        </p>
       </section>
 
       {/* TESTIMONIALS */}
