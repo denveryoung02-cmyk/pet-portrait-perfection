@@ -7,6 +7,7 @@ import superhero from "@/assets/pet-superhero.jpg";
 import mafia from "@/assets/pet-mafia.jpg";
 import astronaut from "@/assets/pet-astronaut.jpg";
 import viking from "@/assets/pet-viking.jpg";
+import pirate from "@/assets/pet-pirate.jpg";
 import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
@@ -17,9 +18,10 @@ export const Route = createFileRoute("/")({ component: Home });
 const themes = [
   { name: "Royal Pet", img: royal, tag: "Crown jewels" },
   { name: "Superhero Pet", img: superhero, tag: "Cape included" },
-  { name: "Mafia Pet", img: mafia, tag: "Don't mess" },
-  { name: "Astronaut Pet", img: astronaut, tag: "To infinity" },
-  { name: "Viking Pet", img: viking, tag: "Battle ready" },
+  { name: "Mafia Boss", img: mafia, tag: "Don't mess" },
+  { name: "Viking Warrior", img: viking, tag: "Battle ready" },
+  { name: "Astronaut Explorer", img: astronaut, tag: "To infinity" },
+  { name: "Pirate Captain", img: pirate, tag: "Arrr-mazing" },
 ];
 
 const products = [
@@ -106,6 +108,26 @@ function Home() {
         </div>
       </section>
 
+      {/* TRUST STRIP */}
+      <section className="border-y border-border bg-card/60">
+        <div className="mx-auto max-w-7xl px-5 md:px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {[
+            { icon: "⚡", label: "Generated in", bold: "Under 60 seconds" },
+            { icon: "🌍", label: "Printed & shipped", bold: "Worldwide" },
+            { icon: "💝", label: "Happiness", bold: "30-day guarantee" },
+            { icon: "⭐", label: "Loved by", bold: "12,400+ pet parents" },
+          ].map((t) => (
+            <div key={t.bold} className="flex items-center justify-center gap-3">
+              <div className="text-2xl">{t.icon}</div>
+              <div className="text-left">
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t.label}</div>
+                <div className="font-display text-sm md:text-base font-semibold">{t.bold}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* HOW IT WORKS */}
       <section id="how" className="mx-auto max-w-7xl px-5 md:px-8 py-20 md:py-28">
         <div className="text-center max-w-2xl mx-auto">
@@ -143,7 +165,7 @@ function Home() {
               Start Creating →
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
             {themes.map((t, i) => (
               <Link
                 to="/upload"
@@ -233,6 +255,54 @@ function Home() {
         </div>
       </section>
 
+      {/* MOCK CHECKOUT PREVIEW */}
+      <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Sneak peek</span>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display">From upload to doorstep, sorted.</h2>
+        </div>
+        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-6 rounded-[2rem] bg-card border border-border p-5 md:p-8 shadow-[var(--shadow-card)]">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="rounded-2xl overflow-hidden aspect-square bg-secondary">
+              <img src={superhero} alt="" className="w-full h-full object-cover" loading="lazy" />
+            </div>
+            <div className="rounded-2xl overflow-hidden aspect-square bg-secondary">
+              <img src={mug} alt="" className="w-full h-full object-cover" loading="lazy" />
+            </div>
+            <div className="col-span-2 rounded-2xl bg-secondary p-4 flex items-center gap-3">
+              <span className="text-2xl">🚚</span>
+              <div className="flex-1 text-sm">
+                <div className="font-semibold">Estimated delivery</div>
+                <div className="text-muted-foreground text-xs">5–7 business days · Free over $50</div>
+              </div>
+              <div className="text-xs rounded-full bg-card border border-border px-3 py-1 font-semibold">On track ✓</div>
+            </div>
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-wider text-muted-foreground">Order preview</div>
+            <h3 className="font-display text-2xl mt-1">Bella the Superhero Mug</h3>
+            <div className="mt-4 space-y-2 text-sm">
+              <div className="flex justify-between"><span className="text-muted-foreground">Caricature</span><span>Superhero Pet</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Product</span><span>Ceramic Mug · 11oz</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>$2.99</span></div>
+              <div className="flex justify-between font-semibold text-base pt-3 border-t border-border"><span>Total</span><span>$26.99</span></div>
+            </div>
+            <Link
+              to="/upload"
+              className="mt-6 inline-flex w-full justify-center rounded-full px-6 py-3.5 font-semibold text-primary-foreground shadow-[var(--shadow-glow)] hover:scale-[1.02] transition-transform"
+              style={{ background: "var(--gradient-primary)" }}
+            >
+              Start mine like this →
+            </Link>
+            <div className="mt-3 flex justify-center gap-3 text-[10px] uppercase tracking-wider text-muted-foreground">
+              <span>🔒 Secure checkout</span>
+              <span>•</span>
+              <span>💳 All cards · Apple Pay</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20">
         <div className="relative rounded-[2.5rem] overflow-hidden p-10 md:p-20 text-center" style={{ background: "var(--gradient-primary)" }}>
@@ -242,17 +312,29 @@ function Home() {
             Ready to make them famous?
           </h2>
           <p className="relative mt-4 text-primary-foreground/85 max-w-xl mx-auto">
-            Join thousands of pet parents turning everyday photos into forever keepsakes.
+            Their face. Their personality. Immortalised on a mug your colleagues will fight over.
           </p>
           <Link
             to="/upload"
             className="relative inline-block mt-8 rounded-full bg-background text-foreground px-8 py-4 font-semibold shadow-2xl hover:scale-[1.03] transition-transform"
           >
-            Start Creating →
+            ✨ Create My Pet
           </Link>
         </div>
       </section>
 
+      {/* Sticky mobile CTA */}
+      <div className="fixed bottom-0 inset-x-0 z-40 md:hidden p-3 bg-background/90 backdrop-blur-xl border-t border-border">
+        <Link
+          to="/upload"
+          className="block w-full text-center rounded-full px-6 py-3.5 font-semibold text-primary-foreground shadow-[var(--shadow-glow)]"
+          style={{ background: "var(--gradient-primary)" }}
+        >
+          ✨ Create My Pet
+        </Link>
+      </div>
+
+      <div className="pb-20 md:pb-0" />
       <Footer />
     </div>
   );
