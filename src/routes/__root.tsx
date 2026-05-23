@@ -54,7 +54,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Pawtraits — Turn your pet into legendary art" },
+      { title: "Pawtoons — Turn your pet into legendary art" },
       { name: "description", content: "AI-powered custom caricatures of your pet on premium mugs, tees, posters and mouse mats." },
     ],
     links: [

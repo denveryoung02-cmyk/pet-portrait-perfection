@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import mug from "@/assets/product-mug.jpg";
 
 export const Route = createFileRoute("/checkout")({
-  head: () => ({ meta: [{ title: "Checkout — Pawtraits" }] }),
+  head: () => ({ meta: [{ title: "Checkout — Pawtoons" }] }),
   component: Checkout,
 });
 

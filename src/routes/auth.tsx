@@ -5,7 +5,7 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Sign in — Pawtraits" }] }),
+  head: () => ({ meta: [{ title: "Sign in — Pawtoons" }] }),
   component: AuthPage,
 });
 
@@ -60,7 +60,7 @@ function AuthPage() {
       <div className="w-full max-w-md rounded-3xl bg-card border border-border p-8 shadow-[var(--shadow-soft)]">
         <Link to="/" className="flex items-center gap-2 mb-6">
           <div className="size-9 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground">🐾</div>
-          <span className="font-display text-xl">Pawtraits<span className="text-primary">.</span></span>
+          <span className="font-display text-xl">Pawtoons<span className="text-primary">.</span></span>
         </Link>
         <h1 className="font-display text-3xl mb-1">{mode === "signin" ? "Welcome back" : "Create your account"}</h1>
         <p className="text-sm text-muted-foreground mb-6">{mode === "signin" ? "Sign in to access your pet portraits." : "Save your pets, generations, and orders in one place."}</p>

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/dashboard/pets")({
-  head: () => ({ meta: [{ title: "My pets — Pawtraits" }] }),
+  head: () => ({ meta: [{ title: "My pets — Pawtoons" }] }),
   component: Pets,
 });
 

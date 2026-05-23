@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shield } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — Pawtraits" }] }),
+  head: () => ({ meta: [{ title: "Admin — Pawtoons" }] }),
   component: Admin,
 });
 

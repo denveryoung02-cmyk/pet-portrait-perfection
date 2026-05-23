@@ -29,7 +29,7 @@ export function Nav() {
       <div className="mx-auto max-w-7xl px-5 md:px-8 h-16 md:h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="size-9 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground font-display text-lg shadow-[var(--shadow-soft)] group-hover:rotate-12 transition-transform">🐾</div>
-          <span className="font-display text-xl md:text-2xl font-semibold tracking-tight">Pawtraits<span className="text-primary">.</span></span>
+          <span className="font-display text-xl md:text-2xl font-semibold tracking-tight">Pawtoons<span className="text-primary">.</span></span>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
           <a href="/#how" className="hover:text-foreground transition">How it works</a>
