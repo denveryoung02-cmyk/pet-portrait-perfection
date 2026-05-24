@@ -1,7 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { uploadPetPhoto, validateImage } from "@/services/uploads";
+import { startGeneration } from "@/services/generations";
 import royal from "@/assets/pet-royal.jpg";
 import superhero from "@/assets/pet-superhero.jpg";
 import mafia from "@/assets/pet-mafia.jpg";
