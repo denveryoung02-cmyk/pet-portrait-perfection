@@ -1,7 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { uploadPetPhoto, validateImage } from "@/services/uploads";
+import { startGeneration } from "@/services/generations";
 import royal from "@/assets/pet-royal.jpg";
 import superhero from "@/assets/pet-superhero.jpg";
 import mafia from "@/assets/pet-mafia.jpg";
@@ -132,6 +135,7 @@ const GEN_STAGES = [
 
 function CreateWizard() {
   const navigate = useNavigate();
+  const { session } = useAuth();
   const [step, setStep] = useState(1);
 
   // Step 1 — upload
@@ -140,6 +144,7 @@ function CreateWizard() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [uploadedImageId, setUploadedImageId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Step 2-4
@@ -152,6 +157,9 @@ function CreateWizard() {
   const [genStage, setGenStage] = useState(0);
   const [genDone, setGenDone] = useState(false);
   const [genFailed, setGenFailed] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
+  const [genResultUrl, setGenResultUrl] = useState<string | null>(null);
+  const [genId, setGenId] = useState<string | null>(null);
   const [favourite, setFavourite] = useState(1);
   const [zoom, setZoom] = useState<number | null>(null);
 
@@ -171,44 +179,59 @@ function CreateWizard() {
   const colorObj = COLORS.find((c) => c.id === color)!;
   const total = product.price + (productId === "tshirt" ? fitObj.extra : 0);
 
-  /* upload handlers */
-  const handleFile = (f: File) => {
+  /* upload handlers — real Supabase Storage when signed in, local preview otherwise */
+  const handleFile = async (f: File) => {
     setUploadError(null);
-    if (!f.type.startsWith("image/")) {
-      setUploadError("That's not an image. Try a JPG or PNG of your pet.");
-      return;
-    }
-    if (f.size > 12 * 1024 * 1024) {
-      setUploadError("Photo is too large (max 12MB). Try a smaller file.");
+    const v = validateImage(f);
+    if (v) {
+      setUploadError(v.message);
       return;
     }
     setFileName(f.name);
     setUploadProgress(0);
-    let p = 0;
-    const tick = setInterval(() => {
-      p += Math.random() * 22 + 10;
-      if (p >= 100) {
-        p = 100;
-        clearInterval(tick);
-        setFile(URL.createObjectURL(f));
-      }
-      setUploadProgress(p);
-    }, 130);
+    // Show local preview immediately so the UI feels instant.
+    const localUrl = URL.createObjectURL(f);
+    setFile(localUrl);
+
+    if (!session) {
+      // Anonymous browse mode: simulate progress, no DB row created.
+      let p = 0;
+      const tick = setInterval(() => {
+        p += Math.random() * 22 + 10;
+        if (p >= 100) {
+          p = 100;
+          clearInterval(tick);
+        }
+        setUploadProgress(p);
+      }, 130);
+      return;
+    }
+
+    try {
+      const uploaded = await uploadPetPhoto(f, { onProgress: (n) => setUploadProgress(n) });
+      setUploadedImageId(uploaded.id);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed");
+      setUploadProgress(0);
+      setFile(null);
+    }
   };
+
   const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
-    if (f) handleFile(f);
+    if (f) void handleFile(f);
   };
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
     const f = e.dataTransfer.files?.[0];
-    if (f) handleFile(f);
+    if (f) void handleFile(f);
   };
   const removeFile = () => {
     setFile(null);
     setFileName("");
     setUploadProgress(0);
+    setUploadedImageId(null);
   };
 
   /* theme change resets personality */
@@ -216,24 +239,69 @@ function CreateWizard() {
     setPersonalityId(theme.personalities[0].id);
   }, [themeId]); // eslint-disable-line
 
-  /* generation simulation */
+  /* generation: real server fn when authed + uploaded; simulated otherwise */
   useEffect(() => {
     if (step !== 5 || genDone || genFailed) return;
+
+    // Progress animation (cosmetic — runs alongside the real request)
     setGenProgress(0);
     setGenStage(0);
     const tick = setInterval(() => {
       setGenProgress((p) => {
-        const next = Math.min(100, p + Math.random() * 4 + 2);
+        const next = Math.min(95, p + Math.random() * 4 + 2);
         setGenStage(Math.min(GEN_STAGES.length - 1, Math.floor((next / 100) * GEN_STAGES.length)));
-        if (next >= 100) {
-          clearInterval(tick);
-          setTimeout(() => setGenDone(true), 400);
-        }
         return next;
       });
-    }, 200);
-    return () => clearInterval(tick);
-  }, [step, genDone, genFailed]);
+    }, 220);
+
+    const useReal = !!session && !!uploadedImageId;
+    let cancelled = false;
+
+    (async () => {
+      if (!useReal) {
+        // Anonymous demo path: just complete the simulation.
+        await new Promise((r) => setTimeout(r, 5000));
+        if (cancelled) return;
+        clearInterval(tick);
+        setGenProgress(100);
+        setTimeout(() => setGenDone(true), 300);
+        return;
+      }
+
+      try {
+        const res = await startGeneration({
+          uploadedImageId: uploadedImageId!,
+          themeId,
+          themeName: theme.name,
+          personalityId,
+          personalityName: personality.name,
+          personalityDesc: personality.desc,
+          traits,
+        });
+        if (cancelled) return;
+        clearInterval(tick);
+        if (res.status === "completed" && res.resultUrl) {
+          setGenId(res.generationId);
+          setGenResultUrl(res.resultUrl);
+          setGenProgress(100);
+          setTimeout(() => setGenDone(true), 250);
+        } else {
+          setGenError((res as any).error ?? "Generation failed.");
+          setGenFailed(true);
+        }
+      } catch (err) {
+        if (cancelled) return;
+        clearInterval(tick);
+        setGenError(err instanceof Error ? err.message : "Generation failed.");
+        setGenFailed(true);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      clearInterval(tick);
+    };
+  }, [step, genDone, genFailed, session, uploadedImageId, themeId, personalityId]); // eslint-disable-line
 
   const toggleTrait = (id: string) =>
     setTraits((t) => (t.includes(id) ? t.filter((x) => x !== id) : t.length < 3 ? [...t, id] : t));
@@ -246,7 +314,7 @@ function CreateWizard() {
   };
   const goNext = () => {
     if (step === 7) {
-      navigate({ to: "/checkout" });
+      navigate({ to: "/checkout", search: { gen: genId ?? undefined, product: productId, size, fit, color } as any });
       return;
     }
     if (step === 5 && !genDone) return;
@@ -259,9 +327,11 @@ function CreateWizard() {
   };
   const retryGen = () => {
     setGenFailed(false);
+    setGenError(null);
     setGenDone(false);
     setGenProgress(0);
     setGenStage(0);
+    setGenResultUrl(null);
   };
 
   return (
@@ -296,6 +366,7 @@ function CreateWizard() {
               genProgress={genProgress} genStage={genStage} genDone={genDone}
               genFailed={genFailed} setGenFailed={setGenFailed} retryGen={retryGen}
               favourite={favourite} setFavourite={setFavourite} setZoom={setZoom}
+              genResultUrl={genResultUrl} genError={genError}
             />
           )}
           {step === 6 && (
@@ -623,13 +694,16 @@ function StepTraits({ traits, toggleTrait }: any) {
 function StepGenerate({
   theme, personality, file, genProgress, genStage, genDone, genFailed,
   setGenFailed, retryGen, favourite, setFavourite, setZoom,
+  genResultUrl, genError,
 }: any) {
   if (genFailed) {
     return (
       <div className="rounded-3xl border border-border bg-card p-10 text-center max-w-xl mx-auto">
         <div className="text-5xl mb-4">😿</div>
         <h3 className="font-display text-2xl">Generation hiccup</h3>
-        <p className="text-muted-foreground text-sm mt-2 mb-6">Our AI tripped over its own paws. Let's try again — usually nails it second time.</p>
+        <p className="text-muted-foreground text-sm mt-2 mb-6">
+          {genError ?? "Our AI tripped over its own paws. Let's try again — usually nails it second time."}
+        </p>
         <button onClick={retryGen} className="rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
           Retry generation
         </button>
@@ -684,13 +758,14 @@ function StepGenerate({
     );
   }
 
-  /* RESULTS — 3 variation cards with realistic per-theme images */
+  /* RESULTS — use real AI result when available, otherwise theme placeholders */
   const royalImgs = [royalV1, royalV2, royalV3];
   const isRoyal = theme.id === "royal";
+  const heroImg = genResultUrl ?? (isRoyal ? royalImgs[0] : theme.img);
   const variations = [
-    { id: 0, badge: "Most popular", tone: "Heroic edition", filter: "", img: isRoyal ? royalImgs[0] : theme.img, sub: "Cinematic studio lighting" },
-    { id: 1, badge: "Staff pick", tone: "Dramatic edition", filter: isRoyal ? "" : "saturate(1.35) contrast(1.12) brightness(0.97)", img: isRoyal ? royalImgs[1] : theme.img, sub: "Bold expression, deep shadows" },
-    { id: 2, badge: null, tone: "Pastel dream", filter: isRoyal ? "" : "saturate(0.78) brightness(1.08) hue-rotate(-8deg)", img: isRoyal ? royalImgs[2] : theme.img, sub: "Soft glow, dreamy palette" },
+    { id: 0, badge: "Most popular", tone: "Heroic edition", filter: "", img: heroImg, sub: "Cinematic studio lighting" },
+    { id: 1, badge: "Staff pick", tone: "Dramatic edition", filter: "saturate(1.35) contrast(1.12) brightness(0.97)", img: genResultUrl ?? (isRoyal ? royalImgs[1] : theme.img), sub: "Bold expression, deep shadows" },
+    { id: 2, badge: null, tone: "Pastel dream", filter: "saturate(0.78) brightness(1.08) hue-rotate(-8deg)", img: genResultUrl ?? (isRoyal ? royalImgs[2] : theme.img), sub: "Soft glow, dreamy palette" },
   ];
 
   return (
