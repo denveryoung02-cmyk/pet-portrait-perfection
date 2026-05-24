@@ -366,6 +366,7 @@ function CreateWizard() {
               genProgress={genProgress} genStage={genStage} genDone={genDone}
               genFailed={genFailed} setGenFailed={setGenFailed} retryGen={retryGen}
               favourite={favourite} setFavourite={setFavourite} setZoom={setZoom}
+              genResultUrl={genResultUrl} genError={genError}
             />
           )}
           {step === 6 && (
