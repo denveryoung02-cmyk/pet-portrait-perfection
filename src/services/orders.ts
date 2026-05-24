@@ -73,9 +73,9 @@ export async function placeOrder(items: CartItem[], shipping: ShippingAddress) {
     generation_id: i.generationId ?? null,
     quantity: i.quantity,
     unit_price_cents: i.unitPriceCents,
-    options: i.options ?? null,
+    options: (i.options ?? null) as any,
   }));
-  const { error: itemsErr } = await supabase.from("order_items").insert(rows);
+  const { error: itemsErr } = await supabase.from("order_items").insert(rows as any);
   if (itemsErr) throw new Error(`Could not save order items: ${itemsErr.message}`);
 
   return { orderId: order.id, totalCents };

@@ -21,10 +21,21 @@ export type GenerationRow = {
   createdAt: string;
 };
 
-export type StartGenerationInput = Parameters<typeof generatePawtoon>[0]["data"];
+export type StartGenerationInput = {
+  uploadedImageId: string;
+  themeId: string;
+  themeName?: string;
+  personalityId: string;
+  personalityName?: string;
+  personalityDesc?: string;
+  traits?: string[];
+  petType?: string;
+  petName?: string;
+};
 
 export async function startGeneration(input: StartGenerationInput) {
-  return generatePawtoon({ data: input });
+  // `data` is typed loosely here because generatePawtoon's input is validated by zod at runtime.
+  return generatePawtoon({ data: input } as any);
 }
 
 export async function getGeneration(id: string): Promise<GenerationRow | null> {
