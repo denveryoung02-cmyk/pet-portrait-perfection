@@ -758,13 +758,14 @@ function StepGenerate({
     );
   }
 
-  /* RESULTS — 3 variation cards with realistic per-theme images */
+  /* RESULTS — use real AI result when available, otherwise theme placeholders */
   const royalImgs = [royalV1, royalV2, royalV3];
   const isRoyal = theme.id === "royal";
+  const heroImg = genResultUrl ?? (isRoyal ? royalImgs[0] : theme.img);
   const variations = [
-    { id: 0, badge: "Most popular", tone: "Heroic edition", filter: "", img: isRoyal ? royalImgs[0] : theme.img, sub: "Cinematic studio lighting" },
-    { id: 1, badge: "Staff pick", tone: "Dramatic edition", filter: isRoyal ? "" : "saturate(1.35) contrast(1.12) brightness(0.97)", img: isRoyal ? royalImgs[1] : theme.img, sub: "Bold expression, deep shadows" },
-    { id: 2, badge: null, tone: "Pastel dream", filter: isRoyal ? "" : "saturate(0.78) brightness(1.08) hue-rotate(-8deg)", img: isRoyal ? royalImgs[2] : theme.img, sub: "Soft glow, dreamy palette" },
+    { id: 0, badge: "Most popular", tone: "Heroic edition", filter: "", img: heroImg, sub: "Cinematic studio lighting" },
+    { id: 1, badge: "Staff pick", tone: "Dramatic edition", filter: "saturate(1.35) contrast(1.12) brightness(0.97)", img: genResultUrl ?? (isRoyal ? royalImgs[1] : theme.img), sub: "Bold expression, deep shadows" },
+    { id: 2, badge: null, tone: "Pastel dream", filter: "saturate(0.78) brightness(1.08) hue-rotate(-8deg)", img: genResultUrl ?? (isRoyal ? royalImgs[2] : theme.img), sub: "Soft glow, dreamy palette" },
   ];
 
   return (
