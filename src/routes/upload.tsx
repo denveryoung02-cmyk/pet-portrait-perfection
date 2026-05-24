@@ -694,13 +694,16 @@ function StepTraits({ traits, toggleTrait }: any) {
 function StepGenerate({
   theme, personality, file, genProgress, genStage, genDone, genFailed,
   setGenFailed, retryGen, favourite, setFavourite, setZoom,
+  genResultUrl, genError,
 }: any) {
   if (genFailed) {
     return (
       <div className="rounded-3xl border border-border bg-card p-10 text-center max-w-xl mx-auto">
         <div className="text-5xl mb-4">😿</div>
         <h3 className="font-display text-2xl">Generation hiccup</h3>
-        <p className="text-muted-foreground text-sm mt-2 mb-6">Our AI tripped over its own paws. Let's try again — usually nails it second time.</p>
+        <p className="text-muted-foreground text-sm mt-2 mb-6">
+          {genError ?? "Our AI tripped over its own paws. Let's try again — usually nails it second time."}
+        </p>
         <button onClick={retryGen} className="rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
           Retry generation
         </button>
