@@ -19,21 +19,21 @@ export function Footer() {
             </div>
           </div>
           <div>
-            <h4 className="font-display text-base mb-4">Shop</h4>
+            <h4 className="font-display text-base mb-4">Product</h4>
             <ul className="space-y-2 text-sm text-background/70">
-              <li><Link to="/products" className="hover:text-primary">Mugs</Link></li>
-              <li><Link to="/products" className="hover:text-primary">T-shirts</Link></li>
-              <li><Link to="/products" className="hover:text-primary">Posters</Link></li>
-              <li><Link to="/products" className="hover:text-primary">Mouse mats</Link></li>
+              <li><Link to="/products" className="hover:text-primary">Digital Portrait</Link></li>
+              <li><Link to="/upload" className="hover:text-primary">Create yours</Link></li>
+              <li><a href="/#themes" className="hover:text-primary">Themes</a></li>
+              <li><a href="/#how" className="hover:text-primary">How it works</a></li>
             </ul>
           </div>
           <div>
             <h4 className="font-display text-base mb-4">Help</h4>
             <ul className="space-y-2 text-sm text-background/70">
-              <li><a href="#" className="hover:text-primary">Shipping — 5-7 days worldwide</a></li>
-              <li><a href="#" className="hover:text-primary">30-day returns</a></li>
-              <li><a href="#" className="hover:text-primary">Size guide</a></li>
-              <li><a href="#" className="hover:text-primary">Track order</a></li>
+              <li><a href="/#faq" className="hover:text-primary">FAQ</a></li>
+              <li><a href="#" className="hover:text-primary">Instant digital download</a></li>
+              <li><a href="#" className="hover:text-primary">Refund policy</a></li>
+              <li><a href="mailto:hello@pawtoons.co" className="hover:text-primary">Contact us</a></li>
             </ul>
           </div>
           <div>
