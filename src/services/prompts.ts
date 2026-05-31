@@ -24,7 +24,7 @@ const THEME_STYLE: Record<string, string> = {
   mafia: "rich cinematic oil-painting portrait style, dramatic noir lighting, deep shadows, moody atmosphere, painterly brush strokes, museum-grade composition, pinstripe suit, fedora, smoky speakeasy background",
   viking: "dramatic oil-painting portrait style, epic Norse scene, painterly brush strokes, rich earthy tones, stormy sky backdrop, museum-grade composition, fur cloak, battle-worn warrior",
   astronaut: "rich digital oil-painting portrait style, deep space backdrop, dramatic rim lighting, painterly detail, museum-grade composition, reflective helmet visor, nebula colours",
-  superhero: "dramatic comic oil-painting portrait style, painterly brush strokes, vivid rich colours, museum-grade composition, dynamic cape, city skyline, heroic lighting",
+  superhero: "dramatic oil-painting portrait style, painterly brush strokes, vivid rich colours, museum-grade composition, flowing cape, city skyline backdrop, heroic lighting, head-and-shoulders portrait",
   pirate: "swashbuckling oil-painting portrait style, golden-hour warm tones, painterly brush strokes, dramatic lighting, museum-grade composition, tricorn hat, ship deck background",
 };
 
