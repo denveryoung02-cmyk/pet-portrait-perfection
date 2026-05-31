@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadRouteImport } from './routes/upload'
+import { Route as SuccessRouteImport } from './routes/success'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -25,6 +26,11 @@ import { Route as AuthenticatedDashboardFavoritesRouteImport } from './routes/_a
 const UploadRoute = UploadRouteImport.update({
   id: '/upload',
   path: '/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccessRoute = SuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/products': typeof ProductsRoute
+  '/success': typeof SuccessRoute
   '/upload': typeof UploadRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/products': typeof ProductsRoute
+  '/success': typeof SuccessRoute
   '/upload': typeof UploadRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/products': typeof ProductsRoute
+  '/success': typeof SuccessRoute
   '/upload': typeof UploadRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/products'
+    | '/success'
     | '/upload'
     | '/admin'
     | '/dashboard'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/products'
+    | '/success'
     | '/upload'
     | '/admin'
     | '/dashboard'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/products'
+    | '/success'
     | '/upload'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
@@ -176,6 +188,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CheckoutRoute: typeof CheckoutRoute
   ProductsRoute: typeof ProductsRoute
+  SuccessRoute: typeof SuccessRoute
   UploadRoute: typeof UploadRoute
 }
 
@@ -186,6 +199,13 @@ declare module '@tanstack/react-router' {
       path: '/upload'
       fullPath: '/upload'
       preLoaderRoute: typeof UploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/success': {
+      id: '/success'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof SuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -309,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CheckoutRoute: CheckoutRoute,
   ProductsRoute: ProductsRoute,
+  SuccessRoute: SuccessRoute,
   UploadRoute: UploadRoute,
 }
 export const routeTree = rootRouteImport

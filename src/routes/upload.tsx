@@ -119,8 +119,6 @@ const STEPS = [
   { n: 3, title: "Personality", sub: "Set the vibe" },
   { n: 4, title: "Traits", sub: "Optional flavour" },
   { n: 5, title: "Generate", sub: "AI does the magic" },
-  { n: 6, title: "Product", sub: "Pick what to print" },
-  { n: 7, title: "Checkout", sub: "Make it real" },
 ];
 
 const GEN_STAGES = [
@@ -313,12 +311,12 @@ function CreateWizard() {
     return true;
   };
   const goNext = () => {
-    if (step === 7) {
-      navigate({ to: "/checkout", search: { gen: genId ?? undefined, product: productId, size, fit, color } as any });
+    if (step === 5 && !genDone) return;
+    if (step === 5 && genDone) {
+      navigate({ to: "/checkout", search: { gen: genId ?? undefined } as any });
       return;
     }
-    if (step === 5 && !genDone) return;
-    setStep((s) => Math.min(7, s + 1) as any);
+    setStep((s) => Math.min(5, s + 1) as any);
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const goBack = () => {
@@ -344,7 +342,7 @@ function CreateWizard() {
       <main className="mx-auto max-w-6xl px-5 md:px-8 py-8 md:py-12">
         <header className="mb-8 md:mb-10">
           <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
-            Step {step} of 7 · {STEPS[step - 1].sub}
+            Step {step} of 5 · {STEPS[step - 1]?.sub}
           </span>
           <h1 className="mt-2 text-3xl md:text-5xl font-display">{stepHeadline(step)}</h1>
         </header>
@@ -369,19 +367,7 @@ function CreateWizard() {
               genResultUrl={genResultUrl} genError={genError}
             />
           )}
-          {step === 6 && (
-            <StepProduct
-              theme={theme} productId={productId} setProductId={setProductId}
-              size={size} setSize={setSize} fit={fit} setFit={setFit}
-              color={color} setColor={setColor}
-            />
-          )}
-          {step === 7 && (
-            <StepCheckout
-              theme={theme} personality={personality} product={product}
-              size={size} fitObj={fitObj} colorObj={colorObj} total={total} productId={productId}
-            />
-          )}
+          
         </div>
 
         {step === 5 && genDone && <SocialShowcase />}
@@ -398,7 +384,7 @@ function CreateWizard() {
             ← Back
           </button>
           <div className="hidden md:block flex-1 text-sm text-muted-foreground">
-            {step < 7 ? `Next: ${STEPS[step].title}` : "Ready to make it real."}
+            {step < 7 ? `Next: ${STEPS[step] ? STEPS[step].title : "Checkout"}` : "Ready to make it real."}
           </div>
           <div className="md:hidden flex-1 text-xs text-muted-foreground truncate">
             {STEPS[step - 1].title}
@@ -409,7 +395,7 @@ function CreateWizard() {
             className="rounded-full px-6 md:px-8 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-40 disabled:shadow-none disabled:hover:scale-100"
             style={{ background: "var(--gradient-primary)" }}
           >
-            {step === 7 ? "Go to checkout →" : step === 5 && !genDone ? "Generating…" : "Next →"}
+            {step === 5 && !genDone ? "Generating…" : step === 5 && genDone ? "Go to checkout →" : "Next →"}
           </button>
         </div>
       </div>
@@ -477,12 +463,12 @@ function ProgressBar({ step, onJump }: { step: number; onJump: (n: number) => vo
         </ol>
         <div className="mt-3 md:hidden flex items-center justify-between text-xs">
           <span className="font-semibold">Step {step} / 7</span>
-          <span className="text-muted-foreground">{STEPS[step - 1].title}</span>
+          <span className="text-muted-foreground">{STEPS[step - 1]?.sub}</span>
         </div>
       </div>
     </div>
   );
-}
+}``
 
 /* ---------------- Step 1: Upload ---------------- */
 

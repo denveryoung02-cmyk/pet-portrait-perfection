@@ -15,6 +15,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [err, setErr] = useState<string | null>(null);
+  const [debug, setDebug] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { session } = useAuth();
@@ -26,6 +27,7 @@ function AuthPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErr(null);
+    setDebug(null);
     setLoading(true);
     try {
       if (mode === "signup") {
@@ -38,9 +40,13 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        const { data: sessionData } = await supabase.auth.getSession();
+        setDebug(`Signup success. Session exists: ${sessionData.session ? "yes" : "no"}`);
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        const { data: sessionData } = await supabase.auth.getSession();
+        setDebug(`Signin success. Session exists: ${sessionData.session ? "yes" : "no"}`);
       }
     } catch (e: any) {
       setErr(e.message ?? "Something went wrong");
@@ -87,6 +93,8 @@ function AuthPage() {
           <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm" />
           <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm" />
           {err && <div className="text-sm text-destructive">{err}</div>}
+          {debug && <div className="text-sm text-green-700">{debug}</div>}
+          <div className="text-xs text-muted-foreground">Debug: session {session ? "active" : "none"}</div>
           <button disabled={loading} className="w-full rounded-full px-6 py-3 font-semibold text-primary-foreground shadow-[var(--shadow-glow)] disabled:opacity-60" style={{ background: "var(--gradient-primary)" }}>
             {loading ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
           </button>

@@ -10,7 +10,7 @@ const InputSchema = z.object({}).optional();
 
 const DIGITAL_PRODUCT_NAME = "Pet Portrait Perfection - Digital Download";
 const DIGITAL_DESCRIPTION = "Instant digital delivery of your AI pet portrait.";
-const DIGITAL_PRICE_CENTS = 999; // £9.99
+const DIGITAL_PRICE_CENTS = 299; // £2.99
 const DIGITAL_CURRENCY = "gbp";
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
@@ -71,7 +71,6 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         user_id: userId,
         status: "pending",
         subtotal_cents: DIGITAL_PRICE_CENTS,
-        shipping_cents: 0,
         total_cents: DIGITAL_PRICE_CENTS,
         currency: DIGITAL_CURRENCY,
         stripe_session_id: stripeSessionId,

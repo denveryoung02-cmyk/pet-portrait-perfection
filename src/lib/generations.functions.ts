@@ -1,7 +1,7 @@
 /**
- * Server function: run an AI image generation via the Lovable AI Gateway
- * (Nano Banana / Gemini image model), persist the result to the public
- * `caricatures` storage bucket, and write a row in `generations`.
+ * Server function: run an AI image generation via the Google Gemini API,
+ * persist the result to the public `caricatures` storage bucket,
+ * and write a row in `generations`.
  *
  * Called from the wizard's "Generate" step. Authenticated.
  */
@@ -23,8 +23,8 @@ const InputSchema = z.object({
   petName: z.string().max(64).optional(),
 });
 
-const MODEL = "google/gemini-2.5-flash-image";
-const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const GEMINI_MODEL = "gemini-2.5-flash-image";
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 export const generatePawtoon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -40,7 +40,7 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       .single();
     if (imgErr || !img) throw new Error("Uploaded image not found or not accessible.");
 
-    // 2. Insert a `generations` row in `processing` state immediately
+    // 2. Build prompt and insert a generations row in processing state
     const prompt = buildPrompt({
       petType: data.petType,
       themeId: data.themeId,
@@ -68,73 +68,82 @@ export const generatePawtoon = createServerFn({ method: "POST" })
     const generationId = genRow.id as string;
 
     try {
-      // 3. Download the source pet photo (admin client to bypass RLS server-side)
+      // 3. Download the source pet photo via admin client (bypasses RLS)
       const { data: blob, error: dlErr } = await supabaseAdmin.storage
         .from("pet-uploads")
         .download(img.storage_path);
       if (dlErr || !blob) throw new Error(`Could not load source photo: ${dlErr?.message}`);
 
       const arrayBuf = await blob.arrayBuffer();
-      const base64 = Buffer.from(arrayBuf).toString("base64");
-      const mime = blob.type || "image/jpeg";
-      const dataUrl = `data:${mime};base64,${base64}`;
+      const base64Image = Buffer.from(arrayBuf).toString("base64");
+      const mimeType = (blob.type || "image/jpeg") as string;
 
-      // 4. Call the AI Gateway (Nano Banana / Gemini image model)
-      const apiKey = process.env.LOVABLE_API_KEY;
-      if (!apiKey) throw new Error("LOVABLE_API_KEY is not configured.");
+      // 4. Call Google Gemini API for image generation
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) throw new Error("GEMINI_API_KEY is not configured.");
 
-      const aiRes = await fetch(GATEWAY_URL, {
+      const aiRes = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: MODEL,
-          messages: [
+          contents: [
             {
-              role: "user",
-              content: [
-                { type: "text", text: prompt },
-                { type: "image_url", image_url: { url: dataUrl } },
+              parts: [
+                { text: prompt },
+                {
+                  inline_data: {
+                    mime_type: mimeType,
+                    data: base64Image,
+                  },
+                },
               ],
             },
           ],
-          modalities: ["image", "text"],
+          generationConfig: {
+            responseModalities: ["IMAGE", "TEXT"],
+            temperature: 1,
+          },
         }),
       });
 
       if (!aiRes.ok) {
         const errText = await aiRes.text().catch(() => "");
         if (aiRes.status === 429) throw new Error("Rate limit reached — please try again in a minute.");
-        if (aiRes.status === 402) throw new Error("Generation credits exhausted — top up your workspace.");
-        throw new Error(`AI gateway error (${aiRes.status}): ${errText.slice(0, 200)}`);
+        if (aiRes.status === 403) throw new Error("Gemini API key invalid or not authorised.");
+        throw new Error(`Gemini API error (${aiRes.status}): ${errText.slice(0, 300)}`);
       }
 
       const payload = await aiRes.json();
-      const message = payload?.choices?.[0]?.message;
 
-      // Gemini returns images either in message.images[0].image_url.url or as data URLs in content
-      const imageUrl: string | undefined =
-        message?.images?.[0]?.image_url?.url ??
-        (Array.isArray(message?.content)
-          ? message.content.find((c: any) => c?.type === "image_url")?.image_url?.url
-          : undefined);
+      // Extract the base64 image from Gemini's response
+      const parts = payload?.candidates?.[0]?.content?.parts ?? [];
+      const imagePart = parts.find((p: any) => p.inlineData?.mimeType?.startsWith("image/"));
 
-      if (!imageUrl || !imageUrl.startsWith("data:")) {
-        throw new Error("AI did not return an image — try a clearer pet photo.");
+      if (!imagePart?.inlineData?.data) {
+        const textPart = parts.find((p: any) => p.text);
+        throw new Error(
+          textPart?.text
+            ? `Gemini declined: ${textPart.text.slice(0, 200)}`
+            : "Gemini did not return an image — try a clearer pet photo."
+        );
       }
 
-      // 5. Decode + upload to public `caricatures` bucket
-      const [, b64part] = imageUrl.split(",", 2);
-      const resultBytes = Buffer.from(b64part, "base64");
-      const resultPath = `${userId}/${generationId}.png`;
+      const resultBase64 = imagePart.inlineData.data;
+      const resultMime = imagePart.inlineData.mimeType || "image/png";
+      const resultExt = resultMime.includes("png") ? "png" : "jpg";
+
+      // 5. Upload result to caricatures bucket
+      const resultBytes = Buffer.from(resultBase64, "base64");
+      const resultPath = `${userId}/${generationId}.${resultExt}`;
 
       const { error: putErr } = await supabaseAdmin.storage
         .from("caricatures")
-        .upload(resultPath, resultBytes, { contentType: "image/png", upsert: true });
+        .upload(resultPath, resultBytes, { contentType: resultMime, upsert: true });
       if (putErr) throw new Error(`Could not save result: ${putErr.message}`);
 
       const { data: pub } = supabaseAdmin.storage.from("caricatures").getPublicUrl(resultPath);
 
-      // 6. Update generation row → completed
+      // 6. Mark generation as completed
       const { error: upErr } = await supabaseAdmin
         .from("generations")
         .update({
@@ -147,6 +156,7 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       if (upErr) throw new Error(upErr.message);
 
       return { generationId, status: "completed" as const, resultUrl: pub.publicUrl };
+
     } catch (err) {
       const message = err instanceof Error ? err.message : "Generation failed.";
       await supabaseAdmin
