@@ -14,6 +14,11 @@ import pirate from "@/assets/pet-pirate.jpg";
 import royalV1 from "@/assets/gen-royal-v1.jpg";
 import royalV2 from "@/assets/gen-royal-v2.jpg";
 import royalV3 from "@/assets/gen-royal-v3.jpg";
+import mafiaGen from "@/assets/gen-mafia-v1.png";
+import vikingGen from "@/assets/gen-viking-v1.png";
+import astronautGen from "@/assets/gen-astronaut-v1.png";
+import superheroGen from "@/assets/gen-superhero-v1.png";
+import pirateGen from "@/assets/gen-pirate-v1.png";
 import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
@@ -38,7 +43,7 @@ const themes: Theme[] = [
       { id: "tiny-tyrant", name: "Tiny Tyrant", emoji: "😤", desc: "Small body. Huge ego." },
       { id: "elegant-queen", name: "Elegant Queen", emoji: "👸", desc: "Effortlessly fabulous." },
     ] },
-  { id: "mafia", name: "Mafia", tag: "Don't make it personal", img: mafia, emoji: "🎩",
+  { id: "mafia", name: "Mafia", tag: "Don't make it personal", img: mafiaGen, emoji: "🎩",
     gradient: "from-stone-300 via-stone-500 to-stone-800",
     personalities: [
       { id: "crime-boss", name: "Crime Boss", emoji: "🎩", desc: "Runs the block. And the couch.", recommended: true },
@@ -46,7 +51,7 @@ const themes: Theme[] = [
       { id: "chaotic-gremlin", name: "Chaotic Gremlin", emoji: "😈", desc: "Pure unhinged energy." },
       { id: "smooth-talker", name: "Smooth Talker", emoji: "😎", desc: "Charm-first, paws second." },
     ] },
-  { id: "viking", name: "Viking", tag: "Battle ready, belly rubs", img: viking, emoji: "⚔️",
+  { id: "viking", name: "Viking", tag: "Battle ready, belly rubs", img: vikingGen, emoji: "⚔️",
     gradient: "from-orange-300 via-red-400 to-stone-700",
     personalities: [
       { id: "berserker", name: "Berserker", emoji: "🪓", desc: "Charges first. Naps later." },
@@ -54,7 +59,7 @@ const themes: Theme[] = [
       { id: "tiny-but-violent", name: "Tiny But Violent", emoji: "💢", desc: "Small. Furious. Iconic." },
       { id: "fearless-explorer", name: "Fearless Explorer", emoji: "🧭", desc: "Bold seas, bolder treats." },
     ] },
-  { id: "astronaut", name: "Astronaut", tag: "To infinity and treats", img: astronaut, emoji: "🚀",
+  { id: "astronaut", name: "Astronaut", tag: "To infinity and treats", img: astronautGen, emoji: "🚀",
     gradient: "from-indigo-300 via-violet-500 to-slate-900",
     personalities: [
       { id: "space-commander", name: "Space Commander", emoji: "🚀", desc: "Calm under cosmic pressure.", recommended: true },
@@ -62,7 +67,7 @@ const themes: Theme[] = [
       { id: "galactic-genius", name: "Galactic Genius", emoji: "🧠", desc: "Solves quantum kibble." },
       { id: "cosmic-menace", name: "Cosmic Menace", emoji: "👽", desc: "A threat to all known galaxies." },
     ] },
-  { id: "superhero", name: "Superhero", tag: "Cape, drama, glory", img: superhero, emoji: "🦸",
+  { id: "superhero", name: "Superhero", tag: "Cape, drama, glory", img: superheroGen, emoji: "🦸",
     gradient: "from-sky-300 via-blue-500 to-red-500",
     personalities: [
       { id: "city-protector", name: "City Protector", emoji: "🛡️", desc: "Saves the day, every day." },
@@ -70,7 +75,7 @@ const themes: Theme[] = [
       { id: "overconfident-legend", name: "Overconfident Legend", emoji: "💪", desc: "Believes their own hype." },
       { id: "secret-villain", name: "Secret Villain", emoji: "😼", desc: "Plotting world domination." },
     ] },
-  { id: "pirate", name: "Pirate", tag: "Arrr-mazing", img: pirate, emoji: "🏴‍☠️",
+  { id: "pirate", name: "Pirate", tag: "Arrr-mazing", img: pirateGen, emoji: "🏴‍☠️",
     gradient: "from-teal-300 via-cyan-600 to-slate-800",
     personalities: [
       { id: "treasure-hunter", name: "Treasure Hunter", emoji: "💰", desc: "Will dig for snacks." },
@@ -677,6 +682,16 @@ function StepTraits({ traits, toggleTrait }: any) {
 
 /* ---------------- Step 5: Generate ---------------- */
 
+// Per-theme generated sample shown as the variations fallback before the
+// user's real AI result (genResultUrl) is ready. Royal uses its own 3-up set.
+const THEME_GEN_SAMPLES: Record<string, string> = {
+  mafia: mafiaGen,
+  viking: vikingGen,
+  astronaut: astronautGen,
+  superhero: superheroGen,
+  pirate: pirateGen,
+};
+
 function StepGenerate({
   theme, personality, file, genProgress, genStage, genDone, genFailed,
   setGenFailed, retryGen, favourite, setFavourite, setZoom,
@@ -747,11 +762,12 @@ function StepGenerate({
   /* RESULTS — use real AI result when available, otherwise theme placeholders */
   const royalImgs = [royalV1, royalV2, royalV3];
   const isRoyal = theme.id === "royal";
-  const heroImg = genResultUrl ?? (isRoyal ? royalImgs[0] : theme.img);
+  const themeSample = THEME_GEN_SAMPLES[theme.id] ?? theme.img;
+  const heroImg = genResultUrl ?? (isRoyal ? royalImgs[0] : themeSample);
   const variations = [
     { id: 0, badge: "Most popular", tone: "Heroic edition", filter: "", img: heroImg, sub: "Cinematic studio lighting" },
-    { id: 1, badge: "Staff pick", tone: "Dramatic edition", filter: "saturate(1.35) contrast(1.12) brightness(0.97)", img: genResultUrl ?? (isRoyal ? royalImgs[1] : theme.img), sub: "Bold expression, deep shadows" },
-    { id: 2, badge: null, tone: "Pastel dream", filter: "saturate(0.78) brightness(1.08) hue-rotate(-8deg)", img: genResultUrl ?? (isRoyal ? royalImgs[2] : theme.img), sub: "Soft glow, dreamy palette" },
+    { id: 1, badge: "Staff pick", tone: "Dramatic edition", filter: "saturate(1.35) contrast(1.12) brightness(0.97)", img: genResultUrl ?? (isRoyal ? royalImgs[1] : themeSample), sub: "Bold expression, deep shadows" },
+    { id: 2, badge: null, tone: "Pastel dream", filter: "saturate(0.78) brightness(1.08) hue-rotate(-8deg)", img: genResultUrl ?? (isRoyal ? royalImgs[2] : themeSample), sub: "Soft glow, dreamy palette" },
   ];
 
   return (
