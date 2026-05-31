@@ -1,16 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { z } from "zod";
 import { useState } from "react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { createCheckoutSession } from "@/lib/checkout.functions";
 import { supabase } from "@/integrations/supabase/client";
 
+const searchSchema = z.object({
+  gen: z.string().optional(),
+});
+
 export const Route = createFileRoute("/checkout")({
+  validateSearch: searchSchema,
   head: () => ({ meta: [{ title: "Checkout — Pawtoons" }] }),
   component: Checkout,
 });
 
 function Checkout() {
+  const { gen: generationId } = Route.useSearch();
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,7 +31,10 @@ function Checkout() {
       const accessToken = sessionData.session?.access_token;
       if (!accessToken) throw new Error("You must be signed in to place an order.");
 
-      const res = await createCheckoutSession({ headers: { Authorization: `Bearer ${accessToken}` } });
+      const res = await createCheckoutSession({
+        data: { generationId },
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       if (!res?.url) throw new Error("Checkout URL missing.");
       window.location.href = res.url;
     } catch (e) {

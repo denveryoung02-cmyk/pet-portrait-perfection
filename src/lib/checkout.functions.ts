@@ -6,7 +6,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const InputSchema = z.object({}).optional();
+const InputSchema = z.object({ generationId: z.string().uuid().optional() }).optional();
 
 const DIGITAL_PRODUCT_NAME = "Pet Portrait Perfection - Digital Download";
 const DIGITAL_DESCRIPTION = "Instant digital delivery of your AI pet portrait.";
@@ -16,18 +16,22 @@ const DIGITAL_CURRENCY = "gbp";
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => InputSchema.parse(input))
-  .handler(async ({ context }) => {
+  .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+    const generationId = data?.generationId ?? null;
 
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     if (!stripeSecretKey) throw new Error("STRIPE_SECRET_KEY is not configured.");
 
-    const origin = process.env.APP_ORIGIN ?? "http://localhost:5173";
+    const origin = process.env.APP_ORIGIN ?? "http://localhost:8080";
 
+    // Carry the generation id back to the success page so it can load the
+    // finished portrait (success.tsx reads it from the `gen` query param).
+    const genParam = generationId ? `&gen=${encodeURIComponent(generationId)}` : "";
     const successUrl =
-      process.env.STRIPE_SUCCESS_URL ??
-      `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`;
-    const cancelUrl = process.env.STRIPE_CANCEL_URL ?? `${origin}/checkout/cancel`;
+      (process.env.STRIPE_SUCCESS_URL ??
+        `${origin}/success?session_id={CHECKOUT_SESSION_ID}`) + genParam;
+    const cancelUrl = process.env.STRIPE_CANCEL_URL ?? `${origin}/checkout`;
 
     // Stripe v1 endpoint expects application/x-www-form-urlencoded.
     const params = new URLSearchParams({
@@ -83,7 +87,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     const { error: itemErr } = await supabase.from("order_items").insert({
       order_id: orderRow.id,
       product_id: null,
-      generation_id: null,
+      generation_id: generationId,
       quantity: 1,
       unit_price_cents: DIGITAL_PRICE_CENTS,
       options: { kind: "digital_download" },
