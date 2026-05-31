@@ -33,7 +33,7 @@ export function Nav() {
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
           <a href="/#how" className="hover:text-foreground transition">How it works</a>
-          <a href="/#products" className="hover:text-foreground transition">Products</a>
+          <Link to="/products" className="hover:text-foreground transition">Products</Link>
           <a href="/#themes" className="hover:text-foreground transition">Themes</a>
           <a href="/#faq" className="hover:text-foreground transition">FAQ</a>
         </nav>
