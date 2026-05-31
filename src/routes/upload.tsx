@@ -401,7 +401,7 @@ function CreateWizard() {
       </div>
 
       {/* Zoom modal */}
-      {zoom !== null && <ZoomModal img={theme.img} theme={theme} onClose={() => setZoom(null)} />}
+      {zoom !== null && <ZoomModal img={genResultUrl ?? theme.img} theme={theme} onClose={() => setZoom(null)} />}
 
       <Footer />
     </div>
@@ -838,7 +838,6 @@ function StepGenerate({
 
                 <div className="absolute bottom-3 inset-x-3 flex gap-2 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                   <button onClick={() => setZoom(v.id)} className="flex-1 rounded-full bg-background/95 backdrop-blur px-3 py-2 text-xs font-semibold hover:bg-background">🔍 Zoom</button>
-                  <button className="flex-1 rounded-full bg-background/95 backdrop-blur px-3 py-2 text-xs font-semibold hover:bg-background">⇆ Compare</button>
                 </div>
               </div>
               <div className="p-4">
@@ -854,14 +853,47 @@ function StepGenerate({
       </div>
 
       {/* SHARE STRIP */}
-      <ShareStrip theme={theme} personality={personality} img={isRoyal ? royalImgs[favourite] ?? royalImgs[0] : theme.img} />
+      <ShareStrip theme={theme} personality={personality} img={isRoyal ? royalImgs[favourite] ?? royalImgs[0] : theme.img} genResultUrl={genResultUrl} />
     </div>
   );
 }
 
 /* ---------------- Share Experience ---------------- */
 
-function ShareStrip({ theme, personality, img }: any) {
+function ShareStrip({ theme, personality, img, genResultUrl }: any) {
+  const [copied, setCopied] = useState(false);
+  const shareImg = genResultUrl ?? img;
+
+  const handleDownloadPreview = async () => {
+    if (!genResultUrl) return;
+    try {
+      const res = await fetch(genResultUrl);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "my-pawtoon-preview.png";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      // Fallback: open in a new tab so the user can still save it.
+      window.open(genResultUrl, "_blank");
+    }
+  };
+
+  const handleCopyLink = async () => {
+    if (!genResultUrl) return;
+    try {
+      await navigator.clipboard.writeText(genResultUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard API unavailable (e.g. non-secure context) — ignore silently.
+    }
+  };
+
   return (
     <section className="mt-10 rounded-3xl bg-card border border-border overflow-hidden">
       <div className="grid lg:grid-cols-[1fr_1.2fr]">
@@ -876,7 +908,7 @@ function ShareStrip({ theme, personality, img }: any) {
             <span className="ml-auto text-xs opacity-80">···</span>
           </div>
           <div className="mt-5 relative mx-auto w-full max-w-[260px] aspect-[9/16] rounded-3xl overflow-hidden bg-black shadow-2xl ring-4 ring-white/30">
-            <img src={img} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+            <img src={shareImg} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
             <div className="absolute top-4 inset-x-4 flex gap-1">
               {[0,1,2].map(i => <div key={i} className={`flex-1 h-0.5 rounded-full ${i===0 ? "bg-white" : "bg-white/40"}`} />)}
@@ -904,11 +936,12 @@ function ShareStrip({ theme, personality, img }: any) {
             <ShareBtn icon="💬" label="Send to friend" tone="from-emerald-500 to-teal-500" />
           </div>
 
-          <div className="mt-5 flex gap-2">
-            <button className="flex-1 rounded-full px-5 py-3 text-sm font-semibold border border-border hover:bg-secondary transition flex items-center justify-center gap-2">
+          <div className="mt-5 flex gap-2 items-center">
+            <button onClick={handleDownloadPreview} className="flex-1 rounded-full px-5 py-3 text-sm font-semibold border border-border hover:bg-secondary transition flex items-center justify-center gap-2">
               ⬇ Download preview
             </button>
-            <button className="rounded-full size-12 grid place-items-center border border-border hover:bg-secondary transition" aria-label="Copy link">🔗</button>
+            <button onClick={handleCopyLink} className="rounded-full size-12 grid place-items-center border border-border hover:bg-secondary transition" aria-label="Copy link">🔗</button>
+            {copied && <span className="text-xs font-semibold text-primary whitespace-nowrap">Copied!</span>}
           </div>
 
           <div className="mt-5 p-3 rounded-2xl bg-secondary/60 flex items-center gap-3 text-xs">

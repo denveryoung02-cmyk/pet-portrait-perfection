@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { createCheckoutSession } from "@/lib/checkout.functions";
+import { createCheckoutSession } from "@/lib/stripe.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 const searchSchema = z.object({
@@ -20,19 +20,44 @@ function Checkout() {
   const { gen: generationId } = Route.useSearch();
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // Load the generated portrait for the order summary preview.
+  useEffect(() => {
+    if (!generationId) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("generations")
+        .select("result_url")
+        .eq("id", generationId)
+        .single();
+      if (!cancelled && data?.result_url) setPreviewUrl(data.result_url);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [generationId]);
 
   const onPlaceOrder = async () => {
     setIsPlacingOrder(true);
     setError(null);
 
     try {
+      if (!generationId) throw new Error("No portrait found — please create one first.");
+
       const { data: sessionData, error: sessionErr } = await supabase.auth.getSession();
       if (sessionErr) throw new Error(sessionErr.message);
       const accessToken = sessionData.session?.access_token;
       if (!accessToken) throw new Error("You must be signed in to place an order.");
 
+      const origin = window.location.origin;
       const res = await createCheckoutSession({
-        data: { generationId },
+        data: {
+          generationId,
+          successUrl: `${origin}/success?session_id={CHECKOUT_SESSION_ID}&gen=${generationId}`,
+          cancelUrl: `${origin}/checkout?gen=${generationId}`,
+        },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       if (!res?.url) throw new Error("Checkout URL missing.");
@@ -60,12 +85,9 @@ function Checkout() {
               <input type="email" placeholder="Email address" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
             </div>
 
-            <div>
-              <h2 className="font-display text-xl mb-4">Payment</h2>
-              <div className="rounded-2xl border border-dashed border-border bg-secondary/50 p-6 text-center text-sm text-muted-foreground">
-                💳 Payment integration placeholder
-              </div>
-            </div>
+            <p className="text-sm text-muted-foreground">
+              You'll be redirected to our secure Stripe checkout to complete payment.
+            </p>
             {error ? (
               <p className="text-center text-sm text-destructive">{error}</p>
             ) : null}
@@ -84,7 +106,13 @@ function Checkout() {
           <aside className="rounded-3xl bg-card border border-border p-6 h-fit sticky top-24">
             <h3 className="font-display text-lg mb-4">Order summary</h3>
             <div className="flex gap-4 mb-5">
-              <div className="size-20 rounded-xl bg-secondary flex-shrink-0 grid place-items-center text-3xl">🎨</div>
+              <div className="size-20 rounded-xl overflow-hidden bg-secondary flex-shrink-0 grid place-items-center text-3xl">
+                {previewUrl ? (
+                  <img src={previewUrl} alt="Your Pawtoon" className="w-full h-full object-cover" />
+                ) : (
+                  <span>🐾</span>
+                )}
+              </div>
               <div className="flex-1">
                 <div className="font-semibold text-sm">Pawtoons Digital Portrait</div>
                 <div className="text-xs text-muted-foreground">High-resolution PNG · instant download</div>
