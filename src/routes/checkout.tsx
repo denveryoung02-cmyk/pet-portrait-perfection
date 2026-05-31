@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import mug from "@/assets/product-mug.jpg";
+import { createCheckoutSession } from "@/lib/checkout.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — Pawtoons" }] }),
@@ -9,6 +11,29 @@ export const Route = createFileRoute("/checkout")({
 });
 
 function Checkout() {
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onPlaceOrder = async () => {
+    setIsPlacingOrder(true);
+    setError(null);
+
+    try {
+      const { data: sessionData, error: sessionErr } = await supabase.auth.getSession();
+      if (sessionErr) throw new Error(sessionErr.message);
+      const accessToken = sessionData.session?.access_token;
+      if (!accessToken) throw new Error("You must be signed in to place an order.");
+
+      const res = await createCheckoutSession({ headers: { Authorization: `Bearer ${accessToken}` } });
+      if (!res?.url) throw new Error("Checkout URL missing.");
+      window.location.href = res.url;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to start checkout.");
+    } finally {
+      setIsPlacingOrder(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Nav />
@@ -26,46 +51,41 @@ function Checkout() {
             </div>
 
             <div>
-              <h2 className="font-display text-xl mb-4">Shipping</h2>
-              <div className="grid grid-cols-2 gap-3">
-                <input placeholder="First name" className="rounded-xl border border-input bg-background px-4 py-3 text-sm" />
-                <input placeholder="Last name" className="rounded-xl border border-input bg-background px-4 py-3 text-sm" />
-                <input placeholder="Address" className="col-span-2 rounded-xl border border-input bg-background px-4 py-3 text-sm" />
-                <input placeholder="City" className="rounded-xl border border-input bg-background px-4 py-3 text-sm" />
-                <input placeholder="ZIP / Postcode" className="rounded-xl border border-input bg-background px-4 py-3 text-sm" />
-              </div>
-            </div>
-
-            <div>
               <h2 className="font-display text-xl mb-4">Payment</h2>
               <div className="rounded-2xl border border-dashed border-border bg-secondary/50 p-6 text-center text-sm text-muted-foreground">
                 💳 Payment integration placeholder
               </div>
             </div>
+            {error ? (
+              <p className="text-center text-sm text-destructive">{error}</p>
+            ) : null}
 
-            <button type="button" className="w-full rounded-full px-6 py-4 font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]" style={{ background: "var(--gradient-primary)" }}>
-              Place order — $26.99
+            <button
+              type="button"
+              onClick={onPlaceOrder}
+              disabled={isPlacingOrder}
+              className="w-full rounded-full px-6 py-4 font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
+              style={{ background: "var(--gradient-primary)" }}
+            >
+              {isPlacingOrder ? "Redirecting to checkout..." : "Place order — £2.99"}
             </button>
           </form>
 
           <aside className="rounded-3xl bg-card border border-border p-6 h-fit sticky top-24">
             <h3 className="font-display text-lg mb-4">Order summary</h3>
             <div className="flex gap-4 mb-5">
-              <div className="size-20 rounded-xl overflow-hidden bg-secondary flex-shrink-0">
-                <img src={mug} alt="" className="w-full h-full object-cover" />
-              </div>
+              <div className="size-20 rounded-xl bg-secondary flex-shrink-0 grid place-items-center text-3xl">🎨</div>
               <div className="flex-1">
-                <div className="font-semibold text-sm">Ceramic Mug</div>
-                <div className="text-xs text-muted-foreground">Royal Pet theme</div>
-                <div className="mt-1 font-semibold">$24.00</div>
+                <div className="font-semibold text-sm">Pawtoons Digital Portrait</div>
+                <div className="text-xs text-muted-foreground">High-resolution PNG · instant download</div>
+                <div className="mt-1 font-semibold">£2.99</div>
               </div>
             </div>
             <div className="space-y-2 text-sm border-t border-border pt-4">
-              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>$24.00</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>$2.99</span></div>
-              <div className="flex justify-between font-semibold text-base pt-2 border-t border-border"><span>Total</span><span>$26.99</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>£2.99</span></div>
+              <div className="flex justify-between font-semibold text-base pt-2 border-t border-border"><span>Total</span><span>£2.99</span></div>
             </div>
-            <Link to="/products" className="block text-center text-xs text-muted-foreground mt-4 hover:text-foreground">← Edit order</Link>
+            <Link to="/upload" className="block text-center text-xs text-muted-foreground mt-4 hover:text-foreground">← Back</Link>
           </aside>
         </div>
       </section>
