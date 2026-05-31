@@ -29,10 +29,10 @@ function Checkout() {
     (async () => {
       const { data } = await supabase
         .from("generations")
-        .select("result_url")
+        .select("preview_url")
         .eq("id", generationId)
         .single();
-      if (!cancelled && data?.result_url) setPreviewUrl(data.result_url);
+      if (!cancelled && data?.preview_url) setPreviewUrl(data.preview_url);
     })();
     return () => {
       cancelled = true;
@@ -106,7 +106,7 @@ function Checkout() {
           <aside className="rounded-3xl bg-card border border-border p-6 h-fit sticky top-24">
             <h3 className="font-display text-lg mb-4">Order summary</h3>
             <div className="flex gap-4 mb-5">
-              <div className="size-20 rounded-xl overflow-hidden bg-secondary flex-shrink-0 grid place-items-center text-3xl">
+              <div className="relative size-20 rounded-xl overflow-hidden bg-secondary flex-shrink-0 grid place-items-center text-3xl">
                 {previewUrl ? (
                   <img src={previewUrl} alt="Your Pawtoon" className="w-full h-full object-cover" />
                 ) : (

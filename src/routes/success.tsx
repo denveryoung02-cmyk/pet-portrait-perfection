@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { confirmCheckout } from "@/lib/fulfillment.functions";
 
 const searchSchema = z.object({
   gen: z.string().optional(),
@@ -24,66 +25,46 @@ function Success() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!generationId) {
-      setError("No generation ID found.");
+    if (!generationId || !sessionId) {
+      setError("Missing checkout details. Please use the link from your purchase.");
       setLoading(false);
       return;
     }
 
-    // Load generation and update order status
-    async function loadAndSaveOrder() {
+    // Verify the payment server-side, then reveal the clean (un-watermarked)
+    // image via a short-lived signed URL. The clean image is never exposed
+    // unless Stripe confirms the session is paid.
+    async function confirmAndReveal() {
       try {
-        // 1. Get the generation result
-        const { data: gen, error: genErr } = await supabase
-          .from("generations")
-          .select("result_url, storage_path")
-          .eq("id", generationId!)
-          .single();
-
-        if (genErr || !gen?.result_url) {
-          setError("Could not find your portrait. Please contact support.");
+        const { data: sessionData } = await supabase.auth.getSession();
+        const accessToken = sessionData.session?.access_token;
+        if (!accessToken) {
+          setError("Please sign in to view your purchase.");
           setLoading(false);
           return;
         }
 
-        setPreviewUrl(gen.result_url);
-        setDownloadUrl(gen.result_url);
+        const res = await confirmCheckout({
+          data: { sessionId: sessionId!, generationId: generationId! },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
 
-        // 2. Record the completed order in Supabase
-        const { data: auth } = await supabase.auth.getUser();
-        const user = auth.user;
-        if (user) {
-          const { data: order } = await supabase
-            .from("orders")
-            .insert({
-              user_id: user.id,
-              status: "paid",
-              currency: "gbp",
-              subtotal_cents: 299,
-              total_cents: 299,
-              stripe_session_id: sessionId ?? null,
-            })
-            .select("id")
-            .single();
-
-          if (order) {
-            await supabase.from("order_items").insert({
-              order_id: order.id,
-              generation_id: generationId,
-              quantity: 1,
-              unit_price_cents: 299,
-              options: { type: "digital_download" },
-            });
-          }
+        if (!res?.paid || !res.downloadUrl) {
+          setError("We couldn't confirm your payment. If you were charged, contact support.");
+          setLoading(false);
+          return;
         }
+
+        setPreviewUrl(res.downloadUrl);
+        setDownloadUrl(res.downloadUrl);
       } catch (err) {
-        setError("Something went wrong loading your portrait.");
+        setError("Something went wrong confirming your purchase.");
       } finally {
         setLoading(false);
       }
     }
 
-    loadAndSaveOrder();
+    confirmAndReveal();
   }, [generationId, sessionId]);
 
   async function handleDownload() {

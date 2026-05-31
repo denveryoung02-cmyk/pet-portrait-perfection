@@ -10,6 +10,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { buildPrompt } from "@/services/prompts";
+import { bakeWatermark } from "@/lib/watermark.server";
 
 const InputSchema = z.object({
   uploadedImageId: z.string().uuid(),
@@ -129,33 +130,42 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       }
 
       const resultBase64 = imagePart.inlineData.data;
-      const resultMime = imagePart.inlineData.mimeType || "image/png";
-      const resultExt = resultMime.includes("png") ? "png" : "jpg";
-
-      // 5. Upload result to caricatures bucket
       const resultBytes = Buffer.from(resultBase64, "base64");
-      const resultPath = `${userId}/${generationId}.${resultExt}`;
 
-      const { error: putErr } = await supabaseAdmin.storage
-        .from("caricatures")
-        .upload(resultPath, resultBytes, { contentType: resultMime, upsert: true });
-      if (putErr) throw new Error(`Could not save result: ${putErr.message}`);
+      // 5a. Store the CLEAN original in the private bucket (never public).
+      const cleanPath = `${userId}/${generationId}.png`;
+      const { error: cleanErr } = await supabaseAdmin.storage
+        .from("caricatures-clean")
+        .upload(cleanPath, resultBytes, { contentType: "image/png", upsert: true });
+      if (cleanErr) throw new Error(`Could not save result: ${cleanErr.message}`);
 
-      const { data: pub } = supabaseAdmin.storage.from("caricatures").getPublicUrl(resultPath);
+      // 5b. Bake a watermark and store the PREVIEW in the public bucket.
+      const previewBytes = bakeWatermark(new Uint8Array(resultBytes));
+      const previewPath = `${userId}/${generationId}.png`;
+      const { error: prevErr } = await supabaseAdmin.storage
+        .from("caricature-previews")
+        .upload(previewPath, previewBytes, { contentType: "image/png", upsert: true });
+      if (prevErr) throw new Error(`Could not save preview: ${prevErr.message}`);
 
-      // 6. Mark generation as completed
+      const { data: pub } = supabaseAdmin.storage
+        .from("caricature-previews")
+        .getPublicUrl(previewPath);
+
+      // 6. Mark generation as completed — store the public preview URL and the
+      // private clean path (the clean image is released only via signed URL
+      // after payment). No public URL to the clean original is ever stored.
       const { error: upErr } = await supabaseAdmin
         .from("generations")
         .update({
           status: "completed",
-          result_url: pub.publicUrl,
-          storage_path: resultPath,
+          preview_url: pub.publicUrl,
+          clean_path: cleanPath,
           updated_at: new Date().toISOString(),
         })
         .eq("id", generationId);
       if (upErr) throw new Error(upErr.message);
 
-      return { generationId, status: "completed" as const, resultUrl: pub.publicUrl };
+      return { generationId, status: "completed" as const, previewUrl: pub.publicUrl };
 
     } catch (err) {
       const message = err instanceof Error ? err.message : "Generation failed.";
@@ -163,6 +173,6 @@ export const generatePawtoon = createServerFn({ method: "POST" })
         .from("generations")
         .update({ status: "failed", error: message, updated_at: new Date().toISOString() })
         .eq("id", generationId);
-      return { generationId, status: "failed" as const, resultUrl: null, error: message };
+      return { generationId, status: "failed" as const, previewUrl: null, error: message };
     }
   });

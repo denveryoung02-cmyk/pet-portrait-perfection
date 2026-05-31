@@ -45,9 +45,11 @@ export type Database = {
       }
       generations: {
         Row: {
+          clean_path: string | null
           created_at: string
           error: string | null
           id: string
+          preview_url: string | null
           prompt: string | null
           result_url: string | null
           reviewed_at: string | null
@@ -60,9 +62,11 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          clean_path?: string | null
           created_at?: string
           error?: string | null
           id?: string
+          preview_url?: string | null
           prompt?: string | null
           result_url?: string | null
           reviewed_at?: string | null
@@ -75,9 +79,11 @@ export type Database = {
           user_id: string
         }
         Update: {
+          clean_path?: string | null
           created_at?: string
           error?: string | null
           id?: string
+          preview_url?: string | null
           prompt?: string | null
           result_url?: string | null
           reviewed_at?: string | null

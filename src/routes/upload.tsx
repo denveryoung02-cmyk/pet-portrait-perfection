@@ -295,9 +295,9 @@ function CreateWizard() {
         });
         if (cancelled) return;
         clearInterval(tick);
-        if (res.status === "completed" && res.resultUrl) {
+        if (res.status === "completed" && res.previewUrl) {
           setGenId(res.generationId);
-          setGenResultUrl(res.resultUrl);
+          setGenResultUrl(res.previewUrl);
           setGenProgress(100);
           setTimeout(() => setGenDone(true), 250);
         } else {

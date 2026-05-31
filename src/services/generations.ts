@@ -41,7 +41,7 @@ export async function startGeneration(input: StartGenerationInput) {
 export async function getGeneration(id: string): Promise<GenerationRow | null> {
   const { data, error } = await supabase
     .from("generations")
-    .select("id, status, theme, prompt, result_url, error, created_at")
+    .select("id, status, theme, prompt, preview_url, result_url, error, created_at")
     .eq("id", id)
     .single();
   if (error || !data) return null;
@@ -50,7 +50,8 @@ export async function getGeneration(id: string): Promise<GenerationRow | null> {
     status: data.status as GenerationStatus,
     theme: data.theme,
     prompt: data.prompt,
-    resultUrl: data.result_url,
+    // Prefer the watermarked preview; legacy rows fall back to the old public URL.
+    resultUrl: data.preview_url ?? data.result_url,
     error: data.error,
     createdAt: data.created_at,
   };
@@ -59,7 +60,7 @@ export async function getGeneration(id: string): Promise<GenerationRow | null> {
 export async function listGenerations(limit = 24): Promise<GenerationRow[]> {
   const { data } = await supabase
     .from("generations")
-    .select("id, status, theme, prompt, result_url, error, created_at")
+    .select("id, status, theme, prompt, preview_url, result_url, error, created_at")
     .order("created_at", { ascending: false })
     .limit(limit);
   return (data ?? []).map((d) => ({
@@ -67,7 +68,7 @@ export async function listGenerations(limit = 24): Promise<GenerationRow[]> {
     status: d.status as GenerationStatus,
     theme: d.theme,
     prompt: d.prompt,
-    resultUrl: d.result_url,
+    resultUrl: d.preview_url ?? d.result_url,
     error: d.error,
     createdAt: d.created_at,
   }));

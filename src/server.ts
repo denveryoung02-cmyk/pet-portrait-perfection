@@ -2,6 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { verifyStripeWebhook, recordPaidOrder } from "./lib/fulfillment.server";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -66,9 +67,50 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   return brandedErrorResponse();
 }
 
+// Stripe webhook — authoritative, async order recording. Handled here (ahead
+// of the TanStack router) so we get the raw request body for signature
+// verification. On checkout.session.completed we idempotently mark the order
+// paid (the success page's confirmCheckout does the same, keyed on session id).
+async function handleStripeWebhook(request: Request): Promise<Response> {
+  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!secret) {
+    console.error("STRIPE_WEBHOOK_SECRET is not configured.");
+    return new Response("Webhook not configured", { status: 500 });
+  }
+
+  const payload = await request.text();
+  const event = await verifyStripeWebhook(payload, request.headers.get("stripe-signature"), secret);
+  if (!event) return new Response("Invalid signature", { status: 400 });
+
+  try {
+    if (event.type === "checkout.session.completed") {
+      const session = event.data?.object ?? {};
+      const generationId: string | undefined = session?.metadata?.generationId;
+      if (session?.payment_status === "paid" && session?.id && generationId) {
+        await recordPaidOrder({
+          sessionId: session.id,
+          generationId,
+          amountTotalCents: typeof session.amount_total === "number" ? session.amount_total : null,
+        });
+      }
+    }
+  } catch (error) {
+    // Log but still 200 so Stripe doesn't hammer retries on a transient issue;
+    // the success page's confirmCheckout is a backstop for recording.
+    console.error("Stripe webhook handling error:", error);
+  }
+
+  return new Response("ok", { status: 200 });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+      if (request.method === "POST" && url.pathname === "/api/stripe/webhook") {
+        return await handleStripeWebhook(request);
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
