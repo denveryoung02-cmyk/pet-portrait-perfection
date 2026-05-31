@@ -21,11 +21,11 @@ export type GenerationInput = {
 
 const THEME_STYLE: Record<string, string> = {
   royal: "ornate baroque oil-painting style, regal velvet drapery, gold filigree, dramatic candlelight, crown jewels, museum-grade composition",
-  mafia: "stylised cartoon caricature, film noir atmosphere, pinstripe suit, fedora hat, moody speakeasy lighting, Pixar-meets-graphic-novel art style, dramatic shadows",
-  viking: "stylised cartoon caricature, epic Norse warrior scene, fur cloak, snowy fjord backdrop, dramatic stormy sky, Pixar-meets-fantasy-illustration art style, heroic composition",
-  astronaut: "stylised cartoon caricature, NASA astronaut portrait, reflective helmet visor, deep-space nebula backdrop, Pixar-meets-sci-fi art style, cinematic rim lighting",
-  superhero: "stylised cartoon caricature, comic-book superhero portrait, dynamic cape, city skyline, bold vivid colours, Pixar-meets-Marvel art style, heroic three-quarter pose",
-  pirate: "stylised cartoon caricature, swashbuckling pirate captain, tricorn hat, ship deck at golden-hour sunset, Pixar-meets-adventure-illustration art style, sea spray and drama",
+  mafia: "rich cinematic oil-painting portrait style, dramatic noir lighting, deep shadows, moody atmosphere, painterly brush strokes, museum-grade composition, pinstripe suit, fedora, smoky speakeasy background",
+  viking: "dramatic oil-painting portrait style, epic Norse scene, painterly brush strokes, rich earthy tones, stormy sky backdrop, museum-grade composition, fur cloak, battle-worn warrior",
+  astronaut: "rich digital oil-painting portrait style, deep space backdrop, dramatic rim lighting, painterly detail, museum-grade composition, reflective helmet visor, nebula colours",
+  superhero: "dramatic comic oil-painting portrait style, painterly brush strokes, vivid rich colours, museum-grade composition, dynamic cape, city skyline, heroic lighting",
+  pirate: "swashbuckling oil-painting portrait style, golden-hour warm tones, painterly brush strokes, dramatic lighting, museum-grade composition, tricorn hat, ship deck background",
 };
 
 const PERSONALITY_HINTS: Record<string, string> = {
@@ -80,7 +80,7 @@ export function buildPrompt(input: GenerationInput): string {
       : "";
 
   const lines = [
-    `Cute stylised cartoon illustration portrait of a ${pet}, Pixar animation quality, warm expressive eyes, professional digital art${input.petName ? `, named ${input.petName}` : ""}.`,
+    `Highly detailed oil-painting style portrait of a ${pet}, rich painterly texture, professional portrait art${input.petName ? `, named ${input.petName}` : ""}.`,
     `Scene & style: ${themeStyle}.`,
     `Character vibe: ${personality}.`,
     traitText ? `Additional personality traits: ${traitText}.` : "",

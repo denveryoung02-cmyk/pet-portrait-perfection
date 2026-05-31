@@ -242,6 +242,18 @@ function CreateWizard() {
     setPersonalityId(theme.personalities[0].id);
   }, [themeId]); // eslint-disable-line
 
+  /* inputs changed → discard any previous result so returning to the
+     generate step produces a fresh image for the new theme/personality/traits */
+  useEffect(() => {
+    setGenDone(false);
+    setGenFailed(false);
+    setGenError(null);
+    setGenResultUrl(null);
+    setGenId(null);
+    setGenProgress(0);
+    setGenStage(0);
+  }, [themeId, personalityId, traits]); // eslint-disable-line
+
   /* generation: real server fn when authed + uploaded; simulated otherwise */
   useEffect(() => {
     if (step !== 5 || genDone || genFailed) return;
