@@ -61,56 +61,56 @@ function Home() {
         <div className="absolute inset-0 -z-10" style={{ background: "var(--gradient-hero)" }} />
         <div className="absolute -top-32 -right-32 size-[500px] rounded-full opacity-40 blur-3xl" style={{ background: "var(--gradient-primary)" }} />
 
-        <div className="mx-auto max-w-7xl px-5 md:px-8 pt-12 md:pt-20 pb-20 md:pb-28 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 pt-8 sm:pt-12 md:pt-20 pb-16 sm:pb-20 md:pb-28 grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           <div className="animate-[fade-up_0.8s_ease-out]">
-            <div className="inline-flex items-center gap-2 rounded-full bg-card border border-border px-4 py-1.5 text-xs font-medium shadow-[var(--shadow-soft)]">
+            <div className="inline-flex items-center gap-2 rounded-full bg-card border border-border px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-medium shadow-[var(--shadow-soft)]">
               <span className="size-1.5 rounded-full bg-primary animate-pulse" />
               AI-powered • Made in 60 seconds
             </div>
-            <h1 className="mt-6 font-display text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight">
+            <h1 className="mt-5 sm:mt-6 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight">
               Every pet deserves a<br />
               <span className="italic text-primary">movie poster</span><br />
               moment.
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-md leading-relaxed">
+            <p className="mt-5 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-md leading-relaxed">
               Upload one photo. Our AI turns your pet into a cinematic caricature — royal, viking, superhero, whatever they secretly think they are. Printed on stuff worth gifting.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3">
               <Link
                 to="/upload"
-                className="group relative rounded-full px-7 py-4 text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
+                className="group relative rounded-full px-5 sm:px-7 py-3 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
                 style={{ background: "var(--gradient-primary)" }}
               >
                 ✨ Start Creating — it's free to try
               </Link>
-              <a href="#how" className="rounded-full px-7 py-4 text-base font-semibold border border-foreground/15 hover:bg-card transition">
+              <a href="#how" className="rounded-full px-5 sm:px-7 py-3 sm:py-4 text-sm sm:text-base font-semibold border border-foreground/15 hover:bg-card transition">
                 See it in action
               </a>
             </div>
-            <div className="mt-8 flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="mt-6 sm:mt-8 flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
               <div className="flex -space-x-2">
                 {[royal, superhero, astronaut, viking].map((src, i) => (
-                  <img key={i} src={src} alt="" className="size-9 rounded-full border-2 border-background object-cover" />
+                  <img key={i} src={src} alt="" className="size-7 sm:size-9 rounded-full border-2 border-background object-cover" />
                 ))}
               </div>
               <div>
-                <div className="text-foreground font-semibold">★★★★★ 4.9 / 5</div>
-                <div className="text-xs">12,400+ happy pet parents</div>
+                <div className="text-foreground font-semibold text-xs sm:text-sm">★★★★★ 4.9 / 5</div>
+                <div className="text-[10px] sm:text-xs">12,400+ happy pet parents</div>
               </div>
             </div>
           </div>
 
           <div className="relative">
-            <div className="relative rounded-[2rem] overflow-hidden bg-card shadow-[var(--shadow-card)] aspect-[7/6]">
+            <div className="relative rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-card shadow-[var(--shadow-card)] aspect-[7/6]">
               <img src={royalV1} alt="Pet caricature transformation" className="w-full h-full object-cover" width={1400} height={1200} />
-              <div className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 rounded-full bg-background/90 backdrop-blur px-2 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 sm:gap-1.5">
                 <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" /> AI generated · 58s
               </div>
             </div>
-            <div className="absolute -bottom-6 -left-6 size-32 md:size-40 rounded-3xl overflow-hidden border-4 border-background shadow-[var(--shadow-card)] animate-[float_6s_ease-in-out_infinite]">
+            <div className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 size-24 sm:size-32 md:size-40 rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-4 border-background shadow-[var(--shadow-card)] animate-[float_6s_ease-in-out_infinite]">
               <img src={royalV2} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
-            <div className="absolute -top-6 -right-4 size-28 md:size-32 rounded-3xl overflow-hidden border-4 border-background shadow-[var(--shadow-card)] animate-[float_7s_ease-in-out_infinite_reverse]">
+            <div className="absolute -top-4 -right-3 sm:-top-6 sm:-right-4 size-20 sm:size-28 md:size-32 rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-4 border-background shadow-[var(--shadow-card)] animate-[float_7s_ease-in-out_infinite_reverse]">
               <img src={royalV3} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
@@ -119,18 +119,18 @@ function Home() {
 
       {/* TRUST STRIP */}
       <section className="border-y border-border bg-card/60">
-        <div className="mx-auto max-w-7xl px-5 md:px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 py-6 sm:py-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
           {[
             { icon: "⚡", label: "Generated in", bold: "Under 60 seconds" },
             { icon: "🌍", label: "Printed & shipped", bold: "Worldwide" },
             { icon: "💝", label: "Happiness", bold: "30-day guarantee" },
             { icon: "⭐", label: "Loved by", bold: "12,400+ pet parents" },
           ].map((t) => (
-            <div key={t.bold} className="flex items-center justify-center gap-3">
-              <div className="text-2xl">{t.icon}</div>
+            <div key={t.bold} className="flex items-center justify-center gap-2 sm:gap-3">
+              <div className="text-xl sm:text-2xl">{t.icon}</div>
               <div className="text-left">
-                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t.label}</div>
-                <div className="font-display text-sm md:text-base font-semibold">{t.bold}</div>
+                <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">{t.label}</div>
+                <div className="font-display text-xs sm:text-sm md:text-base font-semibold">{t.bold}</div>
               </div>
             </div>
           ))}
@@ -138,7 +138,7 @@ function Home() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how" className="mx-auto max-w-7xl px-5 md:px-8 py-20 md:py-28">
+      <section id="how" className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 py-16 sm:py-20 md:py-28">
         <div className="text-center max-w-2xl mx-auto">
           <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">How it works</span>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">Three steps. One masterpiece.</h2>

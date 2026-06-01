@@ -89,18 +89,18 @@ function Success() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <section className="mx-auto max-w-2xl px-5 md:px-8 py-16 md:py-24 text-center">
+      <section className="mx-auto max-w-2xl px-4 sm:px-5 md:px-8 py-12 sm:py-16 md:py-24 text-center">
         {loading ? (
-          <div className="space-y-4">
-            <div className="text-5xl animate-bounce">🎨</div>
-            <p className="text-muted-foreground">Preparing your download…</p>
+          <div className="space-y-3 sm:space-y-4">
+            <div className="text-4xl sm:text-5xl animate-bounce">🎨</div>
+            <p className="text-sm sm:text-base text-muted-foreground">Preparing your download…</p>
           </div>
         ) : error ? (
-          <div className="space-y-4">
-            <div className="text-5xl">😿</div>
-            <h1 className="font-display text-3xl">Something went wrong</h1>
-            <p className="text-muted-foreground">{error}</p>
-            <p className="text-sm text-muted-foreground">
+          <div className="space-y-3 sm:space-y-4">
+            <div className="text-4xl sm:text-5xl">😿</div>
+            <h1 className="font-display text-2xl sm:text-3xl">Something went wrong</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">{error}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Your payment was processed. Please email us at{" "}
               <a href="mailto:hello@pawtoons.ai" className="text-primary underline">
                 hello@pawtoons.ai
@@ -109,20 +109,20 @@ function Success() {
             </p>
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Success header */}
-            <div className="space-y-3">
-              <div className="text-5xl">🎉</div>
-              <h1 className="font-display text-4xl md:text-5xl">Your Pawtoon is ready!</h1>
-              <p className="text-muted-foreground">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="text-4xl sm:text-5xl">🎉</div>
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight">Your Pawtoon is ready!</h1>
+              <p className="text-sm sm:text-base text-muted-foreground">
                 Payment confirmed. Your high-resolution portrait is ready to download.
               </p>
             </div>
 
             {/* Portrait preview */}
             {previewUrl && (
-              <div className="mx-auto max-w-sm">
-                <div className="rounded-3xl overflow-hidden border border-border shadow-lg">
+              <div className="mx-auto max-w-sm px-4 sm:px-0">
+                <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border shadow-lg">
                   <img
                     src={previewUrl}
                     alt="Your Pawtoon"
@@ -133,10 +133,10 @@ function Success() {
             )}
 
             {/* Download button */}
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               <button
                 onClick={handleDownload}
-                className="inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
                 style={{ background: "var(--gradient-primary)" }}
               >
                 <span>⬇</span> Download my Pawtoon
@@ -147,22 +147,22 @@ function Success() {
             </div>
 
             {/* What's next */}
-            <div className="rounded-3xl bg-card border border-border p-6 text-left space-y-3">
-              <h3 className="font-display text-lg">What's next?</h3>
-              <ul className="text-sm text-muted-foreground space-y-2">
+            <div className="rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-6 text-left space-y-2 sm:space-y-3">
+              <h3 className="font-display text-base sm:text-lg">What's next?</h3>
+              <ul className="text-xs sm:text-sm text-muted-foreground space-y-2">
                 <li className="flex items-start gap-2">
-                  <span>🐾</span> Share your Pawtoon on social media and tag us @pawtoons
+                  <span>🐾</span> <span>Share your Pawtoon on social media and tag us @pawtoons</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span>🖨️</span> Print it at home or at your local print shop
+                  <span>🖨️</span> <span>Print it at home or at your local print shop</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span>🎁</span> Make another one for a friend's pet!
+                  <span>🎁</span> <span>Make another one for a friend's pet!</span>
                 </li>
               </ul>
             </div>
 
-            <div className="flex justify-center gap-4 text-sm">
+            <div className="flex justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
               <Link to="/upload" className="text-primary hover:underline">
                 Create another Pawtoon →
               </Link>

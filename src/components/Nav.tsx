@@ -57,7 +57,7 @@ export function Nav() {
               )}
             </div>
           ) : (
-            <Link to="/auth" className="hidden sm:inline text-sm font-semibold text-muted-foreground hover:text-foreground">Sign in</Link>
+            <Link to="/auth" className="text-sm font-semibold text-muted-foreground hover:text-foreground">Sign in</Link>
           )}
           <Link to="/upload" className="rounded-full bg-foreground text-background px-4 md:px-5 py-2.5 text-sm font-semibold hover:bg-primary transition-colors shadow-[var(--shadow-soft)]">
             Start Creating

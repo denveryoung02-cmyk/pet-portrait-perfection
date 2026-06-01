@@ -72,58 +72,58 @@ function Checkout() {
   return (
     <div className="min-h-screen bg-background">
       <Nav />
-      <section className="mx-auto max-w-5xl px-5 md:px-8 py-12 md:py-20">
-        <div className="text-center mb-12">
+      <section className="mx-auto max-w-5xl px-4 sm:px-5 md:px-8 py-8 sm:py-12 md:py-20">
+        <div className="text-center mb-8 sm:mb-12">
           <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Step 3 of 3</span>
-          <h1 className="mt-3 text-4xl md:text-5xl font-display">Almost there.</h1>
+          <h1 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-display">Almost there.</h1>
         </div>
 
-        <div className="grid lg:grid-cols-[1fr_380px] gap-8">
-          <form className="rounded-3xl bg-card border border-border p-6 md:p-8 space-y-6">
+        <div className="grid lg:grid-cols-[1fr_380px] gap-6 sm:gap-8">
+          <form className="rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
             <div>
-              <h2 className="font-display text-xl mb-4">Contact</h2>
-              <input type="email" placeholder="Email address" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+              <h2 className="font-display text-lg sm:text-xl mb-3 sm:mb-4">Contact</h2>
+              <input type="email" placeholder="Email address" className="w-full rounded-xl border border-input bg-background px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
             </div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               You'll be redirected to our secure Stripe checkout to complete payment.
             </p>
             {error ? (
-              <p className="text-center text-sm text-destructive">{error}</p>
+              <p className="text-center text-xs sm:text-sm text-destructive">{error}</p>
             ) : null}
 
             <button
               type="button"
               onClick={onPlaceOrder}
               disabled={isPlacingOrder}
-              className="w-full rounded-full px-6 py-4 font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
+              className="w-full rounded-full px-5 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
               style={{ background: "var(--gradient-primary)" }}
             >
               {isPlacingOrder ? "Redirecting to checkout..." : "Place order — £2.99"}
             </button>
           </form>
 
-          <aside className="rounded-3xl bg-card border border-border p-6 h-fit sticky top-24">
-            <h3 className="font-display text-lg mb-4">Order summary</h3>
-            <div className="flex gap-4 mb-5">
-              <div className="relative size-20 rounded-xl overflow-hidden bg-secondary flex-shrink-0 grid place-items-center text-3xl">
+          <aside className="rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-6 h-fit lg:sticky lg:top-24">
+            <h3 className="font-display text-base sm:text-lg mb-3 sm:mb-4">Order summary</h3>
+            <div className="flex gap-3 sm:gap-4 mb-4 sm:mb-5">
+              <div className="relative size-16 sm:size-20 rounded-xl overflow-hidden bg-secondary flex-shrink-0 grid place-items-center text-2xl sm:text-3xl">
                 {previewUrl ? (
                   <img src={previewUrl} alt="Your Pawtoon" className="w-full h-full object-cover" />
                 ) : (
                   <span>🐾</span>
                 )}
               </div>
-              <div className="flex-1">
-                <div className="font-semibold text-sm">Pawtoons Digital Portrait</div>
-                <div className="text-xs text-muted-foreground">High-resolution PNG · instant download</div>
-                <div className="mt-1 font-semibold">£2.99</div>
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-xs sm:text-sm">Pawtoons Digital Portrait</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground">High-resolution PNG · instant download</div>
+                <div className="mt-1 font-semibold text-sm sm:text-base">£2.99</div>
               </div>
             </div>
-            <div className="space-y-2 text-sm border-t border-border pt-4">
+            <div className="space-y-2 text-xs sm:text-sm border-t border-border pt-3 sm:pt-4">
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>£2.99</span></div>
-              <div className="flex justify-between font-semibold text-base pt-2 border-t border-border"><span>Total</span><span>£2.99</span></div>
+              <div className="flex justify-between font-semibold text-sm sm:text-base pt-2 border-t border-border"><span>Total</span><span>£2.99</span></div>
             </div>
-            <Link to="/upload" className="block text-center text-xs text-muted-foreground mt-4 hover:text-foreground">← Back</Link>
+            <Link to="/upload" className="block text-center text-xs text-muted-foreground mt-3 sm:mt-4 hover:text-foreground">← Back</Link>
           </aside>
         </div>
       </section>

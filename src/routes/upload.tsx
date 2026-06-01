@@ -350,18 +350,18 @@ function CreateWizard() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-32 md:pb-28">
+    <div className="min-h-screen bg-background pb-24 sm:pb-32 md:pb-28">
       <Nav />
 
       {/* Progress */}
       <ProgressBar step={step} onJump={(n) => n < step && setStep(n as any)} />
 
-      <main className="mx-auto max-w-6xl px-5 md:px-8 py-8 md:py-12">
-        <header className="mb-8 md:mb-10">
+      <main className="mx-auto max-w-6xl px-4 sm:px-5 md:px-8 py-6 sm:py-8 md:py-12">
+        <header className="mb-6 sm:mb-8 md:mb-10">
           <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
             Step {step} of 5 · {STEPS[step - 1]?.sub}
           </span>
-          <h1 className="mt-2 text-3xl md:text-5xl font-display">{stepHeadline(step)}</h1>
+          <h1 className="mt-2 text-2xl sm:text-3xl md:text-5xl font-display leading-tight">{stepHeadline(step)}</h1>
         </header>
 
         <div key={step} className="animate-[fade-up_0.45s_ease-out]">
@@ -391,12 +391,12 @@ function CreateWizard() {
       </main>
 
       {/* Sticky footer nav */}
-      <div className="fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background/95 backdrop-blur-xl">
-        <div className="mx-auto max-w-6xl px-5 md:px-8 py-3 md:py-4 flex items-center gap-3">
+      <div className="fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background/95 backdrop-blur-xl safe-bottom">
+        <div className="mx-auto max-w-6xl px-4 sm:px-5 md:px-8 py-3 md:py-4 flex items-center gap-2 sm:gap-3">
           <button
             onClick={goBack}
             disabled={step === 1}
-            className="rounded-full px-4 md:px-5 py-3 text-sm font-semibold border border-border bg-card disabled:opacity-40 hover:bg-secondary transition"
+            className="rounded-full px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border border-border bg-card disabled:opacity-40 hover:bg-secondary transition whitespace-nowrap"
           >
             ← Back
           </button>
@@ -409,10 +409,10 @@ function CreateWizard() {
           <button
             onClick={goNext}
             disabled={!canNext()}
-            className="rounded-full px-6 md:px-8 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-40 disabled:shadow-none disabled:hover:scale-100"
+            className="rounded-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-40 disabled:shadow-none disabled:hover:scale-100 whitespace-nowrap"
             style={{ background: "var(--gradient-primary)" }}
           >
-            {step === 5 && !genDone ? "Generating…" : step === 5 && genDone ? "Go to checkout →" : "Next →"}
+            {step === 5 && !genDone ? "Generating…" : step === 5 && genDone ? "Checkout →" : "Next →"}
           </button>
         </div>
       </div>
@@ -442,8 +442,8 @@ function stepHeadline(s: number) {
 function ProgressBar({ step, onJump }: { step: number; onJump: (n: number) => void }) {
   const pct = ((step - 1) / 6) * 100;
   return (
-    <div className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-16 z-30">
-      <div className="mx-auto max-w-6xl px-5 md:px-8 py-4">
+    <div className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-16 md:top-20 z-30">
+      <div className="mx-auto max-w-6xl px-4 sm:px-5 md:px-8 py-3 sm:py-4">
         <div className="relative h-1.5 bg-secondary rounded-full overflow-hidden">
           <div
             className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
@@ -478,8 +478,8 @@ function ProgressBar({ step, onJump }: { step: number; onJump: (n: number) => vo
             );
           })}
         </ol>
-        <div className="mt-3 md:hidden flex items-center justify-between text-xs">
-          <span className="font-semibold">Step {step} / 7</span>
+        <div className="mt-2 sm:mt-3 md:hidden flex items-center justify-between text-xs">
+          <span className="font-semibold">Step {step} / 5</span>
           <span className="text-muted-foreground">{STEPS[step - 1]?.sub}</span>
         </div>
       </div>
@@ -494,7 +494,7 @@ function StepUpload({
   setDragOver, onPick, onDrop, removeFile,
 }: any) {
   return (
-    <div className="grid lg:grid-cols-[1fr_360px] gap-8">
+    <div className="grid lg:grid-cols-[1fr_360px] gap-6 sm:gap-8">
       <div>
         {!file ? (
           <div
@@ -502,7 +502,7 @@ function StepUpload({
             onDragLeave={() => setDragOver(false)}
             onDrop={onDrop}
             onClick={() => inputRef.current?.click()}
-            className={`relative rounded-3xl border-2 border-dashed bg-card p-10 md:p-16 text-center cursor-pointer transition-all ${
+            className={`relative rounded-2xl sm:rounded-3xl border-2 border-dashed bg-card p-6 sm:p-10 md:p-16 text-center cursor-pointer transition-all ${
               dragOver ? "border-primary bg-primary/5 scale-[1.01]" : "border-border hover:border-primary/40 hover:bg-secondary/40"
             }`}
           >
@@ -516,12 +516,12 @@ function StepUpload({
               </div>
             ) : (
               <>
-                <div className="size-20 mx-auto rounded-2xl grid place-items-center text-4xl mb-5" style={{ background: "var(--gradient-warm)" }}>
+                <div className="size-16 sm:size-20 mx-auto rounded-2xl grid place-items-center text-3xl sm:text-4xl mb-4 sm:mb-5" style={{ background: "var(--gradient-warm)" }}>
                   🐾
                 </div>
-                <h3 className="font-display text-2xl mb-1">Drag & drop your pet photo</h3>
-                <p className="text-sm text-muted-foreground mb-6">or click anywhere to browse · JPG, PNG, HEIC up to 12MB</p>
-                <button className="rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
+                <h3 className="font-display text-xl sm:text-2xl mb-1">Drag & drop your pet photo</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-5 sm:mb-6">or click anywhere to browse · JPG, PNG, HEIC up to 12MB</p>
+                <button className="rounded-full px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)]" style={{ background: "var(--gradient-primary)" }}>
                   Choose photo
                 </button>
               </>
@@ -529,21 +529,21 @@ function StepUpload({
             <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={onPick} />
           </div>
         ) : (
-          <div className="rounded-3xl bg-card border border-border overflow-hidden">
+          <div className="rounded-2xl sm:rounded-3xl bg-card border border-border overflow-hidden">
             <div className="relative aspect-[4/3] bg-secondary">
               <img src={file} alt="Your pet" className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5">
-                <span className="size-2 rounded-full bg-emerald-500" /> Photo ready
+              <div className="absolute top-2 sm:top-3 left-2 sm:left-3 rounded-full bg-background/90 backdrop-blur px-2.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold flex items-center gap-1 sm:gap-1.5">
+                <span className="size-1.5 sm:size-2 rounded-full bg-emerald-500" /> Photo ready
               </div>
             </div>
-            <div className="p-4 flex items-center justify-between">
-              <div className="text-sm">
-                <div className="font-semibold truncate max-w-[200px]">{fileName}</div>
+            <div className="p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="text-sm flex-1 min-w-0">
+                <div className="font-semibold truncate">{fileName}</div>
                 <div className="text-xs text-muted-foreground">Looks great — tap next to continue.</div>
               </div>
-              <div className="flex gap-2">
-                <button onClick={() => inputRef.current?.click()} className="rounded-full px-4 py-2 text-xs font-semibold border border-border hover:bg-secondary">Change</button>
-                <button onClick={removeFile} className="rounded-full px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10">Remove</button>
+              <div className="flex gap-2 w-full sm:w-auto">
+                <button onClick={() => inputRef.current?.click()} className="flex-1 sm:flex-none rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-semibold border border-border hover:bg-secondary">Change</button>
+                <button onClick={removeFile} className="flex-1 sm:flex-none rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-semibold text-destructive hover:bg-destructive/10">Remove</button>
               </div>
               <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={onPick} />
             </div>
@@ -561,9 +561,9 @@ function StepUpload({
         )}
       </div>
 
-      <aside className="rounded-3xl bg-card border border-border p-6 h-fit">
-        <h3 className="font-display text-lg mb-1">📸 Photo tips</h3>
-        <p className="text-xs text-muted-foreground mb-4">Better photos = better Pawtoons.</p>
+      <aside className="rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-6 h-fit">
+        <h3 className="font-display text-base sm:text-lg mb-1">📸 Photo tips</h3>
+        <p className="text-xs text-muted-foreground mb-3 sm:mb-4">Better photos = better Pawtoons.</p>
         <Tip ok text="Clear, well-lit face" />
         <Tip ok text="Eyes visible" />
         <Tip ok text="Close-up shot" />
