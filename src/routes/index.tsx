@@ -77,7 +77,7 @@ function Home() {
             <p className="mt-5 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-md leading-relaxed">
               Upload one photo. Our AI turns your pet into a cinematic caricature — royal, viking, superhero, whatever they secretly think they are. Instant digital download.
             </p>
-            <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3">
+            <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3 items-center">
               <Link
                 to="/upload"
                 className="group relative rounded-full px-5 sm:px-7 py-3 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
@@ -88,6 +88,7 @@ function Home() {
               <a href="#how" className="rounded-full px-5 sm:px-7 py-3 sm:py-4 text-sm sm:text-base font-semibold border border-foreground/15 hover:bg-card transition">
                 See it in action
               </a>
+              <span className="text-xs sm:text-sm text-muted-foreground">From £2.99 · Instant digital download</span>
             </div>
             <div className="mt-6 sm:mt-8 flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
               <div className="flex -space-x-2">
