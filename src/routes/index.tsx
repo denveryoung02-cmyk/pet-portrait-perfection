@@ -17,6 +17,10 @@ import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
 import mousemat from "@/assets/product-mousemat.jpg";
+import newMug from "@/assets/New Product Mug.png";
+import newTshirt from "@/assets/New Product T-Shirt.png";
+import newPoster from "@/assets/New Product Picture Frame.png";
+import newMousemat from "@/assets/New Product Mouse Mat.png";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -30,10 +34,10 @@ const themes = [
 ];
 
 const products = [
-  { name: "Ceramic Mug", price: "Coming Soon", img: royalV1 },
-  { name: "Premium Tee", price: "Coming Soon", img: superheroGen },
-  { name: "Framed Poster", price: "Coming Soon", img: vikingGen },
-  { name: "Mouse Mat", price: "Coming Soon", img: pirateGen },
+  { name: "Ceramic Mug", price: "Coming Soon", img: newMug },
+  { name: "Premium Tee", price: "Coming Soon", img: newTshirt },
+  { name: "Framed Poster", price: "Coming Soon", img: newPoster },
+  { name: "Mouse Mat", price: "Coming Soon", img: newMousemat },
 ];
 
 
