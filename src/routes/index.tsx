@@ -10,6 +10,7 @@ import mafiaGen from "@/assets/gen-mafia-v1.png";
 import astronautGen from "@/assets/gen-astronaut-v1.png";
 import vikingGen from "@/assets/gen-viking-v1.png";
 import pirateGen from "@/assets/gen-pirate-v1.png";
+import superhero from "@/assets/pet-superhero.jpg";
 import lifestyleMug from "@/assets/lifestyle-mug.jpg";
 import packagingUnbox from "@/assets/packaging-unbox.jpg";
 import mug from "@/assets/product-mug.jpg";
