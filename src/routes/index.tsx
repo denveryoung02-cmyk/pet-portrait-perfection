@@ -30,10 +30,10 @@ const themes = [
 ];
 
 const products = [
-  { name: "Ceramic Mug", price: "Coming Soon", img: mug },
-  { name: "Premium Tee", price: "Coming Soon", img: tshirt },
-  { name: "Framed Poster", price: "Coming Soon", img: poster },
-  { name: "Mouse Mat", price: "Coming Soon", img: mousemat },
+  { name: "Ceramic Mug", price: "Coming Soon", img: royalV1 },
+  { name: "Premium Tee", price: "Coming Soon", img: superheroGen },
+  { name: "Framed Poster", price: "Coming Soon", img: vikingGen },
+  { name: "Mouse Mat", price: "Coming Soon", img: pirateGen },
 ];
 
 
@@ -145,7 +145,7 @@ function Home() {
           {[
             { n: "01", title: "Upload photo", desc: "Drag in any clear photo of your pet. We handle the rest.", emoji: "📸" },
             { n: "02", title: "AI creates caricature", desc: "Pick a theme — Royal, Superhero, Viking — and watch the magic.", emoji: "✨" },
-            { n: "03", title: "We print & ship", desc: "Premium products, lovingly made and delivered to your door.", emoji: "📦" },
+            { n: "03", title: "Download instantly", desc: "Pay once, download your high-quality portrait immediately.", emoji: "⚡" },
           ].map((s) => (
             <div key={s.n} className="group relative rounded-3xl bg-card border border-border p-8 hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1">
               <div className="text-6xl">{s.emoji}</div>
@@ -298,10 +298,10 @@ function Home() {
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-6 rounded-[2rem] bg-card border border-border p-5 md:p-8 shadow-[var(--shadow-card)]">
           <div className="grid grid-cols-2 gap-4">
             <div className="rounded-2xl overflow-hidden aspect-square bg-secondary">
-              <img src={superhero} alt="" className="w-full h-full object-cover" loading="lazy" />
+              <img src={superheroGen} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="rounded-2xl overflow-hidden aspect-square bg-secondary">
-              <img src={mug} alt="" className="w-full h-full object-cover" loading="lazy" />
+              <img src={superheroGen} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="col-span-2 rounded-2xl bg-secondary p-4 flex items-center gap-3">
               <span className="text-2xl">⚡</span>
