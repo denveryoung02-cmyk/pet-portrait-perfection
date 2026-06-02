@@ -30,10 +30,10 @@ const themes = [
 ];
 
 const products = [
-  { name: "Ceramic Mug", price: "$24", img: mug },
-  { name: "Premium Tee", price: "$32", img: tshirt },
-  { name: "Framed Poster", price: "$45", img: poster },
-  { name: "Mouse Mat", price: "$19", img: mousemat },
+  { name: "Ceramic Mug", price: "Coming Soon", img: mug },
+  { name: "Premium Tee", price: "Coming Soon", img: tshirt },
+  { name: "Framed Poster", price: "Coming Soon", img: poster },
+  { name: "Mouse Mat", price: "Coming Soon", img: mousemat },
 ];
 
 
@@ -46,9 +46,7 @@ const testimonials = [
 const faqs = [
   { q: "How long does the AI take?", a: "About 60 seconds. You'll see your caricature preview before checkout." },
   { q: "What photos work best?", a: "Bright, well-lit photos where your pet's face is clearly visible. JPG or PNG, under 10MB." },
-  { q: "How long is shipping?", a: "5–7 business days worldwide. Expedited options available at checkout." },
   { q: "Can I edit the caricature?", a: "Yes — you can regenerate up to 3 times for free before placing your order." },
-  { q: "What's the return policy?", a: "30-day no-questions returns on all products. If your pet isn't happy, we aren't either." },
 ];
 
 function Home() {
@@ -122,8 +120,8 @@ function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 py-6 sm:py-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
           {[
             { icon: "⚡", label: "Generated in", bold: "Under 60 seconds" },
-            { icon: "🌍", label: "Printed & shipped", bold: "Worldwide" },
-            { icon: "💝", label: "Happiness", bold: "30-day guarantee" },
+            { icon: "💝", label: "Digital download", bold: "Instant access" },
+            { icon: "✨", label: "High quality", bold: "Print-ready files" },
             { icon: "⭐", label: "Loved by", bold: "12,400+ pet parents" },
           ].map((t) => (
             <div key={t.bold} className="flex items-center justify-center gap-2 sm:gap-3">
@@ -202,18 +200,17 @@ function Home() {
         </div>
         <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
           {products.map((p) => (
-            <Link to="/products" key={p.name} className="group">
+            <div key={p.name} className="group opacity-75">
               <div className="aspect-square rounded-3xl overflow-hidden bg-secondary mb-4">
-                <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                <img src={p.img} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
               </div>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-display text-lg">{p.name}</div>
-                  <div className="text-sm text-muted-foreground">From {p.price}</div>
+                  <div className="text-sm text-muted-foreground">{p.price}</div>
                 </div>
-                <div className="size-9 rounded-full bg-foreground text-background grid place-items-center text-sm group-hover:bg-primary transition">→</div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
@@ -238,18 +235,6 @@ function Home() {
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">Unboxing</span>
                 <h3 className="font-display text-xl md:text-2xl mt-1">Wrapped like a gift, because it is.</h3>
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-5 md:gap-6">
-              {[
-                { icon: "🚚", title: "Tracked shipping", sub: "Door-to-door in 5–7 days" },
-                { icon: "💝", title: "Free gift wrap", sub: "Add a note at checkout" },
-              ].map((b) => (
-                <div key={b.title} className="rounded-[2rem] bg-card border border-border p-6 flex flex-col justify-center">
-                  <div className="text-3xl mb-2">{b.icon}</div>
-                  <div className="font-display text-lg">{b.title}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{b.sub}</div>
-                </div>
-              ))}
             </div>
           </div>
         </div>
