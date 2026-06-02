@@ -2,15 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 
-import royal from "@/assets/pet-royal.jpg";
-import superhero from "@/assets/pet-superhero.jpg";
-import mafia from "@/assets/pet-mafia.jpg";
-import astronaut from "@/assets/pet-astronaut.jpg";
-import viking from "@/assets/pet-viking.jpg";
-import pirate from "@/assets/pet-pirate.jpg";
 import royalV1 from "@/assets/gen-royal-v1.jpg";
 import royalV2 from "@/assets/gen-royal-v2.jpg";
 import royalV3 from "@/assets/gen-royal-v3.jpg";
+import superheroGen from "@/assets/gen-superhero-v1.png";
+import mafiaGen from "@/assets/gen-mafia-v1.png";
+import astronautGen from "@/assets/gen-astronaut-v1.png";
+import vikingGen from "@/assets/gen-viking-v1.png";
+import pirateGen from "@/assets/gen-pirate-v1.png";
 import lifestyleMug from "@/assets/lifestyle-mug.jpg";
 import packagingUnbox from "@/assets/packaging-unbox.jpg";
 import mug from "@/assets/product-mug.jpg";
@@ -22,11 +21,11 @@ export const Route = createFileRoute("/")({ component: Home });
 
 const themes = [
   { name: "Royal Pet", img: royalV1, tag: "Crown jewels" },
-  { name: "Superhero Pet", img: superhero, tag: "Cape included" },
-  { name: "Mafia Boss", img: mafia, tag: "Don't mess" },
-  { name: "Viking Warrior", img: viking, tag: "Battle ready" },
-  { name: "Astronaut Explorer", img: astronaut, tag: "To infinity" },
-  { name: "Pirate Captain", img: pirate, tag: "Arrr-mazing" },
+  { name: "Superhero Pet", img: superheroGen, tag: "Cape included" },
+  { name: "Mafia Boss", img: mafiaGen, tag: "Don't mess" },
+  { name: "Viking Warrior", img: vikingGen, tag: "Battle ready" },
+  { name: "Astronaut Explorer", img: astronautGen, tag: "To infinity" },
+  { name: "Pirate Captain", img: pirateGen, tag: "Arrr-mazing" },
 ];
 
 const products = [
@@ -89,7 +88,7 @@ function Home() {
             </div>
             <div className="mt-6 sm:mt-8 flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
               <div className="flex -space-x-2">
-                {[royal, superhero, astronaut, viking].map((src, i) => (
+                {[royalV1, superheroGen, astronautGen, vikingGen].map((src, i) => (
                   <img key={i} src={src} alt="" className="size-7 sm:size-9 rounded-full border-2 border-background object-cover" />
                 ))}
               </div>
