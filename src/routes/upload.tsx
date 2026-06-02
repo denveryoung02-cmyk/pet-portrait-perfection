@@ -269,17 +269,16 @@ function CreateWizard() {
       });
     }, 220);
 
+    // Authentication is now required to reach Step 5, so this should always be true
     const useReal = !!session && !!uploadedImageId;
     let cancelled = false;
 
     (async () => {
+      // Safety check: if user somehow reached Step 5 without auth, block generation
       if (!useReal) {
-        // Anonymous demo path: just complete the simulation.
-        await new Promise((r) => setTimeout(r, 5000));
-        if (cancelled) return;
+        setGenError("Please sign in to generate your portrait.");
+        setGenFailed(true);
         clearInterval(tick);
-        setGenProgress(100);
-        setTimeout(() => setGenDone(true), 300);
         return;
       }
 
@@ -324,10 +323,16 @@ function CreateWizard() {
   /* step gating */
   const canNext = () => {
     if (step === 1) return !!file;
+    if (step === 4) return !!session; // Require sign-in before generation step
     if (step === 5) return genDone;
     return true;
   };
   const goNext = () => {
+    // Block advancement to Step 5 without authentication
+    if (step === 4 && !session) {
+      navigate({ to: "/auth", search: { redirect: "/upload" } as any });
+      return;
+    }
     if (step === 5 && !genDone) return;
     if (step === 5 && genDone) {
       navigate({ to: "/checkout", search: { gen: genId ?? undefined } as any });
@@ -374,7 +379,28 @@ function CreateWizard() {
           )}
           {step === 2 && <StepTheme themeId={themeId} setThemeId={setThemeId} />}
           {step === 3 && <StepPersonality theme={theme} personalityId={personalityId} setPersonalityId={setPersonalityId} />}
-          {step === 4 && <StepTraits traits={traits} toggleTrait={toggleTrait} />}
+          {step === 4 && (
+            <>
+              <StepTraits traits={traits} toggleTrait={toggleTrait} />
+              {!session && (
+                <div className="mt-8 rounded-3xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-6 sm:p-8 text-center max-w-2xl mx-auto">
+                  <div className="text-4xl sm:text-5xl mb-3">🔐</div>
+                  <h3 className="font-display text-xl sm:text-2xl">Sign in to generate</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground mt-2 mb-5 max-w-md mx-auto">
+                    Create an account to generate your AI portrait. It's free, takes 10 seconds, and your portrait will be ready in under a minute.
+                  </p>
+                  <Link
+                    to="/auth"
+                    search={{ redirect: "/upload" } as any}
+                    className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
+                    style={{ background: "var(--gradient-primary)" }}
+                  >
+                    Continue with Google →
+                  </Link>
+                </div>
+              )}
+            </>
+          )}
           {step === 5 && (
             <StepGenerate
               theme={theme} personality={personality} file={file}
