@@ -19,6 +19,8 @@ import vikingGen from "@/assets/gen-viking-v1.png";
 import astronautGen from "@/assets/gen-astronaut-v1.png";
 import superheroGen from "@/assets/gen-superhero-v1.png";
 import pirateGen from "@/assets/gen-pirate-v1.png";
+import pirateDragonGen from "@/assets/Gen-Pirate Dragon-V1.png";
+import catRoyalGen from "@/assets/Gen-Cat Royal-V1.png";
 import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
@@ -1207,14 +1209,10 @@ function Row({ k, v }: { k: string; v: string }) {
 /* ---------------- Social Showcase ---------------- */
 
 const FEED = [
-  { img: royalV1, user: "@bella.thecorgi", handle: "Bella, 4yo", caption: "She demanded the throne. We obliged. 👑", likes: "12.4k", comments: 284, theme: "Royal" },
-  { img: mafia, user: "@loki_themobster", handle: "Loki, 6yo", caption: "Don't make him ask twice for the treats.", likes: "8.9k", comments: 167, theme: "Mafia" },
-  { img: astronaut, user: "@mochi.in.space", handle: "Mochi, 2yo", caption: "Houston, we have a chonk. 🚀", likes: "21.2k", comments: 532, theme: "Astronaut" },
-  { img: superhero, user: "@captain_biscuit", handle: "Biscuit, 5yo", caption: "Saves the day. Naps for the rest.", likes: "6.7k", comments: 98, theme: "Superhero" },
-  { img: viking, user: "@thor.the.frenchie", handle: "Thor, 3yo", caption: "Sleepy warrior. Mighty after 14h.", likes: "9.3k", comments: 211, theme: "Viking" },
-  { img: pirate, user: "@captain.barknacle", handle: "Barknacle, 7yo", caption: "Treasure = his dinner bowl. Arrr.", likes: "5.1k", comments: 74, theme: "Pirate" },
-  { img: royalV3, user: "@cleo.princess", handle: "Cleo, 1yo", caption: "Tiny tyrant in flower-crown era. 🌸", likes: "14.8k", comments: 312, theme: "Royal" },
-  { img: royalV2, user: "@duke_thegrump", handle: "Duke, 8yo", caption: "Permanent side-eye. Iconic.", likes: "11.0k", comments: 245, theme: "Royal" },
+  { img: vikingGen, user: "@thor.the.frenchie", handle: "Thor, 3yo", caption: "Sleepy warrior. Mighty after 14h.", likes: "9.3k", comments: 211, theme: "Viking" },
+  { img: pirateDragonGen, user: "@captain.barknacle", handle: "Barknacle, 7yo", caption: "Treasure = his dinner bowl. Arrr.", likes: "5.1k", comments: 74, theme: "Pirate" },
+  { img: catRoyalGen, user: "@cleo.princess", handle: "Cleo, 1yo", caption: "Tiny tyrant in flower-crown era. 🌸", likes: "14.8k", comments: 312, theme: "Royal" },
+  { img: royalV3, user: "@duke_thegrump", handle: "Duke, 8yo", caption: "Permanent side-eye. Iconic.", likes: "11.0k", comments: 245, theme: "Royal" },
 ];
 
 function SocialShowcase() {
@@ -1267,20 +1265,20 @@ function SocialShowcase() {
             "💬 @mia_p: 'I cried laughing'",
             "♥ 312 just liked Cleo's Pawtoon",
             "🎉 New Pawtoon every 7 seconds",
-            "💬 @james: 'Bought 4 mugs. No regrets.'",
+            "💬 @james: 'Downloaded instantly and shared it everywhere — my friends are obsessed 🐾'",
             "🔥 Trending: Mafia theme",
             "💬 @nina: 'Better than my actual headshots'",
             "♥ 1.2k loved Thor's portrait",
-            "🎁 92% buy as a gift",
+            "💬 @emma_l: 'Set it as my phone wallpaper immediately ✨'",
           ].concat([
             "💬 @mia_p: 'I cried laughing'",
             "♥ 312 just liked Cleo's Pawtoon",
             "🎉 New Pawtoon every 7 seconds",
-            "💬 @james: 'Bought 4 mugs. No regrets.'",
+            "💬 @james: 'Downloaded instantly and shared it everywhere — my friends are obsessed 🐾'",
             "🔥 Trending: Mafia theme",
             "💬 @nina: 'Better than my actual headshots'",
             "♥ 1.2k loved Thor's portrait",
-            "🎁 92% buy as a gift",
+            "💬 @emma_l: 'Set it as my phone wallpaper immediately ✨'",
           ]).map((t, i) => (
             <span key={i} className="text-sm font-medium">{t}</span>
           ))}

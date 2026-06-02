@@ -42,9 +42,9 @@ const products = [
 
 
 const testimonials = [
-  { name: "Sarah K.", role: "Bella's mum", text: "I cried laughing. My dog as a royal king now lives on my favourite mug.", rating: 5 },
-  { name: "Marcus T.", role: "Loki's dad", text: "Gifted the superhero poster to my partner — instant tears of joy. Insane quality.", rating: 5 },
-  { name: "Priya R.", role: "Mochi's human", text: "The mafia bulldog tee is officially my personality now. Worth every penny.", rating: 5 },
+  { name: "Sarah K.", role: "Bella's mum", text: "Downloaded it instantly and everyone at work wants one now. Absolutely hilarious.", rating: 5 },
+  { name: "Marcus T.", role: "Loki's dad", text: "Made it my laptop wallpaper. Best £3 I've ever spent. No contest.", rating: 5 },
+  { name: "Priya R.", role: "Mochi's human", text: "Shared it on Instagram and got 200+ comments. My friends are obsessed.", rating: 5 },
 ];
 
 const faqs = [
