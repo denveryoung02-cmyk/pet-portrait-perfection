@@ -31,8 +31,7 @@ export function Footer() {
             <h4 className="font-display text-sm sm:text-base mb-3 sm:mb-4">Help</h4>
             <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-background/70">
               <li><a href="/#faq" className="hover:text-primary">FAQ</a></li>
-              <li><a href="#" className="hover:text-primary">Instant digital download</a></li>
-              <li><a href="#" className="hover:text-primary">Refund policy</a></li>
+              <li><span className="text-background/50">Instant digital download</span></li>
               <li><a href="mailto:hello@pawtoons.co" className="hover:text-primary">Contact us</a></li>
             </ul>
           </div>
@@ -40,8 +39,6 @@ export function Footer() {
             <h4 className="font-display text-sm sm:text-base mb-3 sm:mb-4">Contact</h4>
             <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-background/70">
               <li>hello@pawtoons.co</li>
-              <li>+1 (555) 123-PAWS</li>
-              <li>Mon–Fri, 9am–6pm EST</li>
             </ul>
           </div>
         </div>

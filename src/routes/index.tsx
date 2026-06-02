@@ -71,7 +71,7 @@ function Home() {
               moment.
             </h1>
             <p className="mt-5 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-md leading-relaxed">
-              Upload one photo. Our AI turns your pet into a cinematic caricature — royal, viking, superhero, whatever they secretly think they are. Printed on stuff worth gifting.
+              Upload one photo. Our AI turns your pet into a cinematic caricature — royal, viking, superhero, whatever they secretly think they are. Instant digital download.
             </p>
             <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3">
               <Link
@@ -194,9 +194,9 @@ function Home() {
       {/* PRODUCTS */}
       <section id="products" className="mx-auto max-w-7xl px-5 md:px-8 py-20 md:py-28">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Premium merch</span>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display">Built to last. Made to gift.</h2>
-          <p className="mt-4 text-muted-foreground">Heavy-weight ceramics, soft-touch cottons, museum paper. We don't cut corners.</p>
+          <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Coming Soon</span>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display">Printed products on the way.</h2>
+          <p className="mt-4 text-muted-foreground">Mugs, tees, posters, and more — launching soon with your digital portraits.</p>
         </div>
         <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
           {products.map((p) => (
@@ -304,22 +304,21 @@ function Home() {
               <img src={mug} alt="" className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="col-span-2 rounded-2xl bg-secondary p-4 flex items-center gap-3">
-              <span className="text-2xl">🚚</span>
+              <span className="text-2xl">⚡</span>
               <div className="flex-1 text-sm">
-                <div className="font-semibold">Estimated delivery</div>
-                <div className="text-muted-foreground text-xs">5–7 business days · Free over $50</div>
+                <div className="font-semibold">Instant delivery</div>
+                <div className="text-muted-foreground text-xs">Download immediately after payment</div>
               </div>
-              <div className="text-xs rounded-full bg-card border border-border px-3 py-1 font-semibold">On track ✓</div>
+              <div className="text-xs rounded-full bg-card border border-border px-3 py-1 font-semibold">Digital ✓</div>
             </div>
           </div>
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground">Order preview</div>
-            <h3 className="font-display text-2xl mt-1">Bella the Superhero Mug</h3>
+            <h3 className="font-display text-2xl mt-1">Bella the Superhero Portrait</h3>
             <div className="mt-4 space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-muted-foreground">Caricature</span><span>Superhero Pet</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Product</span><span>Ceramic Mug · 11oz</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>$2.99</span></div>
-              <div className="flex justify-between font-semibold text-base pt-3 border-t border-border"><span>Total</span><span>$26.99</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Theme</span><span>Superhero Pet</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Format</span><span>Digital Download</span></div>
+              <div className="flex justify-between font-semibold text-base pt-3 border-t border-border"><span>Total</span><span>£2.99</span></div>
             </div>
             <Link
               to="/upload"
