@@ -223,21 +223,21 @@ function Home() {
       <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20 md:pb-28">
         <div className="grid lg:grid-cols-2 gap-5 md:gap-6">
           <div className="relative rounded-[2rem] overflow-hidden bg-secondary group">
-            <img src={lifestyleMug} alt="Customer holding their Pawtoon mug" className="w-full h-[420px] md:h-[520px] object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
+            <img src={vikingGen} alt="Viking pet portrait" className="w-full h-[420px] md:h-[520px] object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
             <div className="absolute bottom-0 inset-x-0 p-7 text-white">
-              <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">In the wild</span>
-              <h3 className="font-display text-2xl md:text-3xl mt-1">Real prints. Real morning coffee.</h3>
-              <p className="text-sm opacity-85 mt-1.5 max-w-sm">Heavy-weight ceramic. Dishwasher safe. Survives the Monday-morning grip.</p>
+              <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">AI-Generated</span>
+              <h3 className="font-display text-2xl md:text-3xl mt-1">Your pet. Reimagined.</h3>
+              <p className="text-sm opacity-85 mt-1.5 max-w-sm">From everyday photo to cinematic portrait in under 60 seconds.</p>
             </div>
           </div>
           <div className="grid grid-rows-2 gap-5 md:gap-6">
             <div className="relative rounded-[2rem] overflow-hidden bg-secondary group">
-              <img src={packagingUnbox} alt="Premium Pawtoons unboxing" className="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
+              <img src={mafiaGen} alt="Mafia pet portrait" className="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               <div className="absolute bottom-0 inset-x-0 p-6 text-white">
-                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">Unboxing</span>
-                <h3 className="font-display text-xl md:text-2xl mt-1">Wrapped like a gift, because it is.</h3>
+                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">Instant Download</span>
+                <h3 className="font-display text-xl md:text-2xl mt-1">Ready to print. Ready to gift.</h3>
               </div>
             </div>
           </div>
