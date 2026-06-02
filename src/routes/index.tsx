@@ -318,7 +318,7 @@ function Home() {
           </div>
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground">Order preview</div>
-            <h3 className="font-display text-2xl mt-1">Bella the Superhero Portrait</h3>
+            <h3 className="font-display text-2xl mt-1">Kobi the Superhero</h3>
             <div className="mt-4 space-y-2 text-sm">
               <div className="flex justify-between"><span className="text-muted-foreground">Theme</span><span>Superhero Pet</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Format</span><span>Digital Download</span></div>
