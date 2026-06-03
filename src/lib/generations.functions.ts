@@ -35,12 +35,17 @@ export const generatePawtoon = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
 
     // 1. Load the uploaded image (owner-scoped via RLS)
+    console.log('[generatePawtoon] Looking for uploadedImageId:', data.uploadedImageId, 'userId:', userId);
     const { data: img, error: imgErr } = await supabase
       .from("uploaded_images")
       .select("id, storage_path")
       .eq("id", data.uploadedImageId)
       .single();
-    if (imgErr || !img) throw new Error("Uploaded image not found or not accessible.");
+    console.log('[generatePawtoon] Query result - img:', !!img, 'error:', imgErr?.message);
+    if (imgErr || !img) {
+      console.error('[generatePawtoon] Failed to fetch uploaded image:', imgErr);
+      throw new Error(`Uploaded image not found or not accessible: ${imgErr?.message ?? 'no data'}`);
+    }
 
     // 2. Build prompt and insert a generations row in processing state
     const prompt = buildPrompt({
@@ -82,8 +87,8 @@ export const generatePawtoon = createServerFn({ method: "POST" })
 
       // 4. Call Google Gemini API for image generation
       const env = getEnv();
-      const apiKey = env.GEMINI_API_KEY;
-      if (!apiKey) throw new Error("GEMINI_API_KEY is not configured.");
+      const apiKey = env.LOVABLE_API_KEY ?? env.GEMINI_API_KEY;
+      if (!apiKey) throw new Error("LOVABLE_API_KEY is not configured.");
 
       const aiRes = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
         method: "POST",
