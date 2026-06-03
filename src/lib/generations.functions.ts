@@ -80,7 +80,7 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       const mimeType = (blob.type || "image/jpeg") as string;
 
       // 4. Call Google Gemini API for image generation
-      const apiKey = process.env.GEMINI_API_KEY;
+      const apiKey = import.meta.env.GEMINI_API_KEY;
       if (!apiKey) throw new Error("GEMINI_API_KEY is not configured.");
 
       const aiRes = await fetch(`${GEMINI_URL}?key=${apiKey}`, {

@@ -72,7 +72,7 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 // verification. On checkout.session.completed we idempotently mark the order
 // paid (the success page's confirmCheckout does the same, keyed on session id).
 async function handleStripeWebhook(request: Request): Promise<Response> {
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  const secret = import.meta.env.STRIPE_WEBHOOK_SECRET;
   if (!secret) {
     console.error("STRIPE_WEBHOOK_SECRET is not configured.");
     return new Response("Webhook not configured", { status: 500 });
