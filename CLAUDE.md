@@ -55,7 +55,7 @@ The webhook is handled BEFORE the TanStack router (in `src/server.ts`) to captur
 
 TanStack Start server functions (created with `createServerFn`) live in `src/lib/*.functions.ts`:
 
-- `generations.functions.ts` — `generatePawtoon()` orchestrates AI generation via Google Gemini API
+- `generations.functions.ts` — `generatePawtoon()` orchestrates AI generation via OpenAI (GPT-4 Vision + DALL-E 3)
 - `stripe.functions.ts` — `createCheckoutSession()` initiates Stripe checkout
 - `fulfillment.functions.ts` — `confirmCheckout()` verifies payment, grants access
 - `fulfillment.server.ts` — `verifyStripeWebhook()` and `recordPaidOrder()` handle webhook events
@@ -69,7 +69,8 @@ All authenticated server functions use `requireSupabaseAuth` middleware.
 3. `generatePawtoon()` (in `generations.functions.ts`):
    - Builds prompt via `buildPrompt()` from `services/prompts.ts`
    - Downloads source photo from Supabase
-   - Sends to Google Gemini API (`gemini-2.5-flash-image` model)
+   - **Step 1**: Analyzes pet photo with GPT-4 Vision (extracts breed, colors, features)
+   - **Step 2**: Generates portrait with DALL-E 3 using enhanced prompt
    - Bakes watermark on result via `watermark.server.ts` (WASM-based `@cf-wasm/photon`)
    - Uploads both watermarked + unwatermarked versions to `caricatures` bucket
    - Writes `generations` table row with paths
@@ -146,7 +147,7 @@ Required vars (see `.env.example`):
 - `SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `SUPABASE_DB_URL`
-- `GEMINI_API_KEY` — for Google Gemini API (get from https://aistudio.google.com/apikey)
+- `OPENAI_API_KEY` — for OpenAI API (get from https://platform.openai.com/api-keys)
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 

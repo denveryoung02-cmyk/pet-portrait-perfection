@@ -18,7 +18,7 @@ export type CloudflareEnv = {
   STRIPE_SECRET_KEY?: string;
   STRIPE_WEBHOOK_SECRET?: string;
   VITE_STRIPE_PUBLISHABLE_KEY?: string;
-  GEMINI_API_KEY?: string;
+  OPENAI_API_KEY?: string;
   [key: string]: any;
 };
 

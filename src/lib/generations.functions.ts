@@ -1,7 +1,11 @@
 /**
- * Server function: run an AI image generation via the Google Gemini API,
+ * Server function: run an AI image generation via OpenAI (GPT-4 Vision + DALL-E 3),
  * persist the result to the public `caricatures` storage bucket,
  * and write a row in `generations`.
+ *
+ * Two-step process:
+ * 1. GPT-4 Vision analyzes uploaded pet photo (breed, colors, features)
+ * 2. DALL-E 3 generates stylized portrait using enhanced prompt
  *
  * Called from the wizard's "Generate" step. Authenticated.
  */
@@ -25,8 +29,10 @@ const InputSchema = z.object({
   petName: z.string().max(64).optional(),
 });
 
-const GEMINI_MODEL = "gemini-2.5-flash-image";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const OPENAI_VISION_MODEL = "gpt-4o";
+const OPENAI_IMAGE_MODEL = "dall-e-3";
+const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
+const OPENAI_IMAGE_URL = "https://api.openai.com/v1/images/generations";
 
 export const generatePawtoon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -85,58 +91,99 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       const base64Image = Buffer.from(arrayBuf).toString("base64");
       const mimeType = (blob.type || "image/jpeg") as string;
 
-      // 4. Call Google Gemini API for image generation
+      // 4. Two-step OpenAI process: Analyze pet photo, then generate portrait
       const env = getEnv();
-      const apiKey = env.GEMINI_API_KEY;
-      if (!apiKey) throw new Error("GEMINI_API_KEY is not configured. Get your key from https://aistudio.google.com/apikey");
+      const apiKey = env.OPENAI_API_KEY;
+      if (!apiKey) throw new Error("OPENAI_API_KEY is not configured. Get your key from https://platform.openai.com/api-keys");
 
-      const aiRes = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
+      // Step 4a: Analyze pet photo with GPT-4 Vision
+      console.log('[generatePawtoon] Step 1: Analyzing pet photo with GPT-4 Vision...');
+      const visionRes = await fetch(OPENAI_CHAT_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          contents: [
+          model: OPENAI_VISION_MODEL,
+          messages: [
             {
-              parts: [
-                { text: prompt },
+              role: "user",
+              content: [
                 {
-                  inline_data: {
-                    mime_type: mimeType,
-                    data: base64Image,
+                  type: "text",
+                  text: "Analyze this pet photo in detail. Describe: species (dog/cat/other), breed or breed mix if identifiable, coat color and pattern, distinctive physical features (ears, eyes, markings), apparent size, and current pose/expression. Be specific and concise (3-4 sentences max). Focus on visual details that would help an artist recreate this specific pet.",
+                },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:${mimeType};base64,${base64Image}`,
                   },
                 },
               ],
             },
           ],
-          generationConfig: {
-            responseModalities: ["IMAGE", "TEXT"],
-            temperature: 1,
-          },
+          max_tokens: 300,
+          temperature: 0.7,
         }),
       });
 
-      if (!aiRes.ok) {
-        const errText = await aiRes.text().catch(() => "");
-        if (aiRes.status === 429) throw new Error("Rate limit reached — please try again in a minute.");
-        if (aiRes.status === 403) throw new Error("Gemini API key invalid or not authorised.");
-        throw new Error(`Gemini API error (${aiRes.status}): ${errText.slice(0, 300)}`);
+      if (!visionRes.ok) {
+        const errText = await visionRes.text().catch(() => "");
+        if (visionRes.status === 429) throw new Error("OpenAI rate limit reached — please try again in a minute.");
+        if (visionRes.status === 401) throw new Error("OpenAI API key invalid or not authorized.");
+        throw new Error(`OpenAI Vision API error (${visionRes.status}): ${errText.slice(0, 300)}`);
       }
 
-      const payload = await aiRes.json();
+      const visionData = await visionRes.json();
+      const petDescription = visionData.choices?.[0]?.message?.content;
 
-      // Extract the base64 image from Gemini's response
-      const parts = payload?.candidates?.[0]?.content?.parts ?? [];
-      const imagePart = parts.find((p: any) => p.inlineData?.mimeType?.startsWith("image/"));
-
-      if (!imagePart?.inlineData?.data) {
-        const textPart = parts.find((p: any) => p.text);
-        throw new Error(
-          textPart?.text
-            ? `Gemini declined: ${textPart.text.slice(0, 200)}`
-            : "Gemini did not return an image — try a clearer pet photo."
-        );
+      if (!petDescription) {
+        throw new Error("GPT-4 Vision did not return a pet description — try a clearer photo.");
       }
 
-      const resultBase64 = imagePart.inlineData.data;
+      console.log('[generatePawtoon] Pet analysis:', petDescription);
+
+      // Step 4b: Generate portrait with DALL-E 3 using enhanced prompt
+      console.log('[generatePawtoon] Step 2: Generating portrait with DALL-E 3...');
+      const enhancedPrompt = `${prompt}
+
+Pet details from photo: ${petDescription}
+
+Important: Create a portrait that captures this specific pet's unique characteristics (breed, colors, features) in the requested artistic style.`;
+
+      const dalleRes = await fetch(OPENAI_IMAGE_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: OPENAI_IMAGE_MODEL,
+          prompt: enhancedPrompt.slice(0, 4000), // DALL-E 3 has 4000 char limit
+          n: 1,
+          size: "1024x1024",
+          quality: "standard",
+          response_format: "b64_json",
+        }),
+      });
+
+      if (!dalleRes.ok) {
+        const errText = await dalleRes.text().catch(() => "");
+        if (dalleRes.status === 429) throw new Error("OpenAI rate limit reached — please try again in a minute.");
+        if (dalleRes.status === 401) throw new Error("OpenAI API key invalid or not authorized.");
+        if (dalleRes.status === 400) throw new Error("OpenAI rejected the prompt — try a different theme or personality.");
+        throw new Error(`OpenAI DALL-E 3 error (${dalleRes.status}): ${errText.slice(0, 300)}`);
+      }
+
+      const dalleData = await dalleRes.json();
+      const resultBase64 = dalleData.data?.[0]?.b64_json;
+
+      if (!resultBase64) {
+        throw new Error("DALL-E 3 did not return an image — please try again.");
+      }
+
+      console.log('[generatePawtoon] Generation successful');
       const resultBytes = Buffer.from(resultBase64, "base64");
 
       // 5a. Store the CLEAN original in the private bucket (never public).
