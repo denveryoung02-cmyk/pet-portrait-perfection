@@ -3,10 +3,8 @@
  *
  * In Cloudflare Workers, environment variables and bindings are passed via the
  * `env` object in the fetch handler. This module provides a way to access them
- * from anywhere in the server code via AsyncLocalStorage.
+ * from anywhere in the server code using a simple global reference.
  */
-
-import { AsyncLocalStorage } from 'node:async_hooks';
 
 export type CloudflareEnv = {
   SUPABASE_URL?: string;
@@ -24,23 +22,14 @@ export type CloudflareEnv = {
   [key: string]: any;
 };
 
-const envStorage = new AsyncLocalStorage<CloudflareEnv>();
-
 export function setEnv(env: CloudflareEnv): void {
   (globalThis as any).__CF_ENV__ = env;
 }
 
 export function getEnv(): CloudflareEnv {
-  const stored = envStorage.getStore();
-  if (stored) return stored;
-
   const global = (globalThis as any).__CF_ENV__;
   if (global) return global;
 
   // Fallback to import.meta.env for development
   return (import.meta as any).env || {};
-}
-
-export function runWithEnv<T>(env: CloudflareEnv, fn: () => T): T {
-  return envStorage.run(env, fn);
 }
