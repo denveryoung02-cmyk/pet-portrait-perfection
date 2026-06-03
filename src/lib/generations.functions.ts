@@ -11,6 +11,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { buildPrompt } from "@/services/prompts";
 import { bakeWatermark } from "@/lib/watermark.server";
+import { getEnv } from "@/lib/env.server";
 
 const InputSchema = z.object({
   uploadedImageId: z.string().uuid(),
@@ -80,7 +81,8 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       const mimeType = (blob.type || "image/jpeg") as string;
 
       // 4. Call Google Gemini API for image generation
-      const apiKey = import.meta.env.GEMINI_API_KEY;
+      const env = getEnv();
+      const apiKey = env.GEMINI_API_KEY;
       if (!apiKey) throw new Error("GEMINI_API_KEY is not configured.");
 
       const aiRes = await fetch(`${GEMINI_URL}?key=${apiKey}`, {

@@ -3,6 +3,7 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { verifyStripeWebhook, recordPaidOrder } from "./lib/fulfillment.server";
+import { setEnv, getEnv, type CloudflareEnv } from "./lib/env.server";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -72,7 +73,8 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 // verification. On checkout.session.completed we idempotently mark the order
 // paid (the success page's confirmCheckout does the same, keyed on session id).
 async function handleStripeWebhook(request: Request): Promise<Response> {
-  const secret = import.meta.env.STRIPE_WEBHOOK_SECRET;
+  const env = getEnv();
+  const secret = env.STRIPE_WEBHOOK_SECRET;
   if (!secret) {
     console.error("STRIPE_WEBHOOK_SECRET is not configured.");
     return new Response("Webhook not configured", { status: 500 });
@@ -105,6 +107,9 @@ async function handleStripeWebhook(request: Request): Promise<Response> {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    // Store Cloudflare Workers env bindings for access throughout the app
+    setEnv(env as CloudflareEnv);
+
     try {
       const url = new URL(request.url);
       if (request.method === "POST" && url.pathname === "/api/stripe/webhook") {

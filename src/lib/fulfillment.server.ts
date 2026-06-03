@@ -10,6 +10,7 @@
  * All DB/storage access uses the service-role client (bypasses RLS).
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { getEnv } from "@/lib/env.server";
 
 const DIGITAL_PRICE_CENTS = 299;
 const SIGNED_URL_TTL_SECONDS = 600;
@@ -22,7 +23,8 @@ export type StripeSessionResult = {
 
 /** Retrieve a Checkout Session from Stripe and report whether it is paid. */
 export async function retrieveStripeSession(sessionId: string): Promise<StripeSessionResult> {
-  const key = import.meta.env.STRIPE_SECRET_KEY;
+  const env = getEnv();
+  const key = env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY is not configured.");
 
   const res = await fetch(

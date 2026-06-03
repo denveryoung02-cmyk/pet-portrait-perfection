@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { getEnv } from "@/lib/env.server";
 
 const InputSchema = z.object({
   generationId: z.string().uuid(),
@@ -12,7 +13,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => InputSchema.parse(input))
   .handler(async ({ data }) => {
-    const stripeSecretKey = import.meta.env.STRIPE_SECRET_KEY;
+    const env = getEnv();
+    const stripeSecretKey = env.STRIPE_SECRET_KEY;
     if (!stripeSecretKey) throw new Error("STRIPE_SECRET_KEY is not configured.");
 
     const params = new URLSearchParams({
