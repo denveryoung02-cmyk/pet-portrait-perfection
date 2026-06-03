@@ -92,8 +92,8 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       const mimeType = (blob.type || "image/jpeg") as string;
 
       // 4. Two-step OpenAI process: Analyze pet photo, then generate portrait
-      const env = getEnv();
-      const apiKey = env.OPENAI_API_KEY;
+      const env = context.env;
+      const apiKey = env?.OPENAI_API_KEY;
       if (!apiKey) throw new Error("OPENAI_API_KEY is not configured. Get your key from https://platform.openai.com/api-keys");
 
       // Step 4a: Analyze pet photo with GPT-4 Vision

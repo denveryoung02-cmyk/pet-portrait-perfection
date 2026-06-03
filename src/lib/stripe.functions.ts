@@ -12,13 +12,13 @@ const InputSchema = z.object({
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => InputSchema.parse(input))
-  .handler(async ({ data }) => {
-    console.log('[createCheckoutSession] Handler called, getting env...');
-    const env = getEnv();
-    console.log('[createCheckoutSession] Env retrieved, checking STRIPE_SECRET_KEY...');
-    console.log('[createCheckoutSession] Env keys present:', Object.keys(env).join(', '));
-    const stripeSecretKey = env.STRIPE_SECRET_KEY;
-    console.log('[createCheckoutSession] STRIPE_SECRET_KEY exists:', !!stripeSecretKey);
+  .handler(async ({ data, context }) => {
+    console.log('[createCheckoutSession] Handler called, getting env from context...');
+    const env = context.env;
+    console.log('[createCheckoutSession] Env from context - STRIPE_SECRET_KEY exists:', !!env?.STRIPE_SECRET_KEY);
+    console.log('[createCheckoutSession] Env keys present:', Object.keys(env || {}).join(', '));
+    const stripeSecretKey = env?.STRIPE_SECRET_KEY;
+    console.log('[createCheckoutSession] STRIPE_SECRET_KEY value:', !!stripeSecretKey);
     if (!stripeSecretKey) {
       console.error('[createCheckoutSession] STRIPE_SECRET_KEY is undefined or null');
       throw new Error("STRIPE_SECRET_KEY is not configured.");

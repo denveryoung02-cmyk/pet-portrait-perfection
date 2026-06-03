@@ -22,7 +22,7 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
       console.error(`[Supabase] ${message}`);
       throw new Error(message);
     }
-    
+
     const request = getRequest();
 
     if (!request?.headers) {
@@ -72,6 +72,7 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
 
     return next({
       context: {
+        env,  // Pass env in context so handlers can access it
         supabase,
         userId: data.claims.sub,
         claims: data.claims,

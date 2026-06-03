@@ -1,10 +1,14 @@
 /**
- * Cloudflare Workers environment bindings store.
+ * Cloudflare Workers environment bindings access.
  *
- * In Cloudflare Workers, environment variables and bindings are passed via the
- * `env` object in the fetch handler. This module provides a way to access them
- * from anywhere in the server code using a simple global reference.
+ * In Cloudflare Workers with TanStack Start, environment variables are
+ * accessed via the request context through the Vinxi/h3 event object.
+ *
+ * This module provides both context-aware access (getEnv) and legacy global
+ * storage (setEnv) for the main server.ts fetch handler.
  */
+
+import { getRequest } from '@tanstack/react-start/server';
 
 export type CloudflareEnv = {
   SUPABASE_URL?: string;
@@ -22,34 +26,46 @@ export type CloudflareEnv = {
   [key: string]: any;
 };
 
-export function setEnv(env: CloudflareEnv): void {
-  // Store in globalThis for synchronous access
-  (globalThis as any).__CF_ENV__ = env;
+// Legacy global storage for main server.ts webhook handler
+let _globalEnv: CloudflareEnv | null = null;
 
-  // ALSO store in a module-level variable as backup
-  // (some execution contexts may not have access to globalThis)
-  _moduleEnv = env;
+export function setEnv(env: CloudflareEnv): void {
+  _globalEnv = env;
+  console.log('[setEnv] Stored env globally - STRIPE_SECRET_KEY exists:', !!env.STRIPE_SECRET_KEY);
 }
 
-// Module-level backup storage for env
-let _moduleEnv: CloudflareEnv | null = null;
-
 export function getEnv(): CloudflareEnv {
-  // Try globalThis first (standard approach)
-  const global = (globalThis as any).__CF_ENV__;
-  if (global) {
-    console.log('[getEnv] Using globalThis.__CF_ENV__ - STRIPE_SECRET_KEY exists:', !!global.STRIPE_SECRET_KEY);
-    return global;
+  try {
+    // PRIMARY: Get env from request context (works in TanStack Start server functions)
+    const request = getRequest();
+
+    // Try multiple context paths where Cloudflare Workers env might be stored
+    const requestAny = request as any;
+    const cfEnv =
+      requestAny?.context?.cloudflare?.env ||
+      requestAny?.__cloudflare__?.env ||
+      requestAny?.cloudflare?.env ||
+      requestAny?.cf?.env;
+
+    if (cfEnv) {
+      console.log('[getEnv] Using request.context.cloudflare.env - STRIPE_SECRET_KEY exists:', !!cfEnv.STRIPE_SECRET_KEY);
+      return cfEnv;
+    }
+
+    console.log('[getEnv] Request context exists but no cloudflare.env found, checking global...');
+  } catch (err) {
+    // getRequest() throws if called outside request context (e.g., webhook handler)
+    console.log('[getEnv] getRequest() failed, falling back to global:', (err as Error).message);
   }
 
-  // Try module-level backup (for execution contexts without globalThis access)
-  if (_moduleEnv) {
-    console.log('[getEnv] Using _moduleEnv backup - STRIPE_SECRET_KEY exists:', !!_moduleEnv.STRIPE_SECRET_KEY);
-    return _moduleEnv;
+  // FALLBACK: Use global storage (for webhook handler and edge cases)
+  if (_globalEnv) {
+    console.log('[getEnv] Using _globalEnv fallback - STRIPE_SECRET_KEY exists:', !!_globalEnv.STRIPE_SECRET_KEY);
+    return _globalEnv;
   }
 
-  // Fallback to import.meta.env for local development
+  // LAST RESORT: Development mode import.meta.env
   const fallback = (import.meta as any).env || {};
-  console.log('[getEnv] Fallback to import.meta.env - STRIPE_SECRET_KEY exists:', !!fallback.STRIPE_SECRET_KEY);
+  console.log('[getEnv] Using import.meta.env fallback - STRIPE_SECRET_KEY exists:', !!fallback.STRIPE_SECRET_KEY);
   return fallback;
 }
