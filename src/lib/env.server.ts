@@ -23,13 +23,33 @@ export type CloudflareEnv = {
 };
 
 export function setEnv(env: CloudflareEnv): void {
+  // Store in globalThis for synchronous access
   (globalThis as any).__CF_ENV__ = env;
+
+  // ALSO store in a module-level variable as backup
+  // (some execution contexts may not have access to globalThis)
+  _moduleEnv = env;
 }
 
-export function getEnv(): CloudflareEnv {
-  const global = (globalThis as any).__CF_ENV__;
-  if (global) return global;
+// Module-level backup storage for env
+let _moduleEnv: CloudflareEnv | null = null;
 
-  // Fallback to import.meta.env for development
-  return (import.meta as any).env || {};
+export function getEnv(): CloudflareEnv {
+  // Try globalThis first (standard approach)
+  const global = (globalThis as any).__CF_ENV__;
+  if (global) {
+    console.log('[getEnv] Using globalThis.__CF_ENV__ - STRIPE_SECRET_KEY exists:', !!global.STRIPE_SECRET_KEY);
+    return global;
+  }
+
+  // Try module-level backup (for execution contexts without globalThis access)
+  if (_moduleEnv) {
+    console.log('[getEnv] Using _moduleEnv backup - STRIPE_SECRET_KEY exists:', !!_moduleEnv.STRIPE_SECRET_KEY);
+    return _moduleEnv;
+  }
+
+  // Fallback to import.meta.env for local development
+  const fallback = (import.meta as any).env || {};
+  console.log('[getEnv] Fallback to import.meta.env - STRIPE_SECRET_KEY exists:', !!fallback.STRIPE_SECRET_KEY);
+  return fallback;
 }

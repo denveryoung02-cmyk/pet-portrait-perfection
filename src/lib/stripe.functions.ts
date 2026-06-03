@@ -13,9 +13,16 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => InputSchema.parse(input))
   .handler(async ({ data }) => {
+    console.log('[createCheckoutSession] Handler called, getting env...');
     const env = getEnv();
+    console.log('[createCheckoutSession] Env retrieved, checking STRIPE_SECRET_KEY...');
+    console.log('[createCheckoutSession] Env keys present:', Object.keys(env).join(', '));
     const stripeSecretKey = env.STRIPE_SECRET_KEY;
-    if (!stripeSecretKey) throw new Error("STRIPE_SECRET_KEY is not configured.");
+    console.log('[createCheckoutSession] STRIPE_SECRET_KEY exists:', !!stripeSecretKey);
+    if (!stripeSecretKey) {
+      console.error('[createCheckoutSession] STRIPE_SECRET_KEY is undefined or null');
+      throw new Error("STRIPE_SECRET_KEY is not configured.");
+    }
 
     const params = new URLSearchParams({
       "payment_method_types[0]": "card",

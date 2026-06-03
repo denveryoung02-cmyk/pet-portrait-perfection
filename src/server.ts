@@ -108,7 +108,12 @@ async function handleStripeWebhook(request: Request): Promise<Response> {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     // Store Cloudflare Workers env bindings for access throughout the app
+    // CRITICAL: Must set this BEFORE any async operations to ensure it's available
+    // in all execution contexts including TanStack Start server functions
     setEnv(env as CloudflareEnv);
+
+    // Debug log to verify env is set (remove after confirming it works)
+    console.log('[server.ts] Env set - STRIPE_SECRET_KEY exists:', !!(env as CloudflareEnv).STRIPE_SECRET_KEY);
 
     try {
       const url = new URL(request.url);
