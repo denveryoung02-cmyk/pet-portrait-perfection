@@ -43,8 +43,8 @@ wrangler secret put STRIPE_SECRET_KEY
 wrangler secret put STRIPE_WEBHOOK_SECRET
 wrangler secret put VITE_STRIPE_PUBLISHABLE_KEY
 
-# AI Gateway
-wrangler secret put LOVABLE_API_KEY
+# Google Gemini API (get key from https://aistudio.google.com/apikey)
+wrangler secret put GEMINI_API_KEY
 ```
 
 You'll be prompted to enter each value. Paste from `.dev.vars` or `.env.local`.

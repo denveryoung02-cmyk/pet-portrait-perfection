@@ -15,5 +15,6 @@ STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 VITE_STRIPE_PUBLISHABLE_KEY=
 
-# ─── AI Gateway ──────────────────────────────────────────────────────
-LOVABLE_API_KEY=
+# ─── Google Gemini API ───────────────────────────────────────────────
+# Get your API key from: https://aistudio.google.com/apikey
+GEMINI_API_KEY=

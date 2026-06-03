@@ -87,8 +87,8 @@ export const generatePawtoon = createServerFn({ method: "POST" })
 
       // 4. Call Google Gemini API for image generation
       const env = getEnv();
-      const apiKey = env.LOVABLE_API_KEY ?? env.GEMINI_API_KEY;
-      if (!apiKey) throw new Error("LOVABLE_API_KEY is not configured.");
+      const apiKey = env.GEMINI_API_KEY;
+      if (!apiKey) throw new Error("GEMINI_API_KEY is not configured. Get your key from https://aistudio.google.com/apikey");
 
       const aiRes = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
         method: "POST",

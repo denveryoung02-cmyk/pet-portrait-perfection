@@ -146,7 +146,7 @@ Required vars (see `.env.example`):
 - `SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `SUPABASE_DB_URL`
-- `LOVABLE_API_KEY` — for Gemini API access via Lovable AI Gateway
+- `GEMINI_API_KEY` — for Google Gemini API (get from https://aistudio.google.com/apikey)
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 
