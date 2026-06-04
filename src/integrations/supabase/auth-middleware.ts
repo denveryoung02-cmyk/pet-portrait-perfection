@@ -39,9 +39,15 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
       throw new Error('Unauthorized: Only Bearer tokens are supported');
     }
 
-    const token = authHeader.replace('Bearer ', '');
+    let token = authHeader.replace('Bearer ', '');
     if (!token) {
       throw new Error('Unauthorized: No token provided');
+    }
+
+    // Strip BOM (Byte Order Mark) if present - fixes "Invalid API key" error
+    // BOM bytes: \xEF\xBB\xBF (UTF-8) appearing at start of token
+    if (token.charCodeAt(0) === 0xFEFF || token.startsWith('﻿')) {
+      token = token.substring(1);
     }
 
     const supabase = createClient<Database>(
