@@ -17,13 +17,42 @@ npm run dev                  # Start dev server on localhost:3000
 # Build & Deploy
 npm run build                # Production build (outputs to dist/)
 npm run build:dev            # Development mode build
-npm run deploy               # Build + deploy to Cloudflare Workers
+npm run deploy:staging       # Build + deploy to STAGING (pawtoons-staging.denveryoung02.workers.dev)
+npm run deploy               # Build + deploy to PRODUCTION (pawtoons.co via tanstack-start-app)
 npm run preview              # Preview production build locally
 
 # Code Quality
 npm run lint                 # ESLint check
 npm run format               # Prettier auto-format
 ```
+
+## Deployment Strategy
+
+**IMPORTANT**: Always deploy to staging first, test thoroughly, then deploy to production.
+
+### Environments
+
+1. **Staging** (`pawtoons-staging`)
+   - URL: https://pawtoons-staging.denveryoung02.workers.dev
+   - Deploy: `npm run deploy:staging`
+   - Uses Stripe TEST keys
+   - Safe for testing changes
+
+2. **Production** (`tanstack-start-app`)
+   - URL: https://pawtoons.co
+   - Deploy: `npm run deploy`
+   - Uses Stripe LIVE keys
+   - Real customer traffic
+
+### Workflow
+
+1. Make changes
+2. Test locally: `npm run dev`
+3. Deploy to staging: `npm run deploy:staging`
+4. Test on staging URL
+5. **Only when ready**: Deploy to production: `npm run deploy`
+
+See `STAGING_SETUP.md` for full setup instructions.
 
 ### Testing Stripe Webhooks Locally
 
@@ -177,13 +206,23 @@ Per `AI_RULES.md` (token reduction rules):
 
 Target: **Cloudflare Workers** (not Vercel)
 
+### Staging
+```bash
+npm run deploy:staging
+```
+Deploys to `pawtoons-staging` worker at pawtoons-staging.denveryoung02.workers.dev
+
+### Production
 ```bash
 npm run deploy
 ```
+Deploys to `tanstack-start-app` worker at pawtoons.co
 
-Builds via Vite, outputs to `dist/`, deploys via Wrangler using config in `wrangler.jsonc`.
+Builds via Vite, outputs to `dist/`, deploys via Wrangler.
 
-Ensure all environment variables are set in Cloudflare dashboard or via `wrangler secret put`.
+Ensure all environment variables are set via `wrangler secret put --name <worker-name>`.
+
+**Setting up staging secrets**: Run `.\scripts\setup-staging-secrets.ps1` or see `STAGING_SETUP.md`.
 
 ## Notes
 

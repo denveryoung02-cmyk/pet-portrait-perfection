@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "deploy": "vite build && wrangler deploy -c dist/server/wrangler.json",
+    "deploy:staging": "vite build && copy wrangler.staging.jsonc dist\\server\\wrangler.staging.json && wrangler deploy -c dist/server/wrangler.staging.json",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

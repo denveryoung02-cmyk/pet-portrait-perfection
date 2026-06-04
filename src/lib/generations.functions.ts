@@ -29,7 +29,7 @@ const InputSchema = z.object({
 });
 
 const OPENAI_VISION_MODEL = "gpt-4o";
-const OPENAI_IMAGE_MODEL = "dall-e-3";
+const OPENAI_IMAGE_MODEL = "gpt-image-1";
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 const OPENAI_IMAGE_URL = "https://api.openai.com/v1/images/generations";
 
@@ -162,28 +162,41 @@ Important: Create a portrait that captures this specific pet's unique characteri
           prompt: enhancedPrompt.slice(0, 4000), // DALL-E 3 has 4000 char limit
           n: 1,
           size: "1024x1024",
-          quality: "standard",
-          response_format: "b64_json",
+          quality: "auto",
+          // Note: DALL-E 3 returns URLs by default, not base64
         }),
       });
 
       if (!dalleRes.ok) {
         const errText = await dalleRes.text().catch(() => "");
+        console.error('[generatePawtoon] DALL-E 3 error response:', dalleRes.status, errText);
         if (dalleRes.status === 429) throw new Error("OpenAI rate limit reached — please try again in a minute.");
         if (dalleRes.status === 401) throw new Error("OpenAI API key invalid or not authorized.");
-        if (dalleRes.status === 400) throw new Error("OpenAI rejected the prompt — try a different theme or personality.");
+        if (dalleRes.status === 400) {
+          // Log the full error for debugging
+          console.error('[generatePawtoon] DALL-E 3 400 error details:', errText);
+          throw new Error(`OpenAI error: ${errText.slice(0, 500)}`);
+        }
         throw new Error(`OpenAI DALL-E 3 error (${dalleRes.status}): ${errText.slice(0, 300)}`);
       }
 
       const dalleData = await dalleRes.json();
-      const resultBase64 = dalleData.data?.[0]?.b64_json;
+      const imageUrl = dalleData.data?.[0]?.url;
 
-      if (!resultBase64) {
+      if (!imageUrl) {
         throw new Error("DALL-E 3 did not return an image — please try again.");
       }
 
+      console.log('[generatePawtoon] Downloading generated image from URL...');
+
+      // Download the image from OpenAI's URL
+      const imgDownloadRes = await fetch(imageUrl);
+      if (!imgDownloadRes || !imgDownloadRes.ok) {
+        throw new Error(`Failed to download generated image: ${imgDownloadRes?.statusText || 'Unknown error'}`);
+      }
+
+      const resultBytes = new Uint8Array(await imgDownloadRes.arrayBuffer());
       console.log('[generatePawtoon] Generation successful');
-      const resultBytes = Buffer.from(resultBase64, "base64");
 
       // 5a. Store the CLEAN original in the private bucket (never public).
       const cleanPath = `${userId}/${generationId}.png`;
