@@ -15,7 +15,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { buildPrompt } from "@/services/prompts";
 import { bakeWatermark } from "@/lib/watermark.server";
-import { getEnv } from "@/lib/env.server";
 
 const InputSchema = z.object({
   uploadedImageId: z.string().uuid(),

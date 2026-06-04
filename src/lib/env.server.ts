@@ -39,20 +39,23 @@ export function getEnv(): CloudflareEnv {
     // PRIMARY: Get env from request context (works in TanStack Start server functions)
     const request = getRequest();
 
-    // Try multiple context paths where Cloudflare Workers env might be stored
+    // Try multiple context paths where Cloudflare Workers env might be stored:
+    // 1. Via TanStack Start h3/Vinxi event context
+    // 2. Via direct Cloudflare Workers request object
     const requestAny = request as any;
     const cfEnv =
-      requestAny?.context?.cloudflare?.env ||
-      requestAny?.__cloudflare__?.env ||
-      requestAny?.cloudflare?.env ||
-      requestAny?.cf?.env;
+      requestAny?.context?.env ||              // TanStack Start middleware context.env
+      requestAny?.context?.cloudflare?.env ||  // Vinxi cloudflare adapter
+      requestAny?.__cloudflare__?.env ||       // Legacy Workers binding
+      requestAny?.cloudflare?.env ||           // Direct Workers request
+      requestAny?.cf?.env;                     // Alternative Workers path
 
     if (cfEnv) {
-      console.log('[getEnv] Using request.context.cloudflare.env - STRIPE_SECRET_KEY exists:', !!cfEnv.STRIPE_SECRET_KEY);
+      console.log('[getEnv] Found env in request context - STRIPE_SECRET_KEY exists:', !!cfEnv.STRIPE_SECRET_KEY);
       return cfEnv;
     }
 
-    console.log('[getEnv] Request context exists but no cloudflare.env found, checking global...');
+    console.log('[getEnv] Request context exists but no env found, checking global...');
   } catch (err) {
     // getRequest() throws if called outside request context (e.g., webhook handler)
     console.log('[getEnv] getRequest() failed, falling back to global:', (err as Error).message);

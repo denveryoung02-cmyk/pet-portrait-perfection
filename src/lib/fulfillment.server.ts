@@ -8,9 +8,13 @@
  *  - mint a short-lived signed URL to the CLEAN (un-watermarked) image.
  *
  * All DB/storage access uses the service-role client (bypasses RLS).
+ *
+ * IMPORTANT: All functions accept env as a parameter instead of calling getEnv()
+ * because TanStack Start server functions run in an isolated context where
+ * globalThis storage is not accessible. Callers must pass env explicitly.
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { getEnv } from "@/lib/env.server";
+import type { CloudflareEnv } from "@/lib/env.server";
 
 const DIGITAL_PRICE_CENTS = 299;
 const SIGNED_URL_TTL_SECONDS = 600;
@@ -22,8 +26,10 @@ export type StripeSessionResult = {
 };
 
 /** Retrieve a Checkout Session from Stripe and report whether it is paid. */
-export async function retrieveStripeSession(sessionId: string): Promise<StripeSessionResult> {
-  const env = getEnv();
+export async function retrieveStripeSession(
+  sessionId: string,
+  env: CloudflareEnv,
+): Promise<StripeSessionResult> {
   const key = env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY is not configured.");
 

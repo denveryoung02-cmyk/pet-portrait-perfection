@@ -3,7 +3,7 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { verifyStripeWebhook, recordPaidOrder } from "./lib/fulfillment.server";
-import { setEnv, getEnv, type CloudflareEnv } from "./lib/env.server";
+import { setEnv, type CloudflareEnv } from "./lib/env.server";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -72,8 +72,7 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 // of the TanStack router) so we get the raw request body for signature
 // verification. On checkout.session.completed we idempotently mark the order
 // paid (the success page's confirmCheckout does the same, keyed on session id).
-async function handleStripeWebhook(request: Request): Promise<Response> {
-  const env = getEnv();
+async function handleStripeWebhook(request: Request, env: CloudflareEnv): Promise<Response> {
   const secret = env.STRIPE_WEBHOOK_SECRET;
   if (!secret) {
     console.error("STRIPE_WEBHOOK_SECRET is not configured.");
@@ -107,18 +106,15 @@ async function handleStripeWebhook(request: Request): Promise<Response> {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
-    // Store Cloudflare Workers env bindings for access throughout the app
-    // CRITICAL: Must set this BEFORE any async operations to ensure it's available
-    // in all execution contexts including TanStack Start server functions
-    setEnv(env as CloudflareEnv);
+    const cfEnv = env as CloudflareEnv;
 
-    // Debug log to verify env is set (remove after confirming it works)
-    console.log('[server.ts] Env set - STRIPE_SECRET_KEY exists:', !!(env as CloudflareEnv).STRIPE_SECRET_KEY);
+    // Store Cloudflare Workers env bindings for webhook handler and fallback access
+    setEnv(cfEnv);
 
     try {
       const url = new URL(request.url);
       if (request.method === "POST" && url.pathname === "/api/stripe/webhook") {
-        return await handleStripeWebhook(request);
+        return await handleStripeWebhook(request, cfEnv);
       }
 
       const handler = await getServerEntry();

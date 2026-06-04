@@ -2,6 +2,11 @@
 // Server-side Supabase client with service role key - bypasses RLS.
 // Use this for admin operations in server functions and server routes only.
 // For user-authenticated queries (with RLS), use the auth middleware instead.
+//
+// IMPORTANT: This module uses getEnv() which works via fallback chain:
+// 1. Request context (TanStack Start server functions via middleware)
+// 2. Global storage (webhook handler sets this in server.ts)
+// 3. import.meta.env (development mode)
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 import { getEnv } from '@/lib/env.server';
@@ -10,8 +15,7 @@ function createSupabaseAdminClient() {
   const env = getEnv();
   const SUPABASE_URL = env.SUPABASE_URL ?? env.VITE_SUPABASE_URL;
   const SUPABASE_SERVICE_ROLE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
-  console.log("SUPABASE_URL:", !!SUPABASE_URL);
-  console.log("SUPABASE_SERVICE_ROLE_KEY:", !!SUPABASE_SERVICE_ROLE_KEY);
+
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     const missing = [
       ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
@@ -21,7 +25,7 @@ function createSupabaseAdminClient() {
     console.error(`[Supabase] ${message}`);
     throw new Error(message);
   }
-  console.log('[debug] SUPABASE_URL:', SUPABASE_URL, 'KEY prefix:', SUPABASE_SERVICE_ROLE_KEY?.slice(0, 20));
+
   return createClient<Database>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
     auth: {
       storage: undefined,

@@ -23,7 +23,7 @@ export const confirmCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => InputSchema.parse(input))
   .handler(async ({ data, context }) => {
-    const { userId } = context;
+    const { userId, env } = context;
     const { sessionId, generationId } = data;
 
     // The generation must belong to the caller.
@@ -37,7 +37,7 @@ export const confirmCheckout = createServerFn({ method: "POST" })
     }
 
     // Verify the Stripe session is genuinely paid for THIS generation.
-    const session = await retrieveStripeSession(sessionId);
+    const session = await retrieveStripeSession(sessionId, env);
     if (!session.paid || session.generationId !== generationId) {
       return { paid: false as const, downloadUrl: null };
     }
