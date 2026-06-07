@@ -18,6 +18,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardPetsRouteImport } from './routes/_authenticated/dashboard.pets'
 import { Route as AuthenticatedDashboardOrdersRouteImport } from './routes/_authenticated/dashboard.orders'
 import { Route as AuthenticatedDashboardGenerationsRouteImport } from './routes/_authenticated/dashboard.generations'
@@ -67,6 +68,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardPetsRoute =
   AuthenticatedDashboardPetsRouteImport.update({
     id: '/pets',
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/generations': typeof AuthenticatedDashboardGenerationsRoute
   '/dashboard/orders': typeof AuthenticatedDashboardOrdersRoute
   '/dashboard/pets': typeof AuthenticatedDashboardPetsRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -114,11 +122,11 @@ export interface FileRoutesByTo {
   '/success': typeof SuccessRoute
   '/upload': typeof UploadRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/dashboard/favorites': typeof AuthenticatedDashboardFavoritesRoute
   '/dashboard/generations': typeof AuthenticatedDashboardGenerationsRoute
   '/dashboard/orders': typeof AuthenticatedDashboardOrdersRoute
   '/dashboard/pets': typeof AuthenticatedDashboardPetsRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/generations': typeof AuthenticatedDashboardGenerationsRoute
   '/_authenticated/dashboard/orders': typeof AuthenticatedDashboardOrdersRoute
   '/_authenticated/dashboard/pets': typeof AuthenticatedDashboardPetsRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/dashboard/generations'
     | '/dashboard/orders'
     | '/dashboard/pets'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -160,11 +170,11 @@ export interface FileRouteTypes {
     | '/success'
     | '/upload'
     | '/admin'
-    | '/dashboard'
     | '/dashboard/favorites'
     | '/dashboard/generations'
     | '/dashboard/orders'
     | '/dashboard/pets'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/generations'
     | '/_authenticated/dashboard/orders'
     | '/_authenticated/dashboard/pets'
+    | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -257,6 +268,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/pets': {
       id: '/_authenticated/dashboard/pets'
       path: '/pets'
@@ -293,6 +311,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardGenerationsRoute: typeof AuthenticatedDashboardGenerationsRoute
   AuthenticatedDashboardOrdersRoute: typeof AuthenticatedDashboardOrdersRoute
   AuthenticatedDashboardPetsRoute: typeof AuthenticatedDashboardPetsRoute
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
@@ -302,6 +321,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
       AuthenticatedDashboardGenerationsRoute,
     AuthenticatedDashboardOrdersRoute: AuthenticatedDashboardOrdersRoute,
     AuthenticatedDashboardPetsRoute: AuthenticatedDashboardPetsRoute,
+    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =
