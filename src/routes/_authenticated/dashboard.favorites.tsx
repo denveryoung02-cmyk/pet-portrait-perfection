@@ -13,7 +13,7 @@ function Favorites() {
     queryFn: async () => {
       const { data } = await supabase
         .from("favorites")
-        .select("id, generations(id, theme, result_url, status)")
+        .select("id, generations(id, theme, preview_url, status)")
         .order("created_at", { ascending: false });
       return data ?? [];
     },
@@ -31,7 +31,7 @@ function Favorites() {
           {data.map((f: any) => f.generations && (
             <div key={f.id} className="rounded-2xl bg-card border border-border overflow-hidden">
               <div className="aspect-square bg-secondary">
-                {f.generations.result_url ? <img src={f.generations.result_url} className="w-full h-full object-cover" alt="" /> : <div className="grid place-items-center h-full text-3xl">✨</div>}
+                {f.generations.preview_url ? <img src={f.generations.preview_url} className="w-full h-full object-cover" alt="" /> : <div className="grid place-items-center h-full text-3xl">✨</div>}
               </div>
               <div className="p-3 text-sm font-semibold capitalize">{f.generations.theme}</div>
             </div>

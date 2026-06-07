@@ -29,6 +29,12 @@ import mousemat from "@/assets/product-mousemat.jpg";
 export const Route = createFileRoute("/upload")({
   head: () => ({ meta: [{ title: "Create your Pawtoon — step by step" }] }),
   component: CreateWizard,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      step: typeof search.step === 'number' ? search.step : undefined,
+      uploadedImageId: typeof search.uploadedImageId === 'string' ? search.uploadedImageId : undefined,
+    };
+  },
 });
 
 /* ---------------- Data ---------------- */
@@ -139,10 +145,14 @@ const GEN_STAGES = [
 /* ---------------- Wizard ---------------- */
 
 function CreateWizard() {
+  console.log('[upload] URL params:', typeof window !== 'undefined' ? window.location.href : 'SSR');
   const navigate = useNavigate();
   const { session } = useAuth();
+  const { step: urlStep, uploadedImageId: urlUploadedImageId } = Route.useSearch();
+  console.log('[upload] urlStep:', urlStep, 'urlUploadedImageId:', urlUploadedImageId);
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(urlStep ?? 1);
+  const [sessionLoaded, setSessionLoaded] = useState(false);
 
   // Step 1 — upload
   const [file, setFile] = useState<string | null>(null);
@@ -150,8 +160,10 @@ function CreateWizard() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [uploadedImageId, setUploadedImageId] = useState<string | null>(null);
+  const [uploadedImageId, setUploadedImageId] = useState<string | null>(urlUploadedImageId ?? null);
+  console.log('[upload] init uploadedImageId from URL:', urlUploadedImageId);
   const inputRef = useRef<HTMLInputElement>(null);
+  const pendingFileRef = useRef<File | null>(null);
 
   // Step 2-4
   const [themeId, setThemeId] = useState("royal");
@@ -185,65 +197,34 @@ function CreateWizard() {
   const colorObj = COLORS.find((c) => c.id === color)!;
   const total = product.price + (productId === "tshirt" ? fitObj.extra : 0);
 
-  // Restore wizard state from localStorage on mount (client-only to avoid hydration mismatch)
+  // Track when session has had time to load after redirect
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const saved = localStorage.getItem("pawtoons-wizard-state");
-    if (!saved) return;
-
-    (async () => {
-      try {
-        const state = JSON.parse(saved);
-        if (state.step) setStep(state.step);
-        if (state.uploadedImageId) {
-          setUploadedImageId(state.uploadedImageId);
-          // Fetch the uploaded image to restore the preview
-          const { data: img } = await supabase
-            .from("uploaded_images")
-            .select("storage_path")
-            .eq("id", state.uploadedImageId)
-            .single();
-          if (img?.storage_path) {
-            const { getSignedPreview } = await import("@/services/uploads");
-            const signedUrl = await getSignedPreview(img.storage_path);
-            setFile(signedUrl);
-            setUploadProgress(100);
+    if (session) {
+      setSessionLoaded(true);
+      // If there's a pending file from pre-auth attempt, restore and upload it
+      if (typeof window !== 'undefined') {
+        const savedFile = sessionStorage.getItem('pawtoons-pending-file');
+        if (savedFile) {
+          try {
+            const { data, name, type } = JSON.parse(savedFile);
+            sessionStorage.removeItem('pawtoons-pending-file');
+            // Convert base64 back to File
+            fetch(data)
+              .then(res => res.blob())
+              .then(blob => {
+                const file = new File([blob], name, { type });
+                handleFile(file);
+              });
+          } catch (err) {
+            console.error('[upload] Failed to restore pending file:', err);
           }
         }
-        if (state.themeId) setThemeId(state.themeId);
-        if (state.personalityId) setPersonalityId(state.personalityId);
-        if (state.traits) setTraits(state.traits);
-      } catch {
-        // Ignore parse errors
       }
-    })();
-  }, []);
-
-  // Track if user just returned from OAuth and wait for session to be fully ready
-  const [justSignedIn, setJustSignedIn] = useState(false);
-  const [sessionReady, setSessionReady] = useState(false);
-  useEffect(() => {
-    const saved = localStorage.getItem("pawtoons-wizard-state");
-    if (saved && session && step === 4 && uploadedImageId) {
-      try {
-        const state = JSON.parse(saved);
-        // User just signed in with saved state at step 4
-        if (state.step === 4) {
-          setJustSignedIn(true);
-
-          // Wait briefly for session to be fully established after OAuth redirect
-          setTimeout(() => {
-            setSessionReady(true);
-          }, 500);
-        }
-      } catch {
-        // Ignore parse errors
-      }
-    } else if (session && !justSignedIn) {
-      // Normal sign-in flow (not OAuth redirect) - session is immediately ready
-      setSessionReady(true);
+    } else {
+      const timer = setTimeout(() => setSessionLoaded(true), 1000);
+      return () => clearTimeout(timer);
     }
-  }, [session, step, uploadedImageId, justSignedIn]);
+  }, [session]);
 
   /* upload handlers — real Supabase Storage when signed in, local preview otherwise */
   const handleFile = async (f: File) => {
@@ -260,16 +241,17 @@ function CreateWizard() {
     setFile(localUrl);
 
     if (!session) {
-      // Anonymous browse mode: simulate progress, no DB row created.
-      let p = 0;
-      const tick = setInterval(() => {
-        p += Math.random() * 22 + 10;
-        if (p >= 100) {
-          p = 100;
-          clearInterval(tick);
-        }
-        setUploadProgress(p);
-      }, 130);
+      // User must sign in before upload - save file to sessionStorage and redirect
+      const reader = new FileReader();
+      reader.onload = () => {
+        sessionStorage.setItem('pawtoons-pending-file', JSON.stringify({
+          data: reader.result,
+          name: f.name,
+          type: f.type,
+        }));
+        navigate({ to: "/auth", search: { redirect: "/upload" } as any });
+      };
+      reader.readAsDataURL(f);
       return;
     }
 
@@ -334,14 +316,21 @@ function CreateWizard() {
 
     // Authentication is now required to reach Step 5, so this should always be true
     const useReal = !!session && !!uploadedImageId;
+    console.log('[gen] session:', !!session, 'sessionLoaded:', sessionLoaded, 'uploadedImageId:', uploadedImageId, 'useReal:', useReal);
     let cancelled = false;
 
     (async () => {
       // Safety check: if user somehow reached Step 5 without auth, block generation
-      if (!useReal) {
+      // Only enforce after session has had time to load (prevents false error on redirect)
+      if (!useReal && sessionLoaded) {
         setGenError("Please sign in to generate your portrait.");
         setGenFailed(true);
         clearInterval(tick);
+        return;
+      }
+
+      // Wait for session to load before starting generation
+      if (!useReal) {
         return;
       }
 
@@ -378,7 +367,7 @@ function CreateWizard() {
       cancelled = true;
       clearInterval(tick);
     };
-  }, [step, genDone, genFailed, session, uploadedImageId, themeId, personalityId]); // eslint-disable-line
+  }, [step, genDone, genFailed, session, uploadedImageId, themeId, personalityId, sessionLoaded]); // eslint-disable-line
 
   const toggleTrait = (id: string) =>
     setTraits((t) => (t.includes(id) ? t.filter((x) => x !== id) : t.length < 3 ? [...t, id] : t));
@@ -386,32 +375,19 @@ function CreateWizard() {
   /* step gating */
   const canNext = () => {
     if (step === 1) return !!file;
-    if (step === 4 && !session) return false; // Must sign in first
-    if (step === 4 && session && justSignedIn) return false; // Must click Continue button
+    if (step === 4 && !session) return false;
     if (step === 4) return !!session;
     if (step === 5) return genDone;
     return true;
   };
   const goNext = () => {
-    // Block advancement to Step 5 without authentication
     if (step === 4 && !session) {
-      // Save wizard state to localStorage before redirecting to auth
-      localStorage.setItem("pawtoons-wizard-state", JSON.stringify({
-        step: 4,
-        uploadedImageId,
-        themeId,
-        personalityId,
-        traits,
-      }));
-      navigate({ to: "/auth", search: { redirect: "/upload" } as any });
+      console.log('[goNext] uploadedImageId at redirect:', uploadedImageId);
+      navigate({ to: "/auth", search: { redirect: `/upload?step=4&uploadedImageId=${uploadedImageId ?? ''}` } as any });
       return;
     }
-    // Block footer Next button if user just signed in (must use Continue button)
-    if (step === 4 && justSignedIn) return;
     if (step === 5 && !genDone) return;
     if (step === 5 && genDone) {
-      // Clear saved wizard state when completing the flow
-      localStorage.removeItem("pawtoons-wizard-state");
       navigate({ to: "/checkout", search: { gen: genId ?? undefined } as any });
       return;
     }
@@ -466,34 +442,15 @@ function CreateWizard() {
                   <p className="text-sm sm:text-base text-muted-foreground mt-2 mb-5 max-w-md mx-auto">
                     Create an account to generate your AI portrait. It's free, takes 10 seconds, and your portrait will be ready in under a minute.
                   </p>
-                  <Link
-                    to="/auth"
-                    search={{ redirect: "/upload" } as any}
+                  <button
+                    onClick={() => {
+                      console.log('[button] uploadedImageId at redirect:', uploadedImageId);
+                      navigate({ to: "/auth", search: { redirect: `/upload?step=4&uploadedImageId=${uploadedImageId ?? ''}` } as any });
+                    }}
                     className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
                     style={{ background: "var(--gradient-primary)" }}
                   >
                     Continue with Google →
-                  </Link>
-                </div>
-              )}
-              {session && justSignedIn && (
-                <div className="mt-8 rounded-3xl border-2 border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent p-6 sm:p-8 text-center max-w-2xl mx-auto animate-[fade-up_0.4s_ease-out]">
-                  <div className="text-4xl sm:text-5xl mb-3">✨</div>
-                  <h3 className="font-display text-xl sm:text-2xl">You're all set!</h3>
-                  <p className="text-sm sm:text-base text-muted-foreground mt-2 mb-5 max-w-md mx-auto">
-                    {sessionReady ? "Your account is ready. Click continue to generate your AI portrait." : "Finalizing your session..."}
-                  </p>
-                  <button
-                    onClick={() => {
-                      if (!sessionReady) return;
-                      setJustSignedIn(false);
-                      setStep(5);
-                    }}
-                    disabled={!sessionReady}
-                    className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ background: "var(--gradient-primary)" }}
-                  >
-                    Continue to Generation →
                   </button>
                 </div>
               )}

@@ -13,9 +13,22 @@ function Pets() {
     queryFn: async () => {
       const { data } = await supabase
         .from("uploaded_images")
-        .select("id, pet_name, public_url, storage_path, created_at")
+        .select("id, pet_name, storage_path, created_at")
         .order("created_at", { ascending: false });
-      return data ?? [];
+
+      if (!data) return [];
+
+      // Generate signed URLs for each uploaded image
+      const withUrls = await Promise.all(
+        data.map(async (img) => {
+          const { data: signedUrl } = await supabase.storage
+            .from("pet-uploads")
+            .createSignedUrl(img.storage_path, 3600); // 1 hour expiry
+          return { ...img, signedUrl: signedUrl?.signedUrl ?? null };
+        })
+      );
+
+      return withUrls;
     },
   });
 
@@ -40,7 +53,7 @@ function Pets() {
           {data.map((p) => (
             <div key={p.id} className="rounded-2xl bg-card border border-border overflow-hidden">
               <div className="aspect-square bg-secondary">
-                {p.public_url && <img src={p.public_url} alt={p.pet_name ?? ""} className="w-full h-full object-cover" />}
+                {p.signedUrl && <img src={p.signedUrl} alt={p.pet_name ?? ""} className="w-full h-full object-cover" />}
               </div>
               <div className="p-3 text-sm font-semibold">{p.pet_name ?? "Untitled"}</div>
             </div>

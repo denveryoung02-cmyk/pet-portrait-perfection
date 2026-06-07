@@ -1,5 +1,8 @@
 # CLAUDE.md
 
+## CRITICAL — READ THIS FIRST
+Read this entire file before every task. One fix at a time. Targeted edits only. No guessing — read relevant files first, state facts only. Never use words like probably or possibly. Deploy to staging only with npm run deploy:staging unless explicitly told otherwise.
+
 ## Project
 Pawtoons — AI pet portrait service. Upload photo → select theme → pay £2.99 → instant digital download.
 Stack: React 19 + TanStack Start + Vite + TypeScript + Tailwind 4 + Supabase + Stripe + Cloudflare Workers.
