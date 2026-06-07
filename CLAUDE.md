@@ -1,232 +1,46 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Project
+Pawtoons — AI pet portrait service. Upload photo → select theme → pay £2.99 → instant digital download.
+Stack: React 19 + TanStack Start + Vite + TypeScript + Tailwind 4 + Supabase + Stripe + Cloudflare Workers.
 
-## Project Overview
+## Commands
+npm run dev                # Local dev (localhost:3000)
+npm run deploy:staging     # Deploy to staging
+npm run deploy             # Deploy to production (pawtoons.co)
 
-**Pawtoons (Pet Portrait Perfection)** — AI-powered pet portrait generation service where users upload a pet photo, select a theme + personality, pay £2.99 via Stripe, and receive a high-quality downloadable portrait.
+## Environments
+- Staging: pawtoons-staging.denveryoung02.workers.dev (worker: pawtoons-staging)
+- Production: pawtoons.co (worker: tanstack-start-app)
+- Always deploy staging first, test, then production.
 
-**Stack**: React 19 + TanStack Start (SSR) + Vite + TypeScript + Tailwind CSS 4 + Supabase + Stripe + Cloudflare Workers deployment.
+## Key Files
+- src/server.ts — Cloudflare Workers entry, env setup, webhook handler
+- src/lib/generations.functions.ts — OpenAI generation (GPT-4 Vision + gpt-image-1)
+- src/lib/stripe.functions.ts — Stripe checkout session
+- src/lib/fulfillment.functions.ts — payment verification
+- src/lib/watermark.server.ts — WASM watermarking (@cf-wasm/photon)
+- src/services/prompts.ts — prompt builder (themes/personalities/traits)
+- src/routes/ — file-based routing
 
-## Common Commands
-
-```bash
-# Development
-npm run dev                  # Start dev server on localhost:3000
-
-# Build & Deploy
-npm run build                # Production build (outputs to dist/)
-npm run build:dev            # Development mode build
-npm run deploy:staging       # Build + deploy to STAGING (pawtoons-staging.denveryoung02.workers.dev)
-npm run deploy               # Build + deploy to PRODUCTION (pawtoons.co via tanstack-start-app)
-npm run preview              # Preview production build locally
-
-# Code Quality
-npm run lint                 # ESLint check
-npm run format               # Prettier auto-format
-```
-
-## Deployment Strategy
-
-**IMPORTANT**: Always deploy to staging first, test thoroughly, then deploy to production.
-
-### Environments
-
-1. **Staging** (`pawtoons-staging`)
-   - URL: https://pawtoons-staging.denveryoung02.workers.dev
-   - Deploy: `npm run deploy:staging`
-   - Uses Stripe TEST keys
-   - Safe for testing changes
-
-2. **Production** (`tanstack-start-app`)
-   - URL: https://pawtoons.co
-   - Deploy: `npm run deploy`
-   - Uses Stripe LIVE keys
-   - Real customer traffic
-
-### Workflow
-
-1. Make changes
-2. Test locally: `npm run dev`
-3. Deploy to staging: `npm run deploy:staging`
-4. Test on staging URL
-5. **Only when ready**: Deploy to production: `npm run deploy`
-
-See `STAGING_SETUP.md` for full setup instructions.
-
-### Testing Stripe Webhooks Locally
-
-Stripe webhook handler runs at `/api/stripe/webhook`. To test locally:
-
-```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
-```
-
-The webhook is handled BEFORE the TanStack router (in `src/server.ts`) to capture raw request body for signature verification.
-
-## Architecture
-
-### Routing & Server
-
-- **Framework**: TanStack Start (file-based routing + SSR)
-- **Entry points**: 
-  - `src/start.ts` — client entry
-  - `src/server.ts` — Cloudflare Workers fetch handler
-- **Routes**: `src/routes/` (file-based, auto-generated tree in `src/routeTree.gen.ts`)
-- **Key routes**:
-  - `/upload` — main wizard (upload photo → select theme/personality/traits → generate)
-  - `/checkout` — Stripe checkout page with watermarked preview
-  - `/success` — post-payment success page (unwatermarked download)
-  - `/auth` — sign-in/sign-up
-  - `/_authenticated/*` — protected routes (dashboard, admin)
-
-### Server Functions
-
-TanStack Start server functions (created with `createServerFn`) live in `src/lib/*.functions.ts`:
-
-- `generations.functions.ts` — `generatePawtoon()` orchestrates AI generation via OpenAI (GPT-4 Vision + DALL-E 3)
-- `stripe.functions.ts` — `createCheckoutSession()` initiates Stripe checkout
-- `fulfillment.functions.ts` — `confirmCheckout()` verifies payment, grants access
-- `fulfillment.server.ts` — `verifyStripeWebhook()` and `recordPaidOrder()` handle webhook events
-
-All authenticated server functions use `requireSupabaseAuth` middleware.
-
-### AI Generation Flow
-
-1. User uploads pet photo → `uploads.ts` service → Supabase storage (`pet-uploads` bucket)
-2. User selects theme/personality/traits → calls `generatePawtoon()`
-3. `generatePawtoon()` (in `generations.functions.ts`):
-   - Builds prompt via `buildPrompt()` from `services/prompts.ts`
-   - Downloads source photo from Supabase
-   - **Step 1**: Analyzes pet photo with GPT-4 Vision (extracts breed, colors, features)
-   - **Step 2**: Generates portrait with DALL-E 3 using enhanced prompt
-   - Bakes watermark on result via `watermark.server.ts` (WASM-based `@cf-wasm/photon`)
-   - Uploads both watermarked + unwatermarked versions to `caricatures` bucket
-   - Writes `generations` table row with paths
-4. User proceeds to checkout → watermarked preview shown
-5. Post-payment → success page serves unwatermarked version via signed URL
-
-### Prompt Engineering System
-
-`src/services/prompts.ts` — modular prompt builder combining:
-
-- **Theme styles** (`THEME_STYLE` record): royal, mafia, viking, astronaut, superhero, pirate
-- **Personality hints** (`PERSONALITY_HINTS` record): 24 personalities mapped to visual directives
-- **Trait hints** (`TRAIT_HINTS` record): funny, grumpy, energetic, lazy, chaotic, elegant, dramatic, mischievous
-
-`buildPrompt()` assembles a production-ready prompt string. `describePrompt()` generates short human-readable labels.
-
-### Payment & Fulfillment
-
-- **Price**: Fixed at £2.99 (299 pence) — digital download only, no merchandise
-- **Stripe mode**: Test mode
-- **Checkout flow**:
-  1. `createCheckoutSession()` generates Stripe checkout session with `generationId` in metadata
-  2. User completes payment
-  3. Stripe webhook (`/api/stripe/webhook`) fires `checkout.session.completed` → `recordPaidOrder()`
-  4. Success page also calls `confirmCheckout()` as backstop (idempotent via `session_id` uniqueness)
-- **Order tracking**: `orders` table links `session_id` → `generation_id`, records `paid_at`
-
-### Watermarking
-
-`src/lib/watermark.server.ts` — server-only WASM watermarking:
-
-- Uses `@cf-wasm/photon` library (Cloudflare Workers compatible)
-- Text overlay: "PAWTOONS PREVIEW" diagonal across center
-- Applied to ALL preview images before checkout
-- Unwatermarked versions protected by Supabase RLS + signed URLs (payment-gated)
-
-### Database (Supabase)
-
-Tables managed via `supabase/migrations/*.sql`:
-
-- `uploaded_images` — pet photos (RLS: owner-only read/write)
-- `generations` — AI-generated portraits (RLS: owner-only read, links to `uploaded_images`)
-- `orders` — payment records (RLS: owner-only read)
-
-Storage buckets:
-
-- `pet-uploads` — user-uploaded photos (private, RLS-protected)
-- `caricatures` — generated portraits (private, signed-URL access only)
-
-Auth: Supabase Auth with Google OAuth provider configured.
-
-### Styling & Components
-
-- **Tailwind CSS 4** (configured in `@tailwindcss/vite`)
-- **Component library**: `src/components/ui/` — shadcn-style primitives (Radix UI + Tailwind)
-- **Custom components**: `src/components/` (Nav, Footer, etc.)
-- **Mobile-first responsive design**: Progressive padding/text scales (`px-4 sm:px-5 md:px-8`, etc.)
-- **Safe area utilities**: `.safe-bottom`, `.safe-top`, etc. for iOS notched devices (defined in `src/styles.css`)
-
-Recent mobile audit fixes documented in `MOBILE_AUDIT_FIXES.md`.
+## Key Routes
+- /upload — 5-step wizard
+- /checkout — watermarked preview + Stripe
+- /success — post-payment download
+- /auth — sign in/up
+- /_authenticated/* — dashboard, admin
 
 ## Environment Variables
+Public (VITE_ prefix): VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_SUPABASE_PROJECT_ID, VITE_STRIPE_PUBLISHABLE_KEY
+Server only: SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY, OPENAI_API_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+Set via: npx wrangler secret put <KEY> --name <worker-name>
 
-Required vars (see `.env.example`):
-
-**Public** (prefixed with `VITE_`, safe for browser):
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_PUBLISHABLE_KEY`
-- `VITE_SUPABASE_PROJECT_ID`
-- `VITE_STRIPE_PUBLISHABLE_KEY`
-
-**Server-side only** (never expose):
-- `SUPABASE_URL`
-- `SUPABASE_PUBLISHABLE_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `SUPABASE_DB_URL`
-- `OPENAI_API_KEY` — for OpenAI API (get from https://platform.openai.com/api-keys)
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET`
-
-Store in `.env.local` (gitignored). For Cloudflare Workers deployment, set via Wrangler secrets or `.dev.vars`.
-
-## Development Workflow
-
-Per `AI_RULES.md` (token reduction rules):
-
-- **One task/component/bug at a time**
-- **Return only required code changes** — never rewrite full files unless requested
-- **Targeted edits only** — edit specific functions/sections, not entire pages
-- **Reuse existing components** — do not create new ones unnecessarily
-- **Preserve current styling** — match existing Tailwind patterns
-- **Minimize dependencies** — use existing libraries where possible
-
-## Key Constraints
-
-1. **Digital downloads only** — no physical merchandise, no shipping, no sizes/colors
-2. **Fixed price** — always £2.99, no variants
-3. **Watermark enforcement** — all previews watermarked until payment confirmed
-4. **No secrets in code** — never commit `.env.local` or hardcode API keys
-5. **Mobile-first responsive** — all UI changes must work on mobile (320px+)
-6. **Conventional commits** — use `feat:`, `fix:`, `chore:`, `refactor:` prefixes
-
-## Deployment
-
-Target: **Cloudflare Workers** (not Vercel)
-
-### Staging
-```bash
-npm run deploy:staging
-```
-Deploys to `pawtoons-staging` worker at pawtoons-staging.denveryoung02.workers.dev
-
-### Production
-```bash
-npm run deploy
-```
-Deploys to `tanstack-start-app` worker at pawtoons.co
-
-Builds via Vite, outputs to `dist/`, deploys via Wrangler.
-
-Ensure all environment variables are set via `wrangler secret put --name <worker-name>`.
-
-**Setting up staging secrets**: Run `.\scripts\setup-staging-secrets.ps1` or see `STAGING_SETUP.md`.
-
-## Notes
-
-- **Lovable export**: Project originally exported from Lovable, now maintained locally
-- **Bun lock exists** (`bun.lock`) but project uses npm
-- **Route tree is generated** — `src/routeTree.gen.ts` auto-generated by `@tanstack/router-plugin`, do not edit manually
-- **Step count is 5** — upload wizard has 5 steps (was incorrectly 7 in old UI, now fixed)
+## Rules
+- One fix at a time, targeted edits only, never rewrite full files
+- Digital download only — no physical products, no shipping
+- Price always £2.99
+- All previews watermarked until payment confirmed
+- Mobile-first (320px+)
+- Never commit API keys
+- Conventional commits: feat/fix/chore/refactor
+- Cloudflare Workers env vars accessed via context.env — never process.env or import.meta.env

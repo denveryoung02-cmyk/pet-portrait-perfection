@@ -141,6 +141,7 @@ const GEN_STAGES = [
 function CreateWizard() {
   const navigate = useNavigate();
   const { session } = useAuth();
+
   const [step, setStep] = useState(1);
 
   // Step 1 — upload
@@ -183,6 +184,47 @@ function CreateWizard() {
   const fitObj = FITS.find((f) => f.id === fit)!;
   const colorObj = COLORS.find((c) => c.id === color)!;
   const total = product.price + (productId === "tshirt" ? fitObj.extra : 0);
+
+  // Restore wizard state from localStorage on mount (client-only to avoid hydration mismatch)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = localStorage.getItem("pawtoons-wizard-state");
+    if (!saved) return;
+
+    try {
+      const state = JSON.parse(saved);
+      if (state.step) setStep(state.step);
+      if (state.uploadedImageId) setUploadedImageId(state.uploadedImageId);
+      if (state.themeId) setThemeId(state.themeId);
+      if (state.personalityId) setPersonalityId(state.personalityId);
+      if (state.traits) setTraits(state.traits);
+    } catch {
+      // Ignore parse errors
+    }
+  }, []);
+
+  // Track if user just returned from OAuth
+  const [justSignedIn, setJustSignedIn] = useState(false);
+  useEffect(() => {
+    const saved = localStorage.getItem("pawtoons-wizard-state");
+    if (saved && session && step === 4 && uploadedImageId) {
+      try {
+        const state = JSON.parse(saved);
+        // User just signed in with saved state at step 4
+        if (state.step === 4) {
+          console.log('[upload] User returned from OAuth:', {
+            hasSession: !!session,
+            accessToken: session.access_token ? `${session.access_token.substring(0, 20)}...` : 'NO TOKEN',
+            expiresAt: session.expires_at,
+            user: session.user?.email
+          });
+          setJustSignedIn(true);
+        }
+      } catch {
+        // Ignore parse errors
+      }
+    }
+  }, [session, step, uploadedImageId]);
 
   /* upload handlers — real Supabase Storage when signed in, local preview otherwise */
   const handleFile = async (f: File) => {
@@ -325,18 +367,32 @@ function CreateWizard() {
   /* step gating */
   const canNext = () => {
     if (step === 1) return !!file;
-    if (step === 4) return !!session; // Require sign-in before generation step
+    if (step === 4 && !session) return false; // Must sign in first
+    if (step === 4 && session && justSignedIn) return false; // Must click Continue button
+    if (step === 4) return !!session;
     if (step === 5) return genDone;
     return true;
   };
   const goNext = () => {
     // Block advancement to Step 5 without authentication
     if (step === 4 && !session) {
+      // Save wizard state to localStorage before redirecting to auth
+      localStorage.setItem("pawtoons-wizard-state", JSON.stringify({
+        step: 4,
+        uploadedImageId,
+        themeId,
+        personalityId,
+        traits,
+      }));
       navigate({ to: "/auth", search: { redirect: "/upload" } as any });
       return;
     }
+    // Block footer Next button if user just signed in (must use Continue button)
+    if (step === 4 && justSignedIn) return;
     if (step === 5 && !genDone) return;
     if (step === 5 && genDone) {
+      // Clear saved wizard state when completing the flow
+      localStorage.removeItem("pawtoons-wizard-state");
       navigate({ to: "/checkout", search: { gen: genId ?? undefined } as any });
       return;
     }
@@ -399,6 +455,25 @@ function CreateWizard() {
                   >
                     Continue with Google →
                   </Link>
+                </div>
+              )}
+              {session && justSignedIn && (
+                <div className="mt-8 rounded-3xl border-2 border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent p-6 sm:p-8 text-center max-w-2xl mx-auto animate-[fade-up_0.4s_ease-out]">
+                  <div className="text-4xl sm:text-5xl mb-3">✨</div>
+                  <h3 className="font-display text-xl sm:text-2xl">You're all set!</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground mt-2 mb-5 max-w-md mx-auto">
+                    Your account is ready. Click continue to generate your AI portrait.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setJustSignedIn(false);
+                      setStep(5);
+                    }}
+                    className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
+                    style={{ background: "var(--gradient-primary)" }}
+                  >
+                    Continue to Generation →
+                  </button>
                 </div>
               )}
             </>

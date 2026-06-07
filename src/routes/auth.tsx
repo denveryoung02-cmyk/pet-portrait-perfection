@@ -5,6 +5,9 @@ import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in — Pawtoons" }] }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: (search.redirect as string) ?? "/dashboard",
+  }),
   component: AuthPage,
 });
 
@@ -14,19 +17,18 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [err, setErr] = useState<string | null>(null);
-  const [debug, setDebug] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { session } = useAuth();
+  const { redirect } = Route.useSearch();
 
   useEffect(() => {
-    if (session) navigate({ to: "/dashboard" });
-  }, [session, navigate]);
+    if (session) navigate({ to: redirect });
+  }, [session, navigate, redirect]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErr(null);
-    setDebug(null);
     setLoading(true);
     try {
       if (mode === "signup") {
@@ -39,13 +41,9 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        const { data: sessionData } = await supabase.auth.getSession();
-        setDebug(`Signup success. Session exists: ${sessionData.session ? "yes" : "no"}`);
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        const { data: sessionData } = await supabase.auth.getSession();
-        setDebug(`Signin success. Session exists: ${sessionData.session ? "yes" : "no"}`);
       }
     } catch (e: any) {
       setErr(e.message ?? "Something went wrong");
@@ -59,7 +57,7 @@ function AuthPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/dashboard`,
+        redirectTo: `${window.location.origin}${redirect}`,
       },
     });
     if (error) setErr(error.message ?? "Google sign-in failed");
@@ -97,8 +95,6 @@ function AuthPage() {
           <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full rounded-xl border border-input bg-background px-3 sm:px-4 py-2.5 sm:py-3 text-sm" />
           <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full rounded-xl border border-input bg-background px-3 sm:px-4 py-2.5 sm:py-3 text-sm" />
           {err && <div className="text-xs sm:text-sm text-destructive">{err}</div>}
-          {debug && <div className="text-xs sm:text-sm text-green-700">{debug}</div>}
-          <div className="text-xs text-muted-foreground">Debug: session {session ? "active" : "none"}</div>
           <button disabled={loading} className="w-full rounded-full px-5 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] disabled:opacity-60" style={{ background: "var(--gradient-primary)" }}>
             {loading ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
           </button>

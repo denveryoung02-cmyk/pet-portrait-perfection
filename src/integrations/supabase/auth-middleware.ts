@@ -31,18 +31,31 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
 
     const authHeader = request.headers.get('authorization');
 
+    console.log('[auth-middleware] Request headers:', {
+      hasAuthHeader: !!authHeader,
+      authHeaderPreview: authHeader ? `${authHeader.substring(0, 30)}...` : 'MISSING'
+    });
+
     if (!authHeader) {
+      console.error('[auth-middleware] No authorization header provided');
       throw new Error('Unauthorized: No authorization header provided');
     }
 
     if (!authHeader.startsWith('Bearer ')) {
+      console.error('[auth-middleware] Invalid auth header format:', authHeader.substring(0, 50));
       throw new Error('Unauthorized: Only Bearer tokens are supported');
     }
 
     let token = authHeader.replace('Bearer ', '');
     if (!token) {
+      console.error('[auth-middleware] Token empty after Bearer prefix removal');
       throw new Error('Unauthorized: No token provided');
     }
+
+    console.log('[auth-middleware] Token extracted:', {
+      tokenPreview: `${token.substring(0, 20)}...`,
+      tokenLength: token.length
+    });
 
     // Strip BOM (Byte Order Mark) if present - fixes "Invalid API key" error
     // BOM bytes: \xEF\xBB\xBF (UTF-8) appearing at start of token
@@ -68,11 +81,29 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
     );
 
     const { data, error } = await supabase.auth.getClaims(token);
+
+    console.log('[auth-middleware] Token verification:', {
+      hasError: !!error,
+      errorCode: error?.code,
+      errorMessage: error?.message,
+      errorStatus: error?.status,
+      hasClaims: !!data?.claims,
+      userId: data?.claims?.sub,
+      supabaseUrl: SUPABASE_URL,
+      keyPreview: SUPABASE_PUBLISHABLE_KEY?.substring(0, 20) + '...'
+    });
+
     if (error || !data?.claims) {
-      throw new Error('Unauthorized: Invalid token');
+      console.error('[auth-middleware] Token verification failed:', {
+        error: JSON.stringify(error, null, 2),
+        token: token.substring(0, 50) + '...',
+        tokenLength: token.length
+      });
+      throw new Error(`Unauthorized: Invalid token (${error?.message || 'no claims'})`);
     }
 
     if (!data.claims.sub) {
+      console.error('[auth-middleware] No user ID in token claims');
       throw new Error('Unauthorized: No user ID found in token');
     }
 
