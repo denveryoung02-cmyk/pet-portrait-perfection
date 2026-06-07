@@ -16,7 +16,7 @@ function Generations() {
     queryFn: async () => {
       const { data } = await supabase
         .from("generations")
-        .select("id, theme, status, result_url, created_at")
+        .select("id, theme, status, preview_url, created_at")
         .order("created_at", { ascending: false });
       return data ?? [];
     },
@@ -61,7 +61,7 @@ function Generations() {
             return (
               <div key={g.id} className="rounded-2xl bg-card border border-border overflow-hidden group">
                 <div className="aspect-square bg-secondary relative">
-                  {g.result_url ? <img src={g.result_url} alt="" className="w-full h-full object-cover" /> : <div className="grid place-items-center h-full text-3xl">✨</div>}
+                  {g.preview_url ? <img src={g.preview_url} alt="" className="w-full h-full object-cover" /> : <div className="grid place-items-center h-full text-3xl">✨</div>}
                   <button onClick={() => toggleFav.mutate({ id: g.id, isFav })} className="absolute top-2 right-2 size-9 rounded-full bg-background/90 backdrop-blur grid place-items-center hover:scale-110 transition">
                     <Heart className={`size-4 ${isFav ? "fill-primary text-primary" : ""}`} />
                   </button>

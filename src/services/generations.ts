@@ -34,25 +34,22 @@ export type StartGenerationInput = {
 };
 
 export async function startGeneration(input: StartGenerationInput) {
-  console.log('[generations] Starting generation, checking session...');
   const { supabase } = await import('@/integrations/supabase/client');
   const { data: sessionData } = await supabase.auth.getSession();
 
-  const clientSupabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const clientSupabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  // Validate token before sending to server
+  if (!sessionData.session?.access_token) {
+    throw new Error('No access token available. Please sign in again.');
+  }
 
-  console.log('[generations] Client Supabase config:', {
-    url: clientSupabaseUrl,
-    keyPreview: clientSupabaseKey?.substring(0, 20) + '...'
-  });
-
-  console.log('[generations] Session state before server call:', {
-    hasSession: !!sessionData.session,
-    hasToken: !!sessionData.session?.access_token,
-    tokenPreview: sessionData.session?.access_token ? `${sessionData.session.access_token.substring(0, 20)}...` : 'NO TOKEN',
-    expiresAt: sessionData.session?.expires_at,
-    user: sessionData.session?.user?.email
-  });
+  // Check if token is expired
+  const expiresAt = sessionData.session.expires_at;
+  if (expiresAt && expiresAt <= Math.floor(Date.now() / 1000)) {
+    const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+    if (refreshError || !refreshData.session?.access_token) {
+      throw new Error('Session expired. Please sign in again.');
+    }
+  }
 
   // `data` is typed loosely here because generatePawtoon's input is validated by zod at runtime.
   return generatePawtoon({ data: input } as any);

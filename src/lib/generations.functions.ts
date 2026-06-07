@@ -40,15 +40,12 @@ export const generatePawtoon = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
 
     // 1. Load the uploaded image (owner-scoped via RLS)
-    console.log('[generatePawtoon] Looking for uploadedImageId:', data.uploadedImageId, 'userId:', userId);
     const { data: img, error: imgErr } = await supabase
       .from("uploaded_images")
       .select("id, storage_path")
       .eq("id", data.uploadedImageId)
       .single();
-    console.log('[generatePawtoon] Query result - img:', !!img, 'error:', imgErr?.message);
     if (imgErr || !img) {
-      console.error('[generatePawtoon] Failed to fetch uploaded image:', imgErr);
       throw new Error(`Uploaded image not found or not accessible: ${imgErr?.message ?? 'no data'}`);
     }
 
@@ -96,7 +93,6 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       if (!apiKey) throw new Error("OPENAI_API_KEY is not configured. Get your key from https://platform.openai.com/api-keys");
 
       // Step 4a: Analyze pet photo with GPT-4 Vision
-      console.log('[generatePawtoon] Step 1: Analyzing pet photo with GPT-4 Vision...');
       const visionRes = await fetch(OPENAI_CHAT_URL, {
         method: "POST",
         headers: {
@@ -141,10 +137,7 @@ export const generatePawtoon = createServerFn({ method: "POST" })
         throw new Error("GPT-4 Vision did not return a pet description — try a clearer photo.");
       }
 
-      console.log('[generatePawtoon] Pet analysis:', petDescription);
-
       // Step 4b: Generate portrait with DALL-E 3 using enhanced prompt
-      console.log('[generatePawtoon] Step 2: Generating portrait with DALL-E 3...');
       const enhancedPrompt = `${prompt}
 
 Pet details from photo: ${petDescription}
@@ -163,7 +156,6 @@ Important: Create a portrait that captures this specific pet's unique characteri
           n: 1,
           size: "1024x1024",
           quality: "auto",
-          // Note: DALL-E 3 returns URLs by default, not base64
         }),
       });
 
@@ -182,21 +174,31 @@ Important: Create a portrait that captures this specific pet's unique characteri
 
       const dalleData = await dalleRes.json();
       const imageUrl = dalleData.data?.[0]?.url;
+      const imageB64 = dalleData.data?.[0]?.b64_json;
 
-      if (!imageUrl) {
+      if (!imageUrl && !imageB64) {
         throw new Error("DALL-E 3 did not return an image — please try again.");
       }
 
-      console.log('[generatePawtoon] Downloading generated image from URL...');
+      let resultBytes: Uint8Array;
 
-      // Download the image from OpenAI's URL
-      const imgDownloadRes = await fetch(imageUrl);
-      if (!imgDownloadRes || !imgDownloadRes.ok) {
-        throw new Error(`Failed to download generated image: ${imgDownloadRes?.statusText || 'Unknown error'}`);
+      if (imageB64) {
+        // Handle base64 response
+        const binaryString = atob(imageB64);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        resultBytes = bytes;
+      } else {
+        // Handle URL response
+        const imgDownloadRes = await fetch(imageUrl!);
+        if (!imgDownloadRes || !imgDownloadRes.ok) {
+          throw new Error(`Failed to download generated image: ${imgDownloadRes?.statusText || 'Unknown error'}`);
+        }
+        resultBytes = new Uint8Array(await imgDownloadRes.arrayBuffer());
       }
-
-      const resultBytes = new Uint8Array(await imgDownloadRes.arrayBuffer());
-      console.log('[generatePawtoon] Generation successful');
 
       // 5a. Store the CLEAN original in the private bucket (never public).
       const cleanPath = `${userId}/${generationId}.png`;

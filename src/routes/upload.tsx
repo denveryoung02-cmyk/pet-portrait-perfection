@@ -191,20 +191,37 @@ function CreateWizard() {
     const saved = localStorage.getItem("pawtoons-wizard-state");
     if (!saved) return;
 
-    try {
-      const state = JSON.parse(saved);
-      if (state.step) setStep(state.step);
-      if (state.uploadedImageId) setUploadedImageId(state.uploadedImageId);
-      if (state.themeId) setThemeId(state.themeId);
-      if (state.personalityId) setPersonalityId(state.personalityId);
-      if (state.traits) setTraits(state.traits);
-    } catch {
-      // Ignore parse errors
-    }
+    (async () => {
+      try {
+        const state = JSON.parse(saved);
+        if (state.step) setStep(state.step);
+        if (state.uploadedImageId) {
+          setUploadedImageId(state.uploadedImageId);
+          // Fetch the uploaded image to restore the preview
+          const { data: img } = await supabase
+            .from("uploaded_images")
+            .select("storage_path")
+            .eq("id", state.uploadedImageId)
+            .single();
+          if (img?.storage_path) {
+            const { getSignedPreview } = await import("@/services/uploads");
+            const signedUrl = await getSignedPreview(img.storage_path);
+            setFile(signedUrl);
+            setUploadProgress(100);
+          }
+        }
+        if (state.themeId) setThemeId(state.themeId);
+        if (state.personalityId) setPersonalityId(state.personalityId);
+        if (state.traits) setTraits(state.traits);
+      } catch {
+        // Ignore parse errors
+      }
+    })();
   }, []);
 
-  // Track if user just returned from OAuth
+  // Track if user just returned from OAuth and wait for session to be fully ready
   const [justSignedIn, setJustSignedIn] = useState(false);
+  const [sessionReady, setSessionReady] = useState(false);
   useEffect(() => {
     const saved = localStorage.getItem("pawtoons-wizard-state");
     if (saved && session && step === 4 && uploadedImageId) {
@@ -212,19 +229,21 @@ function CreateWizard() {
         const state = JSON.parse(saved);
         // User just signed in with saved state at step 4
         if (state.step === 4) {
-          console.log('[upload] User returned from OAuth:', {
-            hasSession: !!session,
-            accessToken: session.access_token ? `${session.access_token.substring(0, 20)}...` : 'NO TOKEN',
-            expiresAt: session.expires_at,
-            user: session.user?.email
-          });
           setJustSignedIn(true);
+
+          // Wait briefly for session to be fully established after OAuth redirect
+          setTimeout(() => {
+            setSessionReady(true);
+          }, 500);
         }
       } catch {
         // Ignore parse errors
       }
+    } else if (session && !justSignedIn) {
+      // Normal sign-in flow (not OAuth redirect) - session is immediately ready
+      setSessionReady(true);
     }
-  }, [session, step, uploadedImageId]);
+  }, [session, step, uploadedImageId, justSignedIn]);
 
   /* upload handlers — real Supabase Storage when signed in, local preview otherwise */
   const handleFile = async (f: File) => {
@@ -462,14 +481,16 @@ function CreateWizard() {
                   <div className="text-4xl sm:text-5xl mb-3">✨</div>
                   <h3 className="font-display text-xl sm:text-2xl">You're all set!</h3>
                   <p className="text-sm sm:text-base text-muted-foreground mt-2 mb-5 max-w-md mx-auto">
-                    Your account is ready. Click continue to generate your AI portrait.
+                    {sessionReady ? "Your account is ready. Click continue to generate your AI portrait." : "Finalizing your session..."}
                   </p>
                   <button
                     onClick={() => {
+                      if (!sessionReady) return;
                       setJustSignedIn(false);
                       setStep(5);
                     }}
-                    className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
+                    disabled={!sessionReady}
+                    className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ background: "var(--gradient-primary)" }}
                   >
                     Continue to Generation →

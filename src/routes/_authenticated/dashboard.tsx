@@ -36,7 +36,7 @@ function Dashboard() {
     queryFn: async () => {
       const { data } = await supabase
         .from("generations")
-        .select("id, theme, status, result_url, created_at")
+        .select("id, theme, status, preview_url, created_at")
         .order("created_at", { ascending: false })
         .limit(6);
       return data ?? [];
@@ -74,8 +74,8 @@ function Dashboard() {
             {recent.map((g) => (
               <div key={g.id} className="rounded-2xl bg-card border border-border overflow-hidden">
                 <div className="aspect-square bg-secondary grid place-items-center">
-                  {g.result_url ? (
-                    <img src={g.result_url} alt="" className="w-full h-full object-cover" />
+                  {g.preview_url ? (
+                    <img src={g.preview_url} alt="" className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-4xl">✨</span>
                   )}

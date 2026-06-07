@@ -36,6 +36,7 @@ Server only: SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY, 
 Set via: npx wrangler secret put <KEY> --name <worker-name>
 
 ## Rules
+- No guessing — read the relevant files first and state facts only before suggesting any fix. Never use words like 'probably' or 'possibly'. If cause is unknown, read more files until it is known.
 - One fix at a time, targeted edits only, never rewrite full files
 - Digital download only — no physical products, no shipping
 - Price always £2.99
