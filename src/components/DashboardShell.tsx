@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Home, Image as ImageIcon, Sparkles, ShoppingBag, Heart, Shield, LogOut, Menu, X } from "lucide-react";
@@ -15,6 +15,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const { user, isAdmin, signOut } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-secondary/30">
@@ -54,7 +55,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 <div className="text-xs text-muted-foreground truncate">{user?.email}</div>
               </div>
             </div>
-            <button onClick={() => signOut()} className="w-full flex items-center justify-center gap-2 rounded-xl border border-border px-3 py-2 text-sm hover:bg-secondary">
+            <button onClick={() => signOut().then(() => navigate({ to: "/" }))} className="w-full flex items-center justify-center gap-2 rounded-xl border border-border px-3 py-2 text-sm hover:bg-secondary">
               <LogOut className="size-4" /> Sign out
             </button>
           </div>

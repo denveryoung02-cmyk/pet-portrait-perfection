@@ -23,6 +23,8 @@ export type CloudflareEnv = {
   STRIPE_WEBHOOK_SECRET?: string;
   VITE_STRIPE_PUBLISHABLE_KEY?: string;
   OPENAI_API_KEY?: string;
+  RESEND_API_KEY?: string;
+  AIML_API_KEY?: string;
   [key: string]: any;
 };
 

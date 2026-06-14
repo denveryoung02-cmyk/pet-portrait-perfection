@@ -48,6 +48,7 @@ export type Database = {
           clean_path: string | null
           created_at: string
           error: string | null
+          generation_params: Json | null
           id: string
           preview_url: string | null
           prompt: string | null
@@ -65,6 +66,7 @@ export type Database = {
           clean_path?: string | null
           created_at?: string
           error?: string | null
+          generation_params?: Json | null
           id?: string
           preview_url?: string | null
           prompt?: string | null
@@ -82,6 +84,7 @@ export type Database = {
           clean_path?: string | null
           created_at?: string
           error?: string | null
+          generation_params?: Json | null
           id?: string
           preview_url?: string | null
           prompt?: string | null
@@ -174,6 +177,10 @@ export type Database = {
           tracking_number: string | null
           updated_at: string
           user_id: string
+          wants_bundle: boolean
+          wants_video: boolean
+          video_task_id: string | null
+          video_url: string | null
         }
         Insert: {
           created_at?: string
@@ -188,6 +195,10 @@ export type Database = {
           tracking_number?: string | null
           updated_at?: string
           user_id: string
+          wants_bundle?: boolean
+          wants_video?: boolean
+          video_task_id?: string | null
+          video_url?: string | null
         }
         Update: {
           created_at?: string
@@ -202,6 +213,10 @@ export type Database = {
           tracking_number?: string | null
           updated_at?: string
           user_id?: string
+          wants_bundle?: boolean
+          wants_video?: boolean
+          video_task_id?: string | null
+          video_url?: string | null
         }
         Relationships: []
       }

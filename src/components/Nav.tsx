@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { LogOut, LayoutDashboard, Shield } from "lucide-react";
@@ -8,6 +8,7 @@ export function Nav() {
   const { user, isAdmin, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -31,11 +32,12 @@ export function Nav() {
           <div className="size-9 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground font-display text-lg shadow-[var(--shadow-soft)] group-hover:rotate-12 transition-transform">🐾</div>
           <span className="font-display text-xl md:text-2xl font-semibold tracking-tight">Pawtoons<span className="text-primary">.</span></span>
         </Link>
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
           <a href="/#how" className="hover:text-foreground transition">How it works</a>
-          <Link to="/products" className="hover:text-foreground transition">Products</Link>
           <a href="/#themes" className="hover:text-foreground transition">Themes</a>
           <a href="/#faq" className="hover:text-foreground transition">FAQ</a>
+          <Link to="/about" className="hover:text-foreground transition">About</Link>
+          <Link to="/blog/" className="hover:text-foreground transition">Blog</Link>
         </nav>
         <div className="flex items-center gap-3">
           {user ? (
@@ -44,7 +46,7 @@ export function Nav() {
                 <div className="size-7 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground text-xs font-semibold">
                   {(user.email ?? "?")[0].toUpperCase()}
                 </div>
-                <span className="hidden sm:inline text-sm font-medium max-w-[120px] truncate">{user.user_metadata?.full_name ?? user.email}</span>
+                <span className="hidden sm:inline-block text-sm font-medium max-w-[120px] truncate">{user.user_metadata?.full_name ?? user.email}</span>
               </button>
               {menuOpen && (
                 <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-card border border-border shadow-[var(--shadow-soft)] overflow-hidden">
@@ -52,7 +54,7 @@ export function Nav() {
                   {isAdmin && (
                     <Link to="/admin" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-secondary"><Shield className="size-4" /> Admin</Link>
                   )}
-                  <button onClick={() => { setMenuOpen(false); signOut(); }} className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-secondary border-t border-border text-left"><LogOut className="size-4" /> Sign out</button>
+                  <button onClick={() => { setMenuOpen(false); signOut().then(() => navigate({ to: "/" })); }} className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-secondary border-t border-border text-left"><LogOut className="size-4" /> Sign out</button>
                 </div>
               )}
             </div>

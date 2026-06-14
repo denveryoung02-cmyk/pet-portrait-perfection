@@ -23,6 +23,7 @@ export type StripeSessionResult = {
   paid: boolean;
   generationId: string | null;
   amountTotalCents: number | null;
+  wantsBundle: boolean;
 };
 
 /** Retrieve a Checkout Session from Stripe and report whether it is paid. */
@@ -37,13 +38,14 @@ export async function retrieveStripeSession(
     `https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionId)}`,
     { headers: { Authorization: `Bearer ${key}` } },
   );
-  if (!res.ok) return { paid: false, generationId: null, amountTotalCents: null };
+  if (!res.ok) return { paid: false, generationId: null, amountTotalCents: null, wantsBundle: false };
 
   const session: any = await res.json();
   return {
     paid: session?.payment_status === "paid",
     generationId: session?.metadata?.generationId ?? null,
     amountTotalCents: typeof session?.amount_total === "number" ? session.amount_total : null,
+    wantsBundle: session?.metadata?.wantsBundle === "true",
   };
 }
 
@@ -56,7 +58,8 @@ export async function recordPaidOrder(opts: {
   sessionId: string;
   generationId: string;
   amountTotalCents?: number | null;
-}): Promise<void> {
+  wantsBundle?: boolean;
+}): Promise<{ orderId: string }> {
   const { sessionId, generationId } = opts;
   const total = opts.amountTotalCents ?? DIGITAL_PRICE_CENTS;
 
@@ -66,7 +69,7 @@ export async function recordPaidOrder(opts: {
     .select("id")
     .eq("stripe_session_id", sessionId)
     .maybeSingle();
-  if (existing) return;
+  if (existing) return { orderId: existing.id };
 
   const { data: gen } = await supabaseAdmin
     .from("generations")
@@ -84,6 +87,7 @@ export async function recordPaidOrder(opts: {
       subtotal_cents: total,
       total_cents: total,
       stripe_session_id: sessionId,
+      wants_bundle: opts.wantsBundle ?? false,
     })
     .select("id")
     .single();
@@ -96,6 +100,16 @@ export async function recordPaidOrder(opts: {
     unit_price_cents: total,
     options: { type: "digital_download" },
   });
+
+  return { orderId: order.id };
+}
+
+/** Store the AIML video task ID on an order row once generation has been kicked off. */
+export async function storeVideoTaskId(orderId: string, taskId: string): Promise<void> {
+  await supabaseAdmin
+    .from("orders")
+    .update({ video_task_id: taskId })
+    .eq("id", orderId);
 }
 
 /**
@@ -153,7 +167,7 @@ export async function verifyStripeWebhook(
  * Short-lived signed URL to the clean image for a generation. Falls back to a
  * legacy public `result_url` for pre-migration rows that have no clean_path.
  */
-export async function signCleanDownloadUrl(generationId: string): Promise<string | null> {
+export async function signCleanDownloadUrl(generationId: string, ttlSeconds = SIGNED_URL_TTL_SECONDS): Promise<string | null> {
   const { data: gen } = await supabaseAdmin
     .from("generations")
     .select("clean_path, result_url")
@@ -164,7 +178,7 @@ export async function signCleanDownloadUrl(generationId: string): Promise<string
   if (gen.clean_path) {
     const { data, error } = await supabaseAdmin.storage
       .from("caricatures-clean")
-      .createSignedUrl(gen.clean_path, SIGNED_URL_TTL_SECONDS);
+      .createSignedUrl(gen.clean_path, ttlSeconds);
     if (error) throw new Error(error.message);
     return data?.signedUrl ?? null;
   }

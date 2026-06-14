@@ -92,6 +92,7 @@ async function handleStripeWebhook(request: Request, env: CloudflareEnv): Promis
           sessionId: session.id,
           generationId,
           amountTotalCents: typeof session.amount_total === "number" ? session.amount_total : null,
+          wantsBundle: session.metadata?.wantsBundle === "true",
         });
       }
     }

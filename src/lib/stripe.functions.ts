@@ -4,6 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const InputSchema = z.object({
   generationId: z.string().uuid(),
+  addBundle: z.boolean().optional(),
   successUrl: z.string().url(),
   cancelUrl: z.string().url(),
 });
@@ -23,17 +24,21 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       throw new Error("STRIPE_SECRET_KEY is not configured.");
     }
 
+    const isBundle = !!data.addBundle;
     const params = new URLSearchParams({
       "payment_method_types[0]": "card",
       "line_items[0][price_data][currency]": "gbp",
-      "line_items[0][price_data][product_data][name]": "Pawtoons — Digital Download",
-      "line_items[0][price_data][product_data][description]": "Instant digital delivery of your AI pet portrait. High-resolution PNG.",
-      "line_items[0][price_data][unit_amount]": "299",
+      "line_items[0][price_data][product_data][name]": isBundle ? "Pawtoons — All 3 Styles Bundle" : "Pawtoons — Digital Download",
+      "line_items[0][price_data][product_data][description]": isBundle
+        ? "Oil Painting, Pixar 3D & Watercolour portraits of your pet. Instant digital delivery."
+        : "Instant digital delivery of your AI pet portrait. High-resolution PNG.",
+      "line_items[0][price_data][unit_amount]": isBundle ? "499" : "199",
       "line_items[0][quantity]": "1",
       "mode": "payment",
       "success_url": data.successUrl,
       "cancel_url": data.cancelUrl,
       "metadata[generationId]": data.generationId,
+      "metadata[wantsBundle]": isBundle ? "true" : "false",
       "allow_promotion_codes": "true",
     });
 

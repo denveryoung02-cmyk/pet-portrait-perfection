@@ -23,6 +23,7 @@ export type GenerationRow = {
 
 export type StartGenerationInput = {
   uploadedImageId: string;
+  artStyleId?: string;
   themeId: string;
   themeName?: string;
   personalityId: string;
@@ -31,6 +32,7 @@ export type StartGenerationInput = {
   traits?: string[];
   petType?: string;
   petName?: string;
+  personalisationText?: string;
 };
 
 export async function startGeneration(input: StartGenerationInput) {

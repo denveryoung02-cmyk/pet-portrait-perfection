@@ -11,9 +11,14 @@ export function Footer() {
               Turning beloved pets into legendary characters since 2024.
             </p>
             <div className="flex gap-2 sm:gap-3 mt-4 sm:mt-5">
-              {["Instagram", "TikTok", "Pinterest", "X"].map((s) => (
-                <a key={s} href="#" className="size-8 sm:size-9 rounded-full bg-background/10 hover:bg-primary grid place-items-center text-xs transition">
-                  {s[0]}
+              {[
+                { name: "Instagram", href: "https://www.instagram.com/pawtoons.co" },
+                { name: "TikTok", href: "https://www.tiktok.com/@pawtoons.co" },
+                { name: "Pinterest", href: "https://www.pinterest.com/pawtoons" },
+                { name: "X", href: "https://twitter.com/pawtoons" },
+              ].map((s) => (
+                <a key={s.name} href={s.href} className="size-8 sm:size-9 rounded-full bg-background/10 hover:bg-primary grid place-items-center text-xs transition" target="_blank" rel="noopener noreferrer">
+                  {s.name[0]}
                 </a>
               ))}
             </div>
@@ -45,8 +50,8 @@ export function Footer() {
         <div className="mt-10 sm:mt-14 pt-5 sm:pt-6 border-t border-background/10 flex flex-col sm:flex-row justify-between gap-2 sm:gap-3 text-[10px] sm:text-xs text-background/50">
           <span>© 2026 Pawtoons. Made with 🐾 for pet people.</span>
           <div className="flex gap-4 sm:gap-5">
-            <a href="#" className="hover:text-background">Privacy</a>
-            <a href="#" className="hover:text-background">Terms</a>
+            <Link to="/privacy" className="hover:text-background">Privacy</Link>
+            <Link to="/terms" className="hover:text-background">Terms</Link>
           </div>
         </div>
       </div>

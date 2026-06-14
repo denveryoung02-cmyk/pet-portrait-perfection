@@ -21,10 +21,44 @@ import superheroGen from "@/assets/gen-superhero-v1.png";
 import pirateGen from "@/assets/gen-pirate-v1.png";
 import pirateDragonGen from "@/assets/Gen-Pirate Dragon-V1.png";
 import catRoyalGen from "@/assets/Gen-Cat Royal-V1.png";
+import princessGen from "@/assets/Gen-princess-v1.png";
+import angelGen from "@/assets/gen-angel-v1.png";
+import mermaidGen from "@/assets/gen-mermaid-v1.png";
+import wizardGen from "@/assets/Gen-Wizard-v1.png";
+import ballerinaGen from "@/assets/gen-ballerina-v1.png";
+import flowerCrownGen from "@/assets/gen-flower crown-v1.png";
 import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
 import mousemat from "@/assets/product-mousemat.jpg";
+
+// Pixar style images
+import royalPixar from "@/assets/gen-pixar-royal-v1.png";
+import mafiaPixar from "@/assets/gen-pixar-mafia-v1.png";
+import vikingPixar from "@/assets/gen-pixar-viking-v1.png";
+import astronautPixar from "@/assets/gen-pixar-astronaut-v1.png";
+import superheroPixar from "@/assets/gen-Pixar-Superhero-v1.png";
+import piratePixar from "@/assets/gen-pixar-pirate-v1.png";
+import princessPixar from "@/assets/gen-pixar-princess-v1.png";
+import angelPixar from "@/assets/gen-pixar-angel-v1.png";
+import mermaidPixar from "@/assets/gen-pixar-mermaid-v1.png";
+import wizardPixar from "@/assets/gen-pixar-wizard-v1.png";
+import ballerinaPixar from "@/assets/gen-pixar-ballerina-v1.png";
+import flowerCrownPixar from "@/assets/gen-pixar-flower crown-v1.png";
+
+// Watercolour style images
+import royalWatercolour from "@/assets/gen-watercolour-royal-v1.png";
+import mafiaWatercolour from "@/assets/gen-watercolour-mafia-v1.png";
+import vikingWatercolour from "@/assets/gen-watercolour-viking-v1.png";
+import astronautWatercolour from "@/assets/gen-Watercolour-astronaut-v1.png";
+import superheroWatercolour from "@/assets/gen-watercolour-superhero-v1.png";
+import pirateWatercolour from "@/assets/gen-watercolour-pirate-v1.png";
+import princessWatercolour from "@/assets/gen-watercolour-princess-v1.png";
+import angelWatercolour from "@/assets/gen-watercolour-angel-v1.png";
+import mermaidWatercolour from "@/assets/gen-watercolour-mermaid-v1.png";
+import wizardWatercolour from "@/assets/gen-watercolour-wizard-v1.png";
+import ballerinaWatercolour from "@/assets/gen-watercolour-ballerina-v1.png";
+import flowerCrownWatercolour from "@/assets/gen-watercolour-flower crown-v1.png";
 
 export const Route = createFileRoute("/upload")({
   head: () => ({ meta: [{ title: "Create your Pawtoon — step by step" }] }),
@@ -40,10 +74,21 @@ export const Route = createFileRoute("/upload")({
 /* ---------------- Data ---------------- */
 
 type Personality = { id: string; name: string; emoji: string; desc: string; recommended?: boolean };
-type Theme = { id: string; name: string; tag: string; img: string; emoji: string; gradient: string; personalities: Personality[] };
+type Theme = {
+  id: string;
+  name: string;
+  tag: string;
+  img: string;
+  imgOil: string;
+  imgPixar: string;
+  imgWatercolour: string;
+  emoji: string;
+  gradient: string;
+  personalities: Personality[]
+};
 
 const themes: Theme[] = [
-  { id: "royal", name: "Royal", tag: "Crown jewels included", img: royalV1, emoji: "👑",
+  { id: "royal", name: "Royal", tag: "Crown jewels included", img: royalV1, imgOil: royalV1, imgPixar: royalPixar, imgWatercolour: royalWatercolour, emoji: "👑",
     gradient: "from-amber-200 via-rose-200 to-purple-300",
     personalities: [
       { id: "noble-king", name: "Noble King", emoji: "👑", desc: "Wise, regal, slightly stuck-up.", recommended: true },
@@ -51,7 +96,7 @@ const themes: Theme[] = [
       { id: "tiny-tyrant", name: "Tiny Tyrant", emoji: "😤", desc: "Small body. Huge ego." },
       { id: "elegant-queen", name: "Elegant Queen", emoji: "👸", desc: "Effortlessly fabulous." },
     ] },
-  { id: "mafia", name: "Mafia", tag: "Don't make it personal", img: mafiaGen, emoji: "🎩",
+  { id: "mafia", name: "Mafia", tag: "Don't make it personal", img: mafiaGen, imgOil: mafiaGen, imgPixar: mafiaPixar, imgWatercolour: mafiaWatercolour, emoji: "🎩",
     gradient: "from-stone-300 via-stone-500 to-stone-800",
     personalities: [
       { id: "crime-boss", name: "Crime Boss", emoji: "🎩", desc: "Runs the block. And the couch.", recommended: true },
@@ -59,7 +104,7 @@ const themes: Theme[] = [
       { id: "chaotic-gremlin", name: "Chaotic Gremlin", emoji: "😈", desc: "Pure unhinged energy." },
       { id: "smooth-talker", name: "Smooth Talker", emoji: "😎", desc: "Charm-first, paws second." },
     ] },
-  { id: "viking", name: "Viking", tag: "Battle ready, belly rubs", img: vikingGen, emoji: "⚔️",
+  { id: "viking", name: "Viking", tag: "Battle ready, belly rubs", img: vikingGen, imgOil: vikingGen, imgPixar: vikingPixar, imgWatercolour: vikingWatercolour, emoji: "⚔️",
     gradient: "from-orange-300 via-red-400 to-stone-700",
     personalities: [
       { id: "berserker", name: "Berserker", emoji: "🪓", desc: "Charges first. Naps later." },
@@ -67,7 +112,7 @@ const themes: Theme[] = [
       { id: "tiny-but-violent", name: "Tiny But Violent", emoji: "💢", desc: "Small. Furious. Iconic." },
       { id: "fearless-explorer", name: "Fearless Explorer", emoji: "🧭", desc: "Bold seas, bolder treats." },
     ] },
-  { id: "astronaut", name: "Astronaut", tag: "To infinity and treats", img: astronautGen, emoji: "🚀",
+  { id: "astronaut", name: "Astronaut", tag: "To infinity and treats", img: astronautGen, imgOil: astronautGen, imgPixar: astronautPixar, imgWatercolour: astronautWatercolour, emoji: "🚀",
     gradient: "from-indigo-300 via-violet-500 to-slate-900",
     personalities: [
       { id: "space-commander", name: "Space Commander", emoji: "🚀", desc: "Calm under cosmic pressure.", recommended: true },
@@ -75,7 +120,7 @@ const themes: Theme[] = [
       { id: "galactic-genius", name: "Galactic Genius", emoji: "🧠", desc: "Solves quantum kibble." },
       { id: "cosmic-menace", name: "Cosmic Menace", emoji: "👽", desc: "A threat to all known galaxies." },
     ] },
-  { id: "superhero", name: "Superhero", tag: "Cape, drama, glory", img: superheroGen, emoji: "🦸",
+  { id: "superhero", name: "Superhero", tag: "Cape, drama, glory", img: superheroGen, imgOil: superheroGen, imgPixar: superheroPixar, imgWatercolour: superheroWatercolour, emoji: "🦸",
     gradient: "from-sky-300 via-blue-500 to-red-500",
     personalities: [
       { id: "city-protector", name: "City Protector", emoji: "🛡️", desc: "Saves the day, every day." },
@@ -83,13 +128,61 @@ const themes: Theme[] = [
       { id: "overconfident-legend", name: "Overconfident Legend", emoji: "💪", desc: "Believes their own hype." },
       { id: "secret-villain", name: "Secret Villain", emoji: "😼", desc: "Plotting world domination." },
     ] },
-  { id: "pirate", name: "Pirate", tag: "Arrr-mazing", img: pirateGen, emoji: "🏴‍☠️",
+  { id: "pirate", name: "Pirate", tag: "Arrr-mazing", img: pirateGen, imgOil: pirateGen, imgPixar: piratePixar, imgWatercolour: pirateWatercolour, emoji: "🏴‍☠️",
     gradient: "from-teal-300 via-cyan-600 to-slate-800",
     personalities: [
       { id: "treasure-hunter", name: "Treasure Hunter", emoji: "💰", desc: "Will dig for snacks." },
       { id: "drunken-captain", name: "Drunken Captain", emoji: "🍺", desc: "Wobbly. Loud. Beloved.", recommended: true },
       { id: "chaos-goblin", name: "Chaos Goblin", emoji: "🤪", desc: "Lives only for destruction." },
       { id: "sea-monster-slayer", name: "Sea Monster Slayer", emoji: "🐙", desc: "Bath time = epic battle." },
+    ] },
+  { id: "princess", name: "Princess", tag: "Fairy tale dreams", img: princessGen, imgOil: princessGen, imgPixar: princessPixar, imgWatercolour: princessWatercolour, emoji: "👸",
+    gradient: "from-pink-200 via-purple-200 to-blue-200",
+    personalities: [
+      { id: "royal-princess", name: "Royal Princess", emoji: "👸", desc: "Grace and elegance.", recommended: true },
+      { id: "adventurous-princess", name: "Adventurous Princess", emoji: "🗡️", desc: "Saves herself." },
+      { id: "shy-princess", name: "Shy Princess", emoji: "🌸", desc: "Quiet but magical." },
+      { id: "rebel-princess", name: "Rebel Princess", emoji: "⚡", desc: "Breaks the rules." },
+    ] },
+  { id: "angel", name: "Angel", tag: "Garden guardian", img: angelGen, imgOil: angelGen, imgPixar: angelPixar, imgWatercolour: angelWatercolour, emoji: "😇",
+    gradient: "from-sky-100 via-pink-100 to-yellow-100",
+    personalities: [
+      { id: "gentle-angel", name: "Gentle Angel", emoji: "😇", desc: "Pure and kind.", recommended: true },
+      { id: "mischievous-angel", name: "Mischievous Angel", emoji: "😊", desc: "Innocent chaos." },
+      { id: "guardian-angel", name: "Guardian Angel", emoji: "🛡️", desc: "Protects all creatures." },
+      { id: "sleepy-angel", name: "Sleepy Angel", emoji: "😴", desc: "Naps on clouds." },
+    ] },
+  { id: "mermaid", name: "Mermaid", tag: "Under the sea", img: mermaidGen, imgOil: mermaidGen, imgPixar: mermaidPixar, imgWatercolour: mermaidWatercolour, emoji: "🧜‍♀️",
+    gradient: "from-cyan-200 via-teal-300 to-blue-400",
+    personalities: [
+      { id: "ocean-explorer", name: "Ocean Explorer", emoji: "🧜‍♀️", desc: "Curious and brave.", recommended: true },
+      { id: "shy-mermaid", name: "Shy Mermaid", emoji: "🐚", desc: "Hides in coral reefs." },
+      { id: "singing-mermaid", name: "Singing Mermaid", emoji: "🎵", desc: "Voice of the sea." },
+      { id: "treasure-collector", name: "Treasure Collector", emoji: "💎", desc: "Loves shiny things." },
+    ] },
+  { id: "wizard", name: "Wizard", tag: "Magical and mystical", img: wizardGen, imgOil: wizardGen, imgPixar: wizardPixar, imgWatercolour: wizardWatercolour, emoji: "🧙",
+    gradient: "from-purple-300 via-indigo-400 to-violet-500",
+    personalities: [
+      { id: "wise-wizard", name: "Wise Wizard", emoji: "🧙", desc: "Ancient and powerful.", recommended: true },
+      { id: "clumsy-wizard", name: "Clumsy Wizard", emoji: "✨", desc: "Spells go sideways." },
+      { id: "dark-wizard", name: "Dark Wizard", emoji: "🌑", desc: "Master of shadows." },
+      { id: "young-wizard", name: "Young Wizard", emoji: "📚", desc: "Still learning magic." },
+    ] },
+  { id: "ballerina", name: "Ballerina", tag: "Grace and poise", img: ballerinaGen, imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgWatercolour: ballerinaWatercolour, emoji: "🩰",
+    gradient: "from-pink-100 via-rose-200 to-pink-300",
+    personalities: [
+      { id: "prima-ballerina", name: "Prima Ballerina", emoji: "🩰", desc: "Star of the stage.", recommended: true },
+      { id: "playful-dancer", name: "Playful Dancer", emoji: "💃", desc: "Twirls everywhere." },
+      { id: "graceful-swan", name: "Graceful Swan", emoji: "🦢", desc: "Elegant and poised." },
+      { id: "energetic-dancer", name: "Energetic Dancer", emoji: "⚡", desc: "Never stops moving." },
+    ] },
+  { id: "flower-crown", name: "Flower Crown", tag: "Boho vibes", img: flowerCrownGen, imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgWatercolour: flowerCrownWatercolour, emoji: "🌸",
+    gradient: "from-green-200 via-yellow-200 to-pink-200",
+    personalities: [
+      { id: "nature-lover", name: "Nature Lover", emoji: "🌸", desc: "One with the earth.", recommended: true },
+      { id: "free-spirit", name: "Free Spirit", emoji: "🦋", desc: "Wild and carefree." },
+      { id: "garden-keeper", name: "Garden Keeper", emoji: "🌻", desc: "Tends the blooms." },
+      { id: "sunset-dreamer", name: "Sunset Dreamer", emoji: "🌅", desc: "Lost in beauty." },
     ] },
 ];
 
@@ -126,12 +219,19 @@ const COLORS = [
   { id: "grey", name: "Grey", hex: "#9aa0a6" },
 ];
 
+const ART_STYLES = [
+  { id: "oil-painting", name: "Oil Painting", emoji: "🎨", desc: "Museum-quality oil painting, rich painterly brush strokes, dramatic lighting, gallery-grade composition" },
+  { id: "pixar-3d", name: "Pixar/3D", emoji: "✨", desc: "Pixar 3D animation style, soft volumetric lighting, Disney character aesthetic, rounded forms, high detail render, warm family-friendly colours" },
+  { id: "watercolour", name: "Watercolour", emoji: "🌸", desc: "Delicate watercolour illustration style, soft flowing edges, pastel wash tones, hand-painted feel, gentle artistic atmosphere" },
+];
+
 const STEPS = [
   { n: 1, title: "Upload photo", sub: "Add a clear pet pic" },
-  { n: 2, title: "Theme", sub: "Pick a universe" },
-  { n: 3, title: "Personality", sub: "Set the vibe" },
-  { n: 4, title: "Traits", sub: "Optional flavour" },
-  { n: 5, title: "Generate", sub: "AI does the magic" },
+  { n: 2, title: "Art style", sub: "Pick your look" },
+  { n: 3, title: "Theme", sub: "Pick a universe" },
+  { n: 4, title: "Personality", sub: "Set the vibe" },
+  { n: 5, title: "Traits", sub: "Optional flavour" },
+  { n: 6, title: "Generate", sub: "AI does the magic" },
 ];
 
 const GEN_STAGES = [
@@ -156,6 +256,8 @@ function CreateWizard() {
 
   // Step 1 — upload
   const [file, setFile] = useState<string | null>(null);
+  // Step 2 — art style
+  const [artStyleId, setArtStyleId] = useState("oil-painting");
   const [fileName, setFileName] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -165,12 +267,13 @@ function CreateWizard() {
   const inputRef = useRef<HTMLInputElement>(null);
   const pendingFileRef = useRef<File | null>(null);
 
-  // Step 2-4
+  // Step 3-5
   const [themeId, setThemeId] = useState("royal");
   const [personalityId, setPersonalityId] = useState("noble-king");
   const [traits, setTraits] = useState<string[]>([]);
+  const [personalisationText, setPersonalisationText] = useState("");
 
-  // Step 5 — generate
+  // Step 6 — generate
   const [genProgress, setGenProgress] = useState(0);
   const [genStage, setGenStage] = useState(0);
   const [genDone, setGenDone] = useState(false);
@@ -181,7 +284,7 @@ function CreateWizard() {
   const [favourite, setFavourite] = useState(1);
   const [zoom, setZoom] = useState<number | null>(null);
 
-  // Step 6 — product
+  // Step 7 — product
   const [productId, setProductId] = useState("tshirt");
   const [size, setSize] = useState("M");
   const [fit, setFit] = useState("regular");
@@ -297,11 +400,11 @@ function CreateWizard() {
     setGenId(null);
     setGenProgress(0);
     setGenStage(0);
-  }, [themeId, personalityId, traits]); // eslint-disable-line
+  }, [artStyleId, themeId, personalityId, traits]); // eslint-disable-line
 
   /* generation: real server fn when authed + uploaded; simulated otherwise */
   useEffect(() => {
-    if (step !== 5 || genDone || genFailed) return;
+    if (step !== 6 || genDone || genFailed) return;
 
     // Progress animation (cosmetic — runs alongside the real request)
     setGenProgress(0);
@@ -337,12 +440,14 @@ function CreateWizard() {
       try {
         const res = await startGeneration({
           uploadedImageId: uploadedImageId!,
+          artStyleId,
           themeId,
           themeName: theme.name,
           personalityId,
           personalityName: personality.name,
           personalityDesc: personality.desc,
           traits,
+          personalisationText: personalisationText.trim() || undefined,
         });
         if (cancelled) return;
         clearInterval(tick);
@@ -375,23 +480,23 @@ function CreateWizard() {
   /* step gating */
   const canNext = () => {
     if (step === 1) return !!file;
-    if (step === 4 && !session) return false;
-    if (step === 4) return !!session;
-    if (step === 5) return genDone;
+    if (step === 5 && !session) return false;
+    if (step === 5) return !!session;
+    if (step === 6) return genDone;
     return true;
   };
   const goNext = () => {
-    if (step === 4 && !session) {
+    if (step === 5 && !session) {
       console.log('[goNext] uploadedImageId at redirect:', uploadedImageId);
-      navigate({ to: "/auth", search: { redirect: `/upload?step=4&uploadedImageId=${uploadedImageId ?? ''}` } as any });
+      navigate({ to: "/auth", search: { redirect: `/upload?step=5&uploadedImageId=${uploadedImageId ?? ''}` } as any });
       return;
     }
-    if (step === 5 && !genDone) return;
-    if (step === 5 && genDone) {
+    if (step === 6 && !genDone) return;
+    if (step === 6 && genDone) {
       navigate({ to: "/checkout", search: { gen: genId ?? undefined } as any });
       return;
     }
-    setStep((s) => Math.min(5, s + 1) as any);
+    setStep((s) => Math.min(6, s + 1) as any);
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const goBack = () => {
@@ -417,7 +522,7 @@ function CreateWizard() {
       <main className="mx-auto max-w-6xl px-4 sm:px-5 md:px-8 py-6 sm:py-8 md:py-12">
         <header className="mb-6 sm:mb-8 md:mb-10">
           <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
-            Step {step} of 5 · {STEPS[step - 1]?.sub}
+            Step {step} of 6 · {STEPS[step - 1]?.sub}
           </span>
           <h1 className="mt-2 text-2xl sm:text-3xl md:text-5xl font-display leading-tight">{stepHeadline(step)}</h1>
         </header>
@@ -430,11 +535,12 @@ function CreateWizard() {
               setDragOver={setDragOver} onPick={onPick} onDrop={onDrop} removeFile={removeFile}
             />
           )}
-          {step === 2 && <StepTheme themeId={themeId} setThemeId={setThemeId} />}
-          {step === 3 && <StepPersonality theme={theme} personalityId={personalityId} setPersonalityId={setPersonalityId} />}
-          {step === 4 && (
+          {step === 2 && <StepArtStyle artStyleId={artStyleId} setArtStyleId={setArtStyleId} />}
+          {step === 3 && <StepTheme themeId={themeId} setThemeId={setThemeId} artStyleId={artStyleId} />}
+          {step === 4 && <StepPersonality theme={theme} personalityId={personalityId} setPersonalityId={setPersonalityId} />}
+          {step === 5 && (
             <>
-              <StepTraits traits={traits} toggleTrait={toggleTrait} />
+              <StepTraits traits={traits} toggleTrait={toggleTrait} personalisationText={personalisationText} setPersonalisationText={setPersonalisationText} />
               {!session && (
                 <div className="mt-8 rounded-3xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-6 sm:p-8 text-center max-w-2xl mx-auto">
                   <div className="text-4xl sm:text-5xl mb-3">🔐</div>
@@ -445,7 +551,7 @@ function CreateWizard() {
                   <button
                     onClick={() => {
                       console.log('[button] uploadedImageId at redirect:', uploadedImageId);
-                      navigate({ to: "/auth", search: { redirect: `/upload?step=4&uploadedImageId=${uploadedImageId ?? ''}` } as any });
+                      navigate({ to: "/auth", search: { redirect: `/upload?step=5&uploadedImageId=${uploadedImageId ?? ''}` } as any });
                     }}
                     className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
                     style={{ background: "var(--gradient-primary)" }}
@@ -456,7 +562,7 @@ function CreateWizard() {
               )}
             </>
           )}
-          {step === 5 && (
+          {step === 6 && (
             <StepGenerate
               theme={theme} personality={personality} file={file}
               genProgress={genProgress} genStage={genStage} genDone={genDone}
@@ -465,10 +571,10 @@ function CreateWizard() {
               genResultUrl={genResultUrl} genError={genError}
             />
           )}
-          
+
         </div>
 
-        {step === 5 && genDone && <SocialShowcase />}
+        {step === 6 && genDone && <SocialShowcase />}
       </main>
 
       {/* Sticky footer nav */}
@@ -482,7 +588,7 @@ function CreateWizard() {
             ← Back
           </button>
           <div className="hidden md:block flex-1 text-sm text-muted-foreground">
-            {step < 7 ? `Next: ${STEPS[step] ? STEPS[step].title : "Checkout"}` : "Ready to make it real."}
+            {step < 6 ? `Next: ${STEPS[step] ? STEPS[step].title : "Checkout"}` : "Ready to make it real."}
           </div>
           <div className="md:hidden flex-1 text-xs text-muted-foreground truncate">
             {STEPS[step - 1].title}
@@ -493,7 +599,7 @@ function CreateWizard() {
             className="rounded-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-40 disabled:shadow-none disabled:hover:scale-100 whitespace-nowrap"
             style={{ background: "var(--gradient-primary)" }}
           >
-            {step === 5 && !genDone ? "Generating…" : step === 5 && genDone ? "Checkout →" : "Next →"}
+            {step === 6 && !genDone ? "Generating…" : step === 6 && genDone ? "Checkout →" : "Next →"}
           </button>
         </div>
       </div>
@@ -509,19 +615,20 @@ function CreateWizard() {
 function stepHeadline(s: number) {
   return {
     1: "Drop in your best pet pic.",
-    2: "Pick your pet's cinematic universe.",
-    3: "Who are they, really?",
-    4: "Add a sprinkle of chaos.",
-    5: "Painting their movie poster moment ✨",
-    6: "Pick where the magic lives.",
-    7: "One last look before glory.",
-  }[s as 1 | 2 | 3 | 4 | 5 | 6 | 7];
+    2: "Choose your art style.",
+    3: "Pick your pet's cinematic universe.",
+    4: "Who are they, really?",
+    5: "Add a sprinkle of chaos.",
+    6: "Painting their movie poster moment ✨",
+    7: "Pick where the magic lives.",
+    8: "One last look before glory.",
+  }[s as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8];
 }
 
 /* ---------------- Progress ---------------- */
 
 function ProgressBar({ step, onJump }: { step: number; onJump: (n: number) => void }) {
-  const pct = ((step - 1) / 6) * 100;
+  const pct = ((step - 1) / (STEPS.length - 1)) * 100;
   return (
     <div className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-16 md:top-20 z-30">
       <div className="mx-auto max-w-6xl px-4 sm:px-5 md:px-8 py-3 sm:py-4">
@@ -560,7 +667,7 @@ function ProgressBar({ step, onJump }: { step: number; onJump: (n: number) => vo
           })}
         </ol>
         <div className="mt-2 sm:mt-3 md:hidden flex items-center justify-between text-xs">
-          <span className="font-semibold">Step {step} / 5</span>
+          <span className="font-semibold">Step {step} / {STEPS.length}</span>
           <span className="text-muted-foreground">{STEPS[step - 1]?.sub}</span>
         </div>
       </div>
@@ -666,13 +773,46 @@ function Tip({ ok, text }: { ok?: boolean; text: string }) {
   );
 }
 
-/* ---------------- Step 2: Theme ---------------- */
+/* ---------------- Step 2: Art Style ---------------- */
 
-function StepTheme({ themeId, setThemeId }: any) {
+function StepArtStyle({ artStyleId, setArtStyleId }: any) {
+  return (
+    <div className="grid sm:grid-cols-3 gap-4 md:gap-5 max-w-4xl mx-auto">
+      {ART_STYLES.map((style) => {
+        const active = style.id === artStyleId;
+        return (
+          <button
+            key={style.id}
+            onClick={() => setArtStyleId(style.id)}
+            className={`group relative text-left rounded-3xl border-2 p-6 transition-all hover:-translate-y-1 ${
+              active ? "border-primary bg-primary/5 shadow-[var(--shadow-soft)] scale-[1.02]" : "border-border bg-card hover:border-primary/40"
+            }`}
+          >
+            <div className="size-16 rounded-2xl bg-secondary grid place-items-center text-4xl mb-4">{style.emoji}</div>
+            <div className="font-display text-2xl mb-2">{style.name}</div>
+            <div className="text-sm text-muted-foreground leading-relaxed">{style.desc}</div>
+            {active && <div className="absolute top-4 right-4 size-7 rounded-full bg-primary grid place-items-center text-primary-foreground text-xs font-bold">✓</div>}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ---------------- Step 3: Theme ---------------- */
+
+function StepTheme({ themeId, setThemeId, artStyleId }: any) {
+  const getThemeImage = (theme: Theme) => {
+    if (artStyleId === "pixar-3d") return theme.imgPixar;
+    if (artStyleId === "watercolour") return theme.imgWatercolour;
+    return theme.imgOil;
+  };
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
       {themes.map((t) => {
         const active = t.id === themeId;
+        const img = getThemeImage(t);
         return (
           <button
             key={t.id}
@@ -682,7 +822,7 @@ function StepTheme({ themeId, setThemeId }: any) {
             }`}
           >
             <div className="relative aspect-[4/5] bg-secondary">
-              <img src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+              <img src={img} alt={t.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
               <div className={`absolute inset-0 bg-gradient-to-t ${t.gradient} mix-blend-overlay opacity-60`} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="absolute top-3 right-3 text-2xl drop-shadow">{t.emoji}</div>
@@ -699,7 +839,7 @@ function StepTheme({ themeId, setThemeId }: any) {
   );
 }
 
-/* ---------------- Step 3: Personality ---------------- */
+/* ---------------- Step 4: Personality ---------------- */
 
 function StepPersonality({ theme, personalityId, setPersonalityId }: any) {
   return (
@@ -739,9 +879,9 @@ function StepPersonality({ theme, personalityId, setPersonalityId }: any) {
   );
 }
 
-/* ---------------- Step 4: Traits ---------------- */
+/* ---------------- Step 5: Traits ---------------- */
 
-function StepTraits({ traits, toggleTrait }: any) {
+function StepTraits({ traits, toggleTrait, personalisationText, setPersonalisationText }: any) {
   return (
     <div>
       <p className="text-muted-foreground mb-6">Pick up to 3 (totally optional). Skip if your pet defies labels.</p>
@@ -769,11 +909,29 @@ function StepTraits({ traits, toggleTrait }: any) {
       <div className="mt-6 text-xs text-muted-foreground">
         {traits.length}/3 selected{traits.length === 0 && " · Feel free to skip — it's optional."}
       </div>
+
+      <div className="mt-8 pt-8 border-t border-border">
+        <label className="block mb-3">
+          <span className="text-sm font-semibold">Add personalisation text (optional)</span>
+          <span className="text-xs text-muted-foreground ml-2">Max 30 characters</span>
+        </label>
+        <input
+          type="text"
+          value={personalisationText}
+          onChange={(e) => setPersonalisationText(e.target.value.slice(0, 30))}
+          placeholder='e.g. "Happy Birthday Luna!" or "Best Dog Ever"'
+          className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          maxLength={30}
+        />
+        <p className="text-xs text-muted-foreground mt-2">
+          {personalisationText.length}/30 characters · This text will appear elegantly on your portrait
+        </p>
+      </div>
     </div>
   );
 }
 
-/* ---------------- Step 5: Generate ---------------- */
+/* ---------------- Step 6: Generate ---------------- */
 
 // Per-theme generated sample shown as the variations fallback before the
 // user's real AI result (genResultUrl) is ready. Royal uses its own 3-up set.
@@ -909,7 +1067,8 @@ function StepGenerate({
           return (
             <div
               key={v.id}
-              className={`group relative rounded-3xl overflow-hidden bg-card border-2 transition-all duration-500 animate-[fade-up_0.7s_ease-out_both] ${
+              onClick={() => setFavourite(v.id)}
+              className={`group relative rounded-3xl overflow-hidden bg-card border-2 transition-all duration-500 animate-[fade-up_0.7s_ease-out_both] cursor-pointer ${
                 isFav ? "border-primary shadow-[var(--shadow-card)] scale-[1.02]" : "border-transparent hover:border-border hover:-translate-y-1"
               }`}
               style={{ animationDelay: `${200 + i * 140}ms` }}
@@ -1072,7 +1231,7 @@ function ShareBtn({ icon, label, tone }: { icon: string; label: string; tone: st
   );
 }
 
-/* ---------------- Step 6: Product ---------------- */
+/* ---------------- Step 7: Product ---------------- */
 
 function StepProduct({ theme, productId, setProductId, size, setSize, fit, setFit, color, setColor }: any) {
   const product = PRODUCTS.find((p) => p.id === productId)!;
@@ -1209,7 +1368,7 @@ function Section({ label, value, children, last }: any) {
   );
 }
 
-/* ---------------- Step 7: Checkout summary ---------------- */
+/* ---------------- Step 8: Checkout summary ---------------- */
 
 function StepCheckout({ theme, personality, product, size, fitObj, colorObj, total, productId }: any) {
   return (

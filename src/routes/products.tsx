@@ -56,7 +56,10 @@ function Products() {
             </div>
             <div className="flex flex-col items-center gap-4">
               <div className="text-center text-white">
-                <div className="font-display text-5xl">£2.99</div>
+                <div className="inline-flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold uppercase tracking-wider bg-white/20 rounded-full px-2 py-0.5">Introductory Offer</span>
+                </div>
+                <div className="font-display text-5xl">£1.99</div>
                 <div className="text-white/70 text-sm mt-1">one-time payment</div>
               </div>
               <Link

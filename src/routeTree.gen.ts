@@ -10,12 +10,27 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadRouteImport } from './routes/upload'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SuperheroPetPortraitsRouteImport } from './routes/superhero-pet-portraits'
 import { Route as SuccessRouteImport } from './routes/success'
+import { Route as RoyalPetPortraitsRouteImport } from './routes/royal-pet-portraits'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PetPortraitGiftsRouteImport } from './routes/pet-portrait-gifts'
+import { Route as PetMemorialPortraitsRouteImport } from './routes/pet-memorial-portraits'
+import { Route as FunnyPetPortraitsRouteImport } from './routes/funny-pet-portraits'
+import { Route as DogPortraitsRouteImport } from './routes/dog-portraits'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as CatPortraitsRouteImport } from './routes/cat-portraits'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AiPetPortraitsRouteImport } from './routes/ai-pet-portraits'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as BlogCompleteGuideToAiPetPortraitsRouteImport } from './routes/blog/complete-guide-to-ai-pet-portraits'
+import { Route as BlogBestGiftsForDogLovers2026RouteImport } from './routes/blog/best-gifts-for-dog-lovers-2026'
+import { Route as BlogBestGiftsForCatLovers2026RouteImport } from './routes/blog/best-gifts-for-cat-lovers-2026'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
@@ -29,9 +44,24 @@ const UploadRoute = UploadRouteImport.update({
   path: '/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuperheroPetPortraitsRoute = SuperheroPetPortraitsRouteImport.update({
+  id: '/superhero-pet-portraits',
+  path: '/superhero-pet-portraits',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SuccessRoute = SuccessRouteImport.update({
   id: '/success',
   path: '/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoyalPetPortraitsRoute = RoyalPetPortraitsRouteImport.update({
+  id: '/royal-pet-portraits',
+  path: '/royal-pet-portraits',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -39,14 +69,54 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PetPortraitGiftsRoute = PetPortraitGiftsRouteImport.update({
+  id: '/pet-portrait-gifts',
+  path: '/pet-portrait-gifts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PetMemorialPortraitsRoute = PetMemorialPortraitsRouteImport.update({
+  id: '/pet-memorial-portraits',
+  path: '/pet-memorial-portraits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FunnyPetPortraitsRoute = FunnyPetPortraitsRouteImport.update({
+  id: '/funny-pet-portraits',
+  path: '/funny-pet-portraits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DogPortraitsRoute = DogPortraitsRouteImport.update({
+  id: '/dog-portraits',
+  path: '/dog-portraits',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatPortraitsRoute = CatPortraitsRouteImport.update({
+  id: '/cat-portraits',
+  path: '/cat-portraits',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiPetPortraitsRoute = AiPetPortraitsRouteImport.update({
+  id: '/ai-pet-portraits',
+  path: '/ai-pet-portraits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -58,6 +128,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogCompleteGuideToAiPetPortraitsRoute =
+  BlogCompleteGuideToAiPetPortraitsRouteImport.update({
+    id: '/blog/complete-guide-to-ai-pet-portraits',
+    path: '/blog/complete-guide-to-ai-pet-portraits',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogBestGiftsForDogLovers2026Route =
+  BlogBestGiftsForDogLovers2026RouteImport.update({
+    id: '/blog/best-gifts-for-dog-lovers-2026',
+    path: '/blog/best-gifts-for-dog-lovers-2026',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogBestGiftsForCatLovers2026Route =
+  BlogBestGiftsForCatLovers2026RouteImport.update({
+    id: '/blog/best-gifts-for-cat-lovers-2026',
+    path: '/blog/best-gifts-for-cat-lovers-2026',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -101,13 +194,28 @@ const AuthenticatedDashboardFavoritesRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-pet-portraits': typeof AiPetPortraitsRoute
   '/auth': typeof AuthRoute
+  '/cat-portraits': typeof CatPortraitsRoute
   '/checkout': typeof CheckoutRoute
+  '/dog-portraits': typeof DogPortraitsRoute
+  '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
+  '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
+  '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
+  '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
+  '/royal-pet-portraits': typeof RoyalPetPortraitsRoute
   '/success': typeof SuccessRoute
+  '/superhero-pet-portraits': typeof SuperheroPetPortraitsRoute
+  '/terms': typeof TermsRoute
   '/upload': typeof UploadRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/blog/best-gifts-for-cat-lovers-2026': typeof BlogBestGiftsForCatLovers2026Route
+  '/blog/best-gifts-for-dog-lovers-2026': typeof BlogBestGiftsForDogLovers2026Route
+  '/blog/complete-guide-to-ai-pet-portraits': typeof BlogCompleteGuideToAiPetPortraitsRoute
+  '/blog/': typeof BlogIndexRoute
   '/dashboard/favorites': typeof AuthenticatedDashboardFavoritesRoute
   '/dashboard/generations': typeof AuthenticatedDashboardGenerationsRoute
   '/dashboard/orders': typeof AuthenticatedDashboardOrdersRoute
@@ -116,12 +224,27 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-pet-portraits': typeof AiPetPortraitsRoute
   '/auth': typeof AuthRoute
+  '/cat-portraits': typeof CatPortraitsRoute
   '/checkout': typeof CheckoutRoute
+  '/dog-portraits': typeof DogPortraitsRoute
+  '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
+  '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
+  '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
+  '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
+  '/royal-pet-portraits': typeof RoyalPetPortraitsRoute
   '/success': typeof SuccessRoute
+  '/superhero-pet-portraits': typeof SuperheroPetPortraitsRoute
+  '/terms': typeof TermsRoute
   '/upload': typeof UploadRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/blog/best-gifts-for-cat-lovers-2026': typeof BlogBestGiftsForCatLovers2026Route
+  '/blog/best-gifts-for-dog-lovers-2026': typeof BlogBestGiftsForDogLovers2026Route
+  '/blog/complete-guide-to-ai-pet-portraits': typeof BlogCompleteGuideToAiPetPortraitsRoute
+  '/blog': typeof BlogIndexRoute
   '/dashboard/favorites': typeof AuthenticatedDashboardFavoritesRoute
   '/dashboard/generations': typeof AuthenticatedDashboardGenerationsRoute
   '/dashboard/orders': typeof AuthenticatedDashboardOrdersRoute
@@ -132,13 +255,28 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/about': typeof AboutRoute
+  '/ai-pet-portraits': typeof AiPetPortraitsRoute
   '/auth': typeof AuthRoute
+  '/cat-portraits': typeof CatPortraitsRoute
   '/checkout': typeof CheckoutRoute
+  '/dog-portraits': typeof DogPortraitsRoute
+  '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
+  '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
+  '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
+  '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
+  '/royal-pet-portraits': typeof RoyalPetPortraitsRoute
   '/success': typeof SuccessRoute
+  '/superhero-pet-portraits': typeof SuperheroPetPortraitsRoute
+  '/terms': typeof TermsRoute
   '/upload': typeof UploadRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/blog/best-gifts-for-cat-lovers-2026': typeof BlogBestGiftsForCatLovers2026Route
+  '/blog/best-gifts-for-dog-lovers-2026': typeof BlogBestGiftsForDogLovers2026Route
+  '/blog/complete-guide-to-ai-pet-portraits': typeof BlogCompleteGuideToAiPetPortraitsRoute
+  '/blog/': typeof BlogIndexRoute
   '/_authenticated/dashboard/favorites': typeof AuthenticatedDashboardFavoritesRoute
   '/_authenticated/dashboard/generations': typeof AuthenticatedDashboardGenerationsRoute
   '/_authenticated/dashboard/orders': typeof AuthenticatedDashboardOrdersRoute
@@ -149,13 +287,28 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/ai-pet-portraits'
     | '/auth'
+    | '/cat-portraits'
     | '/checkout'
+    | '/dog-portraits'
+    | '/funny-pet-portraits'
+    | '/pet-memorial-portraits'
+    | '/pet-portrait-gifts'
+    | '/privacy'
     | '/products'
+    | '/royal-pet-portraits'
     | '/success'
+    | '/superhero-pet-portraits'
+    | '/terms'
     | '/upload'
     | '/admin'
     | '/dashboard'
+    | '/blog/best-gifts-for-cat-lovers-2026'
+    | '/blog/best-gifts-for-dog-lovers-2026'
+    | '/blog/complete-guide-to-ai-pet-portraits'
+    | '/blog/'
     | '/dashboard/favorites'
     | '/dashboard/generations'
     | '/dashboard/orders'
@@ -164,12 +317,27 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/ai-pet-portraits'
     | '/auth'
+    | '/cat-portraits'
     | '/checkout'
+    | '/dog-portraits'
+    | '/funny-pet-portraits'
+    | '/pet-memorial-portraits'
+    | '/pet-portrait-gifts'
+    | '/privacy'
     | '/products'
+    | '/royal-pet-portraits'
     | '/success'
+    | '/superhero-pet-portraits'
+    | '/terms'
     | '/upload'
     | '/admin'
+    | '/blog/best-gifts-for-cat-lovers-2026'
+    | '/blog/best-gifts-for-dog-lovers-2026'
+    | '/blog/complete-guide-to-ai-pet-portraits'
+    | '/blog'
     | '/dashboard/favorites'
     | '/dashboard/generations'
     | '/dashboard/orders'
@@ -179,13 +347,28 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
+    | '/ai-pet-portraits'
     | '/auth'
+    | '/cat-portraits'
     | '/checkout'
+    | '/dog-portraits'
+    | '/funny-pet-portraits'
+    | '/pet-memorial-portraits'
+    | '/pet-portrait-gifts'
+    | '/privacy'
     | '/products'
+    | '/royal-pet-portraits'
     | '/success'
+    | '/superhero-pet-portraits'
+    | '/terms'
     | '/upload'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/blog/best-gifts-for-cat-lovers-2026'
+    | '/blog/best-gifts-for-dog-lovers-2026'
+    | '/blog/complete-guide-to-ai-pet-portraits'
+    | '/blog/'
     | '/_authenticated/dashboard/favorites'
     | '/_authenticated/dashboard/generations'
     | '/_authenticated/dashboard/orders'
@@ -196,11 +379,26 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  AiPetPortraitsRoute: typeof AiPetPortraitsRoute
   AuthRoute: typeof AuthRoute
+  CatPortraitsRoute: typeof CatPortraitsRoute
   CheckoutRoute: typeof CheckoutRoute
+  DogPortraitsRoute: typeof DogPortraitsRoute
+  FunnyPetPortraitsRoute: typeof FunnyPetPortraitsRoute
+  PetMemorialPortraitsRoute: typeof PetMemorialPortraitsRoute
+  PetPortraitGiftsRoute: typeof PetPortraitGiftsRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProductsRoute: typeof ProductsRoute
+  RoyalPetPortraitsRoute: typeof RoyalPetPortraitsRoute
   SuccessRoute: typeof SuccessRoute
+  SuperheroPetPortraitsRoute: typeof SuperheroPetPortraitsRoute
+  TermsRoute: typeof TermsRoute
   UploadRoute: typeof UploadRoute
+  BlogBestGiftsForCatLovers2026Route: typeof BlogBestGiftsForCatLovers2026Route
+  BlogBestGiftsForDogLovers2026Route: typeof BlogBestGiftsForDogLovers2026Route
+  BlogCompleteGuideToAiPetPortraitsRoute: typeof BlogCompleteGuideToAiPetPortraitsRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,11 +410,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UploadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/superhero-pet-portraits': {
+      id: '/superhero-pet-portraits'
+      path: '/superhero-pet-portraits'
+      fullPath: '/superhero-pet-portraits'
+      preLoaderRoute: typeof SuperheroPetPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/success': {
       id: '/success'
       path: '/success'
       fullPath: '/success'
       preLoaderRoute: typeof SuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/royal-pet-portraits': {
+      id: '/royal-pet-portraits'
+      path: '/royal-pet-portraits'
+      fullPath: '/royal-pet-portraits'
+      preLoaderRoute: typeof RoyalPetPortraitsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -226,6 +445,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pet-portrait-gifts': {
+      id: '/pet-portrait-gifts'
+      path: '/pet-portrait-gifts'
+      fullPath: '/pet-portrait-gifts'
+      preLoaderRoute: typeof PetPortraitGiftsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pet-memorial-portraits': {
+      id: '/pet-memorial-portraits'
+      path: '/pet-memorial-portraits'
+      fullPath: '/pet-memorial-portraits'
+      preLoaderRoute: typeof PetMemorialPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/funny-pet-portraits': {
+      id: '/funny-pet-portraits'
+      path: '/funny-pet-portraits'
+      fullPath: '/funny-pet-portraits'
+      preLoaderRoute: typeof FunnyPetPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dog-portraits': {
+      id: '/dog-portraits'
+      path: '/dog-portraits'
+      fullPath: '/dog-portraits'
+      preLoaderRoute: typeof DogPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
@@ -233,11 +487,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cat-portraits': {
+      id: '/cat-portraits'
+      path: '/cat-portraits'
+      fullPath: '/cat-portraits'
+      preLoaderRoute: typeof CatPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-pet-portraits': {
+      id: '/ai-pet-portraits'
+      path: '/ai-pet-portraits'
+      fullPath: '/ai-pet-portraits'
+      preLoaderRoute: typeof AiPetPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -252,6 +527,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/complete-guide-to-ai-pet-portraits': {
+      id: '/blog/complete-guide-to-ai-pet-portraits'
+      path: '/blog/complete-guide-to-ai-pet-portraits'
+      fullPath: '/blog/complete-guide-to-ai-pet-portraits'
+      preLoaderRoute: typeof BlogCompleteGuideToAiPetPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/best-gifts-for-dog-lovers-2026': {
+      id: '/blog/best-gifts-for-dog-lovers-2026'
+      path: '/blog/best-gifts-for-dog-lovers-2026'
+      fullPath: '/blog/best-gifts-for-dog-lovers-2026'
+      preLoaderRoute: typeof BlogBestGiftsForDogLovers2026RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/best-gifts-for-cat-lovers-2026': {
+      id: '/blog/best-gifts-for-cat-lovers-2026'
+      path: '/blog/best-gifts-for-cat-lovers-2026'
+      fullPath: '/blog/best-gifts-for-cat-lovers-2026'
+      preLoaderRoute: typeof BlogBestGiftsForCatLovers2026RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -346,11 +649,27 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AboutRoute: AboutRoute,
+  AiPetPortraitsRoute: AiPetPortraitsRoute,
   AuthRoute: AuthRoute,
+  CatPortraitsRoute: CatPortraitsRoute,
   CheckoutRoute: CheckoutRoute,
+  DogPortraitsRoute: DogPortraitsRoute,
+  FunnyPetPortraitsRoute: FunnyPetPortraitsRoute,
+  PetMemorialPortraitsRoute: PetMemorialPortraitsRoute,
+  PetPortraitGiftsRoute: PetPortraitGiftsRoute,
+  PrivacyRoute: PrivacyRoute,
   ProductsRoute: ProductsRoute,
+  RoyalPetPortraitsRoute: RoyalPetPortraitsRoute,
   SuccessRoute: SuccessRoute,
+  SuperheroPetPortraitsRoute: SuperheroPetPortraitsRoute,
+  TermsRoute: TermsRoute,
   UploadRoute: UploadRoute,
+  BlogBestGiftsForCatLovers2026Route: BlogBestGiftsForCatLovers2026Route,
+  BlogBestGiftsForDogLovers2026Route: BlogBestGiftsForDogLovers2026Route,
+  BlogCompleteGuideToAiPetPortraitsRoute:
+    BlogCompleteGuideToAiPetPortraitsRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

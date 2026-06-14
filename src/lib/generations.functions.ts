@@ -18,6 +18,7 @@ import { bakeWatermark } from "@/lib/watermark.server";
 
 const InputSchema = z.object({
   uploadedImageId: z.string().uuid(),
+  artStyleId: z.string().min(1).max(64).optional(),
   themeId: z.string().min(1).max(64),
   themeName: z.string().max(128).optional(),
   personalityId: z.string().min(1).max(64),
@@ -26,6 +27,7 @@ const InputSchema = z.object({
   traits: z.array(z.string().min(1).max(48)).max(8).optional(),
   petType: z.string().max(64).optional(),
   petName: z.string().max(64).optional(),
+  personalisationText: z.string().max(30).optional(),
 });
 
 const OPENAI_VISION_MODEL = "gpt-4o";
@@ -52,6 +54,7 @@ export const generatePawtoon = createServerFn({ method: "POST" })
     // 2. Build prompt and insert a generations row in processing state
     const prompt = buildPrompt({
       petType: data.petType,
+      artStyleId: data.artStyleId,
       themeId: data.themeId,
       themeName: data.themeName,
       personalityId: data.personalityId,
@@ -59,6 +62,7 @@ export const generatePawtoon = createServerFn({ method: "POST" })
       personalityDesc: data.personalityDesc,
       traits: data.traits,
       petName: data.petName,
+      personalisationText: data.personalisationText,
     });
 
     const { data: genRow, error: insErr } = await supabase
@@ -69,6 +73,18 @@ export const generatePawtoon = createServerFn({ method: "POST" })
         theme: data.themeId,
         prompt,
         status: "processing",
+        generation_params: {
+          artStyleId: data.artStyleId,
+          themeId: data.themeId,
+          themeName: data.themeName,
+          personalityId: data.personalityId,
+          personalityName: data.personalityName,
+          personalityDesc: data.personalityDesc,
+          traits: data.traits,
+          petType: data.petType,
+          petName: data.petName,
+          personalisationText: data.personalisationText,
+        },
       })
       .select("id")
       .single();

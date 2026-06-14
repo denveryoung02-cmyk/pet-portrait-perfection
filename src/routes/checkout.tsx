@@ -21,6 +21,7 @@ function Checkout() {
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [addBundle, setAddBundle] = useState(false);
 
   // Load the generated portrait for the order summary preview.
   useEffect(() => {
@@ -55,6 +56,7 @@ function Checkout() {
       const res = await createCheckoutSession({
         data: {
           generationId,
+          addBundle,
           successUrl: `${origin}/success?session_id={CHECKOUT_SESSION_ID}&gen=${generationId}`,
           cancelUrl: `${origin}/checkout?gen=${generationId}`,
         },
@@ -85,6 +87,22 @@ function Checkout() {
               <input type="email" placeholder="Email address" className="w-full rounded-xl border border-input bg-background px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
             </div>
 
+            <label className={`flex items-start gap-3 rounded-xl border p-4 cursor-pointer transition-colors ${addBundle ? "border-primary bg-primary/5" : "border-border"}`}>
+              <input
+                type="checkbox"
+                checked={addBundle}
+                onChange={(e) => setAddBundle(e.target.checked)}
+                className="mt-0.5 size-4 accent-primary flex-shrink-0"
+              />
+              <div>
+                <div className="text-sm font-semibold">
+                  Get all 3 styles — <span className="text-primary">£4.99</span>
+                  <span className="ml-2 text-xs font-normal text-muted-foreground line-through">£5.97</span>
+                </div>
+                <div className="text-xs text-muted-foreground mt-0.5">Oil Painting, Pixar 3D &amp; Watercolour versions of your portrait. Save £1.98.</div>
+              </div>
+            </label>
+
             <p className="text-xs sm:text-sm text-muted-foreground">
               You'll be redirected to our secure Stripe checkout to complete payment.
             </p>
@@ -99,7 +117,7 @@ function Checkout() {
               className="w-full rounded-full px-5 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
               style={{ background: "var(--gradient-primary)" }}
             >
-              {isPlacingOrder ? "Redirecting to checkout..." : "Place order — £2.99"}
+              {isPlacingOrder ? "Redirecting to checkout..." : `Place order — £${addBundle ? "4.99" : "1.99"}`}
             </button>
           </form>
 
@@ -114,14 +132,22 @@ function Checkout() {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-xs sm:text-sm">Pawtoons Digital Portrait</div>
-                <div className="text-[10px] sm:text-xs text-muted-foreground">High-resolution PNG · instant download</div>
-                <div className="mt-1 font-semibold text-sm sm:text-base">£2.99</div>
+                <div className="font-semibold text-xs sm:text-sm">{addBundle ? "Pawtoons — All 3 Styles Bundle" : "Pawtoons Digital Portrait"}</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground">
+                  {addBundle ? "Oil Painting + Pixar 3D + Watercolour · instant download" : "High-resolution PNG · instant download"}
+                </div>
               </div>
             </div>
             <div className="space-y-2 text-xs sm:text-sm border-t border-border pt-3 sm:pt-4">
-              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>£2.99</span></div>
-              <div className="flex justify-between font-semibold text-sm sm:text-base pt-2 border-t border-border"><span>Total</span><span>£2.99</span></div>
+              {addBundle ? (
+                <div className="flex justify-between"><span className="text-muted-foreground">All 3 Styles Bundle</span><span>£4.99</span></div>
+              ) : (
+                <div className="flex justify-between"><span className="text-muted-foreground">Portrait</span><span>£1.99</span></div>
+              )}
+              <div className="flex justify-between font-semibold text-sm sm:text-base pt-2 border-t border-border">
+                <span>Total</span>
+                <span>{addBundle ? "£4.99" : "£1.99"}</span>
+              </div>
             </div>
             <Link to="/upload" className="block text-center text-xs text-muted-foreground mt-3 sm:mt-4 hover:text-foreground">← Back</Link>
           </aside>
