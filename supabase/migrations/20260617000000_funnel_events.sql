@@ -11,5 +11,7 @@ create table if not exists public.funnel_events (
 alter table public.funnel_events enable row level security;
 
 -- Any visitor (anon or signed-in) can insert events; nobody can read via anon key.
+grant insert on public.funnel_events to anon, authenticated;
+
 create policy "funnel_events_insert" on public.funnel_events
   for insert to anon, authenticated with check (true);
