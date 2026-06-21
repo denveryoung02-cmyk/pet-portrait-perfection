@@ -3,15 +3,16 @@ import { organizationSchema, websiteSchema, homepageProductSchema, homepageFAQSc
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { useState, useEffect } from "react";
+import { track } from "@/lib/analytics";
 
 import royalV1 from "@/assets/gen-royal-v1.jpg";
 import royalV2 from "@/assets/gen-royal-v2.jpg";
 import royalV3 from "@/assets/gen-royal-v3.jpg";
-import superheroGen from "@/assets/gen-superhero-v1.png";
-import mafiaGen from "@/assets/gen-mafia-v1.png";
-import astronautGen from "@/assets/gen-astronaut-v1.png";
-import vikingGen from "@/assets/gen-viking-v1.png";
-import pirateGen from "@/assets/gen-pirate-v1.png";
+import superheroGen from "@/assets/gen-superhero-v1.webp";
+import mafiaGen from "@/assets/gen-mafia-v1.webp";
+import astronautGen from "@/assets/gen-astronaut-v1.webp";
+import vikingGen from "@/assets/gen-viking-v1.webp";
+import pirateGen from "@/assets/gen-pirate-v1.webp";
 import superhero from "@/assets/pet-superhero.jpg";
 import lifestyleMug from "@/assets/lifestyle-mug.jpg";
 import packagingUnbox from "@/assets/packaging-unbox.jpg";
@@ -19,41 +20,41 @@ import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
 import mousemat from "@/assets/product-mousemat.jpg";
-import newMug from "@/assets/New Product Mug.png";
-import newTshirt from "@/assets/New Product T-Shirt.png";
-import newPoster from "@/assets/New Product Picture Frame.png";
-import newMousemat from "@/assets/New Product Mouse Mat.png";
-import princessGen from "@/assets/Gen-princess-v1.png";
-import angelGen from "@/assets/gen-angel-v1.png";
-import mermaidGen from "@/assets/gen-mermaid-v1.png";
-import wizardGen from "@/assets/Gen-Wizard-v1.png";
-import ballerinaGen from "@/assets/gen-ballerina-v1.png";
-import flowerCrownGen from "@/assets/gen-flower crown-v1.png";
-import royalPixar from "@/assets/gen-pixar-royal-v1.png";
-import superheroPixar from "@/assets/gen-Pixar-Superhero-v1.png";
-import princessWatercolour from "@/assets/gen-watercolour-princess-v1.png";
+import newMug from "@/assets/New Product Mug.webp";
+import newTshirt from "@/assets/New Product T-Shirt.webp";
+import newPoster from "@/assets/New Product Picture Frame.webp";
+import newMousemat from "@/assets/New Product Mouse Mat.webp";
+import princessGen from "@/assets/Gen-princess-v1.webp";
+import angelGen from "@/assets/gen-angel-v1.webp";
+import mermaidGen from "@/assets/gen-mermaid-v1.webp";
+import wizardGen from "@/assets/Gen-Wizard-v1.webp";
+import ballerinaGen from "@/assets/gen-ballerina-v1.webp";
+import flowerCrownGen from "@/assets/gen-flower crown-v1.webp";
+import royalPixar from "@/assets/gen-pixar-royal-v1.webp";
+import superheroPixar from "@/assets/gen-Pixar-Superhero-v1.webp";
+import princessWatercolour from "@/assets/gen-watercolour-princess-v1.webp";
 
-import royalWatercolour from "@/assets/gen-watercolour-royal-v1.png";
-import mafiaPixar from "@/assets/gen-pixar-mafia-v1.png";
-import mafiaWatercolour from "@/assets/gen-watercolour-mafia-v1.png";
-import vikingPixar from "@/assets/gen-pixar-viking-v1.png";
-import vikingWatercolour from "@/assets/gen-watercolour-viking-v1.png";
-import astronautPixar from "@/assets/gen-pixar-astronaut-v1.png";
-import astronautWatercolour from "@/assets/gen-Watercolour-astronaut-v1.png";
-import superheroWatercolour from "@/assets/gen-watercolour-superhero-v1.png";
-import piratePixar from "@/assets/gen-pixar-pirate-v1.png";
-import pirateWatercolour from "@/assets/gen-watercolour-pirate-v1.png";
-import princessPixar from "@/assets/gen-pixar-princess-v1.png";
-import angelPixar from "@/assets/gen-pixar-angel-v1.png";
-import angelWatercolour from "@/assets/gen-watercolour-angel-v1.png";
-import mermaidPixar from "@/assets/gen-pixar-mermaid-v1.png";
-import mermaidWatercolour from "@/assets/gen-watercolour-mermaid-v1.png";
-import wizardPixar from "@/assets/gen-pixar-wizard-v1.png";
-import wizardWatercolour from "@/assets/gen-watercolour-wizard-v1.png";
-import ballerinaPixar from "@/assets/gen-pixar-ballerina-v1.png";
-import ballerinaWatercolour from "@/assets/gen-watercolour-ballerina-v1.png";
-import flowerCrownPixar from "@/assets/gen-pixar-flower crown-v1.png";
-import flowerCrownWatercolour from "@/assets/gen-watercolour-flower crown-v1.png";
+import royalWatercolour from "@/assets/gen-watercolour-royal-v1.webp";
+import mafiaPixar from "@/assets/gen-pixar-mafia-v1.webp";
+import mafiaWatercolour from "@/assets/gen-watercolour-mafia-v1.webp";
+import vikingPixar from "@/assets/gen-pixar-viking-v1.webp";
+import vikingWatercolour from "@/assets/gen-watercolour-viking-v1.webp";
+import astronautPixar from "@/assets/gen-pixar-astronaut-v1.webp";
+import astronautWatercolour from "@/assets/gen-Watercolour-astronaut-v1.webp";
+import superheroWatercolour from "@/assets/gen-watercolour-superhero-v1.webp";
+import piratePixar from "@/assets/gen-pixar-pirate-v1.webp";
+import pirateWatercolour from "@/assets/gen-watercolour-pirate-v1.webp";
+import princessPixar from "@/assets/gen-pixar-princess-v1.webp";
+import angelPixar from "@/assets/gen-pixar-angel-v1.webp";
+import angelWatercolour from "@/assets/gen-watercolour-angel-v1.webp";
+import mermaidPixar from "@/assets/gen-pixar-mermaid-v1.webp";
+import mermaidWatercolour from "@/assets/gen-watercolour-mermaid-v1.webp";
+import wizardPixar from "@/assets/gen-pixar-wizard-v1.webp";
+import wizardWatercolour from "@/assets/gen-watercolour-wizard-v1.webp";
+import ballerinaPixar from "@/assets/gen-pixar-ballerina-v1.webp";
+import ballerinaWatercolour from "@/assets/gen-watercolour-ballerina-v1.webp";
+import flowerCrownPixar from "@/assets/gen-pixar-flower crown-v1.webp";
+import flowerCrownWatercolour from "@/assets/gen-watercolour-flower crown-v1.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -138,6 +139,7 @@ function Home() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               to="/upload"
+              onClick={() => track("start_creating_clicked", { source: "hero" })}
               className="group relative rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
               style={{ background: "var(--gradient-primary)" }}
             >
@@ -146,6 +148,11 @@ function Home() {
             <a href="#how" className="rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold border border-foreground/15 hover:bg-card transition">
               See how it works
             </a>
+          </div>
+          <div className="mt-3 flex justify-center">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/30 px-4 py-1.5 text-sm font-semibold text-primary shadow-[var(--shadow-soft)]">
+              From £1.99 · Instant digital download
+            </div>
           </div>
 
           <div className="mt-8 flex items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
@@ -156,7 +163,6 @@ function Home() {
             </div>
             <div>
               <div className="text-foreground font-semibold text-xs sm:text-sm">See your portrait in 60 seconds</div>
-              <div className="text-[10px] sm:text-xs">From £1.99 · Instant digital download</div>
             </div>
           </div>
         </div>
@@ -363,6 +369,7 @@ function Home() {
           </p>
           <Link
             to="/upload"
+            onClick={() => track("start_creating_clicked", { source: "cta_banner" })}
             className="relative inline-block mt-8 rounded-full bg-background text-foreground px-8 py-4 font-semibold shadow-2xl hover:scale-[1.03] transition-transform"
           >
             ✨ Create My Pet
@@ -374,6 +381,7 @@ function Home() {
       <div className="fixed bottom-0 inset-x-0 z-40 md:hidden p-3 bg-background/90 backdrop-blur-xl border-t border-border">
         <Link
           to="/upload"
+          onClick={() => track("start_creating_clicked", { source: "sticky_mobile" })}
           className="block w-full text-center rounded-full px-6 py-3.5 font-semibold text-primary-foreground shadow-[var(--shadow-glow)]"
           style={{ background: "var(--gradient-primary)" }}
         >
@@ -458,7 +466,8 @@ function ArtStyleCarousel() {
               src={style.img}
               alt={style.name}
               className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-500 ${currentIndex === i ? 'opacity-100' : 'opacity-60'}`}
-              loading="lazy"
+              loading="eager"
+              fetchPriority={i === 0 ? "high" : "auto"}
             />
             <div className={`absolute top-3 left-3 size-12 rounded-2xl bg-background/90 backdrop-blur grid place-items-center text-2xl transition-all duration-500 ${currentIndex === i ? 'scale-110' : 'scale-100'}`}>
               {style.emoji}

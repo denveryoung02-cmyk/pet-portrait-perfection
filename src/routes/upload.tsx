@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { uploadPetPhoto, validateImage } from "@/services/uploads";
 import { startGeneration } from "@/services/generations";
+import { track } from "@/lib/analytics";
 import royal from "@/assets/pet-royal.jpg";
 import superhero from "@/assets/pet-superhero.jpg";
 import mafia from "@/assets/pet-mafia.jpg";
@@ -14,51 +15,51 @@ import pirate from "@/assets/pet-pirate.jpg";
 import royalV1 from "@/assets/gen-royal-v1.jpg";
 import royalV2 from "@/assets/gen-royal-v2.jpg";
 import royalV3 from "@/assets/gen-royal-v3.jpg";
-import mafiaGen from "@/assets/gen-mafia-v1.png";
-import vikingGen from "@/assets/gen-viking-v1.png";
-import astronautGen from "@/assets/gen-astronaut-v1.png";
-import superheroGen from "@/assets/gen-superhero-v1.png";
-import pirateGen from "@/assets/gen-pirate-v1.png";
-import pirateDragonGen from "@/assets/Gen-Pirate Dragon-V1.png";
-import catRoyalGen from "@/assets/Gen-Cat Royal-V1.png";
-import princessGen from "@/assets/Gen-princess-v1.png";
-import angelGen from "@/assets/gen-angel-v1.png";
-import mermaidGen from "@/assets/gen-mermaid-v1.png";
-import wizardGen from "@/assets/Gen-Wizard-v1.png";
-import ballerinaGen from "@/assets/gen-ballerina-v1.png";
-import flowerCrownGen from "@/assets/gen-flower crown-v1.png";
+import mafiaGen from "@/assets/gen-mafia-v1.webp";
+import vikingGen from "@/assets/gen-viking-v1.webp";
+import astronautGen from "@/assets/gen-astronaut-v1.webp";
+import superheroGen from "@/assets/gen-superhero-v1.webp";
+import pirateGen from "@/assets/gen-pirate-v1.webp";
+import pirateDragonGen from "@/assets/Gen-Pirate Dragon-V1.webp";
+import catRoyalGen from "@/assets/Gen-Cat Royal-V1.webp";
+import princessGen from "@/assets/Gen-princess-v1.webp";
+import angelGen from "@/assets/gen-angel-v1.webp";
+import mermaidGen from "@/assets/gen-mermaid-v1.webp";
+import wizardGen from "@/assets/Gen-Wizard-v1.webp";
+import ballerinaGen from "@/assets/gen-ballerina-v1.webp";
+import flowerCrownGen from "@/assets/gen-flower crown-v1.webp";
 import mug from "@/assets/product-mug.jpg";
 import tshirt from "@/assets/product-tshirt.jpg";
 import poster from "@/assets/product-poster.jpg";
 import mousemat from "@/assets/product-mousemat.jpg";
 
 // Pixar style images
-import royalPixar from "@/assets/gen-pixar-royal-v1.png";
-import mafiaPixar from "@/assets/gen-pixar-mafia-v1.png";
-import vikingPixar from "@/assets/gen-pixar-viking-v1.png";
-import astronautPixar from "@/assets/gen-pixar-astronaut-v1.png";
-import superheroPixar from "@/assets/gen-Pixar-Superhero-v1.png";
-import piratePixar from "@/assets/gen-pixar-pirate-v1.png";
-import princessPixar from "@/assets/gen-pixar-princess-v1.png";
-import angelPixar from "@/assets/gen-pixar-angel-v1.png";
-import mermaidPixar from "@/assets/gen-pixar-mermaid-v1.png";
-import wizardPixar from "@/assets/gen-pixar-wizard-v1.png";
-import ballerinaPixar from "@/assets/gen-pixar-ballerina-v1.png";
-import flowerCrownPixar from "@/assets/gen-pixar-flower crown-v1.png";
+import royalPixar from "@/assets/gen-pixar-royal-v1.webp";
+import mafiaPixar from "@/assets/gen-pixar-mafia-v1.webp";
+import vikingPixar from "@/assets/gen-pixar-viking-v1.webp";
+import astronautPixar from "@/assets/gen-pixar-astronaut-v1.webp";
+import superheroPixar from "@/assets/gen-Pixar-Superhero-v1.webp";
+import piratePixar from "@/assets/gen-pixar-pirate-v1.webp";
+import princessPixar from "@/assets/gen-pixar-princess-v1.webp";
+import angelPixar from "@/assets/gen-pixar-angel-v1.webp";
+import mermaidPixar from "@/assets/gen-pixar-mermaid-v1.webp";
+import wizardPixar from "@/assets/gen-pixar-wizard-v1.webp";
+import ballerinaPixar from "@/assets/gen-pixar-ballerina-v1.webp";
+import flowerCrownPixar from "@/assets/gen-pixar-flower crown-v1.webp";
 
 // Watercolour style images
-import royalWatercolour from "@/assets/gen-watercolour-royal-v1.png";
-import mafiaWatercolour from "@/assets/gen-watercolour-mafia-v1.png";
-import vikingWatercolour from "@/assets/gen-watercolour-viking-v1.png";
-import astronautWatercolour from "@/assets/gen-Watercolour-astronaut-v1.png";
-import superheroWatercolour from "@/assets/gen-watercolour-superhero-v1.png";
-import pirateWatercolour from "@/assets/gen-watercolour-pirate-v1.png";
-import princessWatercolour from "@/assets/gen-watercolour-princess-v1.png";
-import angelWatercolour from "@/assets/gen-watercolour-angel-v1.png";
-import mermaidWatercolour from "@/assets/gen-watercolour-mermaid-v1.png";
-import wizardWatercolour from "@/assets/gen-watercolour-wizard-v1.png";
-import ballerinaWatercolour from "@/assets/gen-watercolour-ballerina-v1.png";
-import flowerCrownWatercolour from "@/assets/gen-watercolour-flower crown-v1.png";
+import royalWatercolour from "@/assets/gen-watercolour-royal-v1.webp";
+import mafiaWatercolour from "@/assets/gen-watercolour-mafia-v1.webp";
+import vikingWatercolour from "@/assets/gen-watercolour-viking-v1.webp";
+import astronautWatercolour from "@/assets/gen-Watercolour-astronaut-v1.webp";
+import superheroWatercolour from "@/assets/gen-watercolour-superhero-v1.webp";
+import pirateWatercolour from "@/assets/gen-watercolour-pirate-v1.webp";
+import princessWatercolour from "@/assets/gen-watercolour-princess-v1.webp";
+import angelWatercolour from "@/assets/gen-watercolour-angel-v1.webp";
+import mermaidWatercolour from "@/assets/gen-watercolour-mermaid-v1.webp";
+import wizardWatercolour from "@/assets/gen-watercolour-wizard-v1.webp";
+import ballerinaWatercolour from "@/assets/gen-watercolour-ballerina-v1.webp";
+import flowerCrownWatercolour from "@/assets/gen-watercolour-flower crown-v1.webp";
 
 export const Route = createFileRoute("/upload")({
   head: () => ({ meta: [{ title: "Create your Pawtoon — step by step" }] }),
@@ -361,6 +362,7 @@ function CreateWizard() {
     try {
       const uploaded = await uploadPetPhoto(f, { onProgress: (n) => setUploadProgress(n) });
       setUploadedImageId(uploaded.id);
+      track("photo_uploaded");
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : "Upload failed");
       setUploadProgress(0);

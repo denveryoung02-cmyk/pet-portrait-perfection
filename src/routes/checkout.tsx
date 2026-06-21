@@ -5,6 +5,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { createCheckoutSession } from "@/lib/stripe.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { track } from "@/lib/analytics";
 
 const searchSchema = z.object({
   gen: z.string().optional(),
@@ -22,6 +23,8 @@ function Checkout() {
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [addBundle, setAddBundle] = useState(false);
+
+  useEffect(() => { track("checkout_reached"); }, []);
 
   // Load the generated portrait for the order summary preview.
   useEffect(() => {

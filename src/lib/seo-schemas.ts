@@ -43,8 +43,8 @@ export const homepageProductSchema = {
   },
   "image": [
     "https://www.pawtoons.co/assets/gen-royal-v1-BrJKr6gD.jpg",
-    "https://www.pawtoons.co/assets/gen-superhero-v1-DBulKvme.png",
-    "https://www.pawtoons.co/assets/gen-astronaut-v1-CuKameFr.png",
+    "https://www.pawtoons.co/assets/gen-superhero-v1-B4wgHz16.webp",
+    "https://www.pawtoons.co/assets/gen-astronaut-v1-DWENdJa5.webp",
   ],
   "offers": {
     "@type": "AggregateOffer",

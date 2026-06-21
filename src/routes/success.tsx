@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { confirmCheckout, checkBundleReady } from "@/lib/fulfillment.functions";
 import type { BundlePortrait } from "@/lib/bundle.server";
+import { track } from "@/lib/analytics";
 
 const searchSchema = z.object({
   gen: z.string().optional(),
@@ -67,6 +68,7 @@ function Success() {
         setDownloadUrl(res.downloadUrl);
         if (res.orderId) setOrderId(res.orderId);
         if (res.wantsBundle) setWantsBundle(true);
+        track("payment_completed", { bundle: !!res.wantsBundle });
       } catch {
         setError("Something went wrong confirming your purchase.");
       } finally {
