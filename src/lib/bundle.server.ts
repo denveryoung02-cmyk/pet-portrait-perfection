@@ -3,13 +3,13 @@ import { buildPrompt, type GenerationInput } from "@/services/prompts";
 import { bakeWatermark } from "@/lib/watermark.server";
 import type { CloudflareEnv } from "@/lib/env.server";
 
-const ALL_ART_STYLES = ["oil-painting", "pixar-3d", "watercolour"] as const;
+const ALL_ART_STYLES = ["oil-painting", "pixar-3d", "comic-book"] as const;
 type ArtStyle = (typeof ALL_ART_STYLES)[number];
 
 const ART_STYLE_LABELS: Record<string, string> = {
   "oil-painting": "Oil Painting",
   "pixar-3d": "Pixar 3D",
-  "watercolour": "Watercolour",
+  "comic-book": "Comic Book",
 };
 
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
@@ -29,24 +29,31 @@ async function runPortraitGeneration(opts: {
   userId: string;
   params: GenerationInput & { artStyleId: string };
   apiKey: string;
+  /** Pre-created generation ID — skips the initial DB insert when provided. */
+  generationId?: string;
 }): Promise<string> {
   const { uploadedImagePath, uploadedImageId, userId, params, apiKey } = opts;
   const prompt = buildPrompt(params);
 
-  const { data: genRow, error: insErr } = await supabaseAdmin
-    .from("generations")
-    .insert({
-      user_id: userId,
-      uploaded_image_id: uploadedImageId,
-      theme: params.themeId,
-      prompt,
-      status: "processing",
-      generation_params: params as any,
-    })
-    .select("id")
-    .single();
-  if (insErr || !genRow) throw new Error(`Could not create generation: ${insErr?.message}`);
-  const generationId = genRow.id as string;
+  let generationId: string;
+  if (opts.generationId) {
+    generationId = opts.generationId;
+  } else {
+    const { data: genRow, error: insErr } = await supabaseAdmin
+      .from("generations")
+      .insert({
+        user_id: userId,
+        uploaded_image_id: uploadedImageId,
+        theme: params.themeId,
+        prompt,
+        status: "processing",
+        generation_params: params as any,
+      })
+      .select("id")
+      .single();
+    if (insErr || !genRow) throw new Error(`Could not create generation: ${insErr?.message}`);
+    generationId = genRow.id as string;
+  }
 
   try {
     const { data: blob, error: dlErr } = await supabaseAdmin.storage
@@ -85,11 +92,11 @@ async function runPortraitGeneration(opts: {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "gpt-image-1",
+        model: "gpt-image-2",
         prompt: enhancedPrompt.slice(0, 4000),
         n: 1,
         size: "1024x1024",
-        quality: "auto",
+        quality: "medium",
       }),
     });
     if (!dalleRes.ok) throw new Error(`Image API error (${dalleRes.status})`);
@@ -143,7 +150,7 @@ async function runPortraitGeneration(opts: {
 /**
  * Generates ONE missing bundle portrait per call to stay within CF Workers
  * 128 MB memory limit. Called repeatedly by checkBundleReady polling until
- * all 3 styles are done — each invocation handles one style.
+ * the 2 non-chosen styles are done — each invocation handles one style.
  *
  * Returns true if a portrait was generated, false if nothing was needed.
  */
@@ -193,29 +200,65 @@ export async function generateNextBundlePortrait(orderId: string, userId: string
   const { data: uploadedImg } = await supabaseAdmin
     .from("uploaded_images")
     .select("storage_path")
-    .eq("id", gen.uploaded_image_id)
+    .eq("id", gen.uploaded_image_id!)
     .single();
   if (!uploadedImg?.storage_path) throw new Error("Uploaded image not found.");
 
-  console.log(`[bundle] orderId=${orderId} generating style=${nextStyle}`);
+  // Pre-create the generation row and claim the order_items slot BEFORE the expensive
+  // OpenAI work. This prevents concurrent checkBundleReady calls from both picking the
+  // same style when the generation takes longer than the 10-second poll interval.
+  const bundleParams = { ...params, artStyleId: nextStyle } as GenerationInput & { artStyleId: string };
+  const bundlePrompt = buildPrompt(bundleParams);
+  const { data: preGenRow, error: preGenErr } = await supabaseAdmin
+    .from("generations")
+    .insert({
+      user_id: userId,
+      uploaded_image_id: gen.uploaded_image_id!,
+      theme: (params as any).themeId,
+      prompt: bundlePrompt,
+      status: "processing",
+      generation_params: bundleParams as any,
+    })
+    .select("id")
+    .single();
+  if (preGenErr || !preGenRow) throw new Error(`Could not pre-create generation: ${preGenErr?.message}`);
+
+  const { error: claimErr } = await supabaseAdmin.from("order_items").insert({
+    order_id: orderId,
+    generation_id: preGenRow.id,
+    quantity: 1,
+    unit_price_cents: 0,
+    options: { type: "bundle_portrait", art_style: nextStyle },
+  });
+
+  if (claimErr) {
+    // Clean up the orphaned generations row regardless of error type.
+    await supabaseAdmin
+      .from("generations")
+      .update({ status: "failed", error: `bundle claim failed: ${claimErr.message}` })
+      .eq("id", preGenRow.id);
+    if (claimErr.code === "23505") {
+      // Unique constraint violation: another concurrent Worker already claimed this
+      // style. Nothing to do — the other invocation will handle generation.
+      console.log(`[bundle] ${nextStyle}: already claimed by concurrent call (23505) — skipping`);
+      return false;
+    }
+    throw new Error(`Could not claim style slot: ${claimErr.message}`);
+  }
+
+  console.log(`[bundle] orderId=${orderId} slot claimed style=${nextStyle} genId=${preGenRow.id}`);
   console.log(`[bundle] storage_path=${uploadedImg.storage_path}`);
 
   try {
-    const newGenId = await runPortraitGeneration({
+    await runPortraitGeneration({
       uploadedImagePath: uploadedImg.storage_path,
       uploadedImageId: gen.uploaded_image_id!,
       userId,
-      params: { ...params, artStyleId: nextStyle } as GenerationInput & { artStyleId: string },
+      params: bundleParams,
       apiKey,
+      generationId: preGenRow.id,
     });
-    console.log(`[bundle] ${nextStyle}: succeeded genId=${newGenId}`);
-    await supabaseAdmin.from("order_items").insert({
-      order_id: orderId,
-      generation_id: newGenId,
-      quantity: 1,
-      unit_price_cents: 0,
-      options: { type: "bundle_portrait", art_style: nextStyle },
-    });
+    console.log(`[bundle] ${nextStyle}: succeeded genId=${preGenRow.id}`);
     return true;
   } catch (err) {
     console.error(`[bundle] ${nextStyle}: FAILED —`, err instanceof Error ? err.message : err);
@@ -238,7 +281,8 @@ export async function getBundlePortraitStatus(orderId: string, userId: string): 
   const { data: items } = await supabaseAdmin
     .from("order_items")
     .select("generation_id, options")
-    .eq("order_id", orderId);
+    .eq("order_id", orderId)
+    .contains("options", { type: "bundle_portrait" });
 
   const genIds = (items ?? []).map(i => i.generation_id).filter(Boolean) as string[];
   if (genIds.length === 0) return { ready: false, portraits: [] };
@@ -269,6 +313,6 @@ export async function getBundlePortraitStatus(orderId: string, userId: string): 
     }),
   );
 
-  const ready = portraits.length === 3 && portraits.every(p => p.status === "completed");
+  const ready = portraits.length === 2 && portraits.every(p => p.status === "completed");
   return { ready, portraits };
 }

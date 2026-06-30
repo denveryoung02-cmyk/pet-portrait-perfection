@@ -101,7 +101,7 @@ export const checkBundleReady = createServerFn({ method: "POST" })
 
     // Verify ownership and get current status.
     const status = await getBundlePortraitStatus(data.orderId, userId);
-    if (!status.ready && status.portraits.length < 3) {
+    if (!status.ready && status.portraits.length < 2) {
       // Generate the next missing style in this invocation (one at a time).
       try {
         await generateNextBundlePortrait(data.orderId, userId, env);

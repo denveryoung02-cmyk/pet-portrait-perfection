@@ -31,7 +31,7 @@ const InputSchema = z.object({
 });
 
 const OPENAI_VISION_MODEL = "gpt-4o";
-const OPENAI_IMAGE_MODEL = "gpt-image-1";
+const OPENAI_IMAGE_MODEL = "gpt-image-2";
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 const OPENAI_IMAGE_URL = "https://api.openai.com/v1/images/generations";
 
@@ -153,103 +153,105 @@ export const generatePawtoon = createServerFn({ method: "POST" })
         throw new Error("GPT-4 Vision did not return a pet description — try a clearer photo.");
       }
 
-      // Step 4b: Generate portrait with DALL-E 3 using enhanced prompt
-      const enhancedPrompt = `${prompt}
+      // Step 4b: Generate v1 (Cinematic Edition) — v2/v3 are fired separately by the client
+      const v1Prompt = buildPrompt({
+        petType: data.petType,
+        artStyleId: data.artStyleId,
+        themeId: data.themeId,
+        themeName: data.themeName,
+        personalityId: data.personalityId,
+        personalityName: data.personalityName,
+        personalityDesc: data.personalityDesc,
+        traits: data.traits,
+        petName: data.petName,
+        personalisationText: data.personalisationText,
+      });
+      const enhancedPrompt = `${v1Prompt}\n\nPet details from photo: ${petDescription}\n\nImportant: Create a portrait that captures this specific pet's unique characteristics (breed, colors, features) in the requested artistic style.`;
 
-Pet details from photo: ${petDescription}
-
-Important: Create a portrait that captures this specific pet's unique characteristics (breed, colors, features) in the requested artistic style.`;
-
-      const dalleRes = await fetch(OPENAI_IMAGE_URL, {
+      const imageRes = await fetch(OPENAI_IMAGE_URL, {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           model: OPENAI_IMAGE_MODEL,
-          prompt: enhancedPrompt.slice(0, 4000), // DALL-E 3 has 4000 char limit
+          prompt: enhancedPrompt.slice(0, 4000),
           n: 1,
           size: "1024x1024",
-          quality: "auto",
+          quality: "medium",
         }),
       });
-
-      if (!dalleRes.ok) {
-        const errText = await dalleRes.text().catch(() => "");
-        console.error('[generatePawtoon] DALL-E 3 error response:', dalleRes.status, errText);
-        if (dalleRes.status === 429) throw new Error("OpenAI rate limit reached — please try again in a minute.");
-        if (dalleRes.status === 401) throw new Error("OpenAI API key invalid or not authorized.");
-        if (dalleRes.status === 400) {
-          // Log the full error for debugging
-          console.error('[generatePawtoon] DALL-E 3 400 error details:', errText);
-          throw new Error(`OpenAI error: ${errText.slice(0, 500)}`);
-        }
-        throw new Error(`OpenAI DALL-E 3 error (${dalleRes.status}): ${errText.slice(0, 300)}`);
+      if (!imageRes.ok) {
+        const errText = await imageRes.text().catch(() => "");
+        console.error("[generatePawtoon] DALL-E error:", imageRes.status, errText);
+        if (imageRes.status === 429) throw new Error("OpenAI rate limit reached — please try again in a minute.");
+        if (imageRes.status === 401) throw new Error("OpenAI API key invalid or not authorized.");
+        throw new Error(`OpenAI error (${imageRes.status}): ${errText.slice(0, 300)}`);
       }
-
-      const dalleData = await dalleRes.json();
+      const dalleData = await imageRes.json();
       const imageUrl = dalleData.data?.[0]?.url;
       const imageB64 = dalleData.data?.[0]?.b64_json;
+      if (!imageUrl && !imageB64) throw new Error("DALL-E did not return an image.");
 
-      if (!imageUrl && !imageB64) {
-        throw new Error("DALL-E 3 did not return an image — please try again.");
-      }
-
-      let resultBytes: Uint8Array;
-
+      let bytes_v1: Uint8Array;
       if (imageB64) {
-        // Handle base64 response
         const binaryString = atob(imageB64);
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        resultBytes = bytes;
+        bytes_v1 = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) bytes_v1[i] = binaryString.charCodeAt(i);
       } else {
-        // Handle URL response
-        const imgDownloadRes = await fetch(imageUrl!);
-        if (!imgDownloadRes || !imgDownloadRes.ok) {
-          throw new Error(`Failed to download generated image: ${imgDownloadRes?.statusText || 'Unknown error'}`);
-        }
-        resultBytes = new Uint8Array(await imgDownloadRes.arrayBuffer());
+        const imgRes = await fetch(imageUrl!);
+        if (!imgRes.ok) throw new Error(`Failed to download image: ${imgRes.statusText}`);
+        bytes_v1 = new Uint8Array(await imgRes.arrayBuffer());
       }
 
-      // 5a. Store the CLEAN original in the private bucket (never public).
-      const cleanPath = `${userId}/${generationId}.png`;
+      // 5. Store v1 — clean original + watermarked preview
+      const v1CleanPath = `${userId}/${generationId}-v1.png`;
       const { error: cleanErr } = await supabaseAdmin.storage
         .from("caricatures-clean")
-        .upload(cleanPath, resultBytes, { contentType: "image/png", upsert: true });
-      if (cleanErr) throw new Error(`Could not save result: ${cleanErr.message}`);
+        .upload(v1CleanPath, bytes_v1, { contentType: "image/png", upsert: true });
+      if (cleanErr) throw new Error(`Could not save clean image: ${cleanErr.message}`);
 
-      // 5b. Bake a watermark and store the PREVIEW in the public bucket.
-      const previewBytes = bakeWatermark(new Uint8Array(resultBytes));
-      const previewPath = `${userId}/${generationId}.png`;
+      const previewBytes = bakeWatermark(new Uint8Array(bytes_v1));
+      const v1PreviewPath = `${userId}/${generationId}-v1.png`;
       const { error: prevErr } = await supabaseAdmin.storage
         .from("caricature-previews")
-        .upload(previewPath, previewBytes, { contentType: "image/png", upsert: true });
+        .upload(v1PreviewPath, previewBytes, { contentType: "image/png", upsert: true });
       if (prevErr) throw new Error(`Could not save preview: ${prevErr.message}`);
 
-      const { data: pub } = supabaseAdmin.storage
-        .from("caricature-previews")
-        .getPublicUrl(previewPath);
+      const { data: pub } = supabaseAdmin.storage.from("caricature-previews").getPublicUrl(v1PreviewPath);
+      const v1PreviewUrl = pub.publicUrl;
 
-      // 6. Mark generation as completed — store the public preview URL and the
-      // private clean path (the clean image is released only via signed URL
-      // after payment). No public URL to the clean original is ever stored.
+      // 6. Mark generation completed. petDescription stored for use by generateVariant calls.
       const { error: upErr } = await supabaseAdmin
         .from("generations")
         .update({
           status: "completed",
-          preview_url: pub.publicUrl,
-          clean_path: cleanPath,
+          preview_url: v1PreviewUrl,
+          clean_path: v1CleanPath,
+          generation_params: {
+            artStyleId: data.artStyleId,
+            themeId: data.themeId,
+            themeName: data.themeName,
+            personalityId: data.personalityId,
+            personalityName: data.personalityName,
+            personalityDesc: data.personalityDesc,
+            traits: data.traits,
+            petType: data.petType,
+            petName: data.petName,
+            personalisationText: data.personalisationText,
+            petDescription,
+            variantPreviews: { v1: v1PreviewUrl },
+            variantCleanPaths: { v1: v1CleanPath },
+          },
           updated_at: new Date().toISOString(),
         })
         .eq("id", generationId);
       if (upErr) throw new Error(upErr.message);
 
-      return { generationId, status: "completed" as const, previewUrl: pub.publicUrl };
+      return {
+        generationId,
+        status: "completed" as const,
+        previewUrl: v1PreviewUrl,
+        previewUrls: { v1: v1PreviewUrl },
+      };
 
     } catch (err) {
       const message = err instanceof Error ? err.message : "Generation failed.";
@@ -260,3 +262,4 @@ Important: Create a portrait that captures this specific pet's unique characteri
       return { generationId, status: "failed" as const, previewUrl: null, error: message };
     }
   });
+

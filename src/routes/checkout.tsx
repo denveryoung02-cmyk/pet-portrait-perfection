@@ -107,12 +107,17 @@ function Checkout() {
             </label>
 
             <p className="text-xs sm:text-sm text-muted-foreground">
-              You'll be redirected to our secure Stripe checkout to complete payment.
+              You'll be redirected to Stripe — the same secure payment platform used by Amazon and millions of other businesses. Your card details are never stored by Pawtoons.
             </p>
             {error ? (
               <p className="text-center text-xs sm:text-sm text-destructive">{error}</p>
             ) : null}
 
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
+              <span>🔒 Secure Stripe checkout</span>
+              <span>⚡ Instant download after payment</span>
+              <span>✅ Full unwatermarked image</span>
+            </div>
             <button
               type="button"
               onClick={onPlaceOrder}
@@ -139,6 +144,7 @@ function Checkout() {
                 <div className="text-[10px] sm:text-xs text-muted-foreground">
                   {addBundle ? "Oil Painting + Pixar 3D + Watercolour · instant download" : "High-resolution PNG · instant download"}
                 </div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground mt-1">🔒 Watermark removed instantly after payment</div>
               </div>
             </div>
             <div className="space-y-2 text-xs sm:text-sm border-t border-border pt-3 sm:pt-4">

@@ -167,7 +167,10 @@ export async function verifyStripeWebhook(
  * Short-lived signed URL to the clean image for a generation. Falls back to a
  * legacy public `result_url` for pre-migration rows that have no clean_path.
  */
-export async function signCleanDownloadUrl(generationId: string, ttlSeconds = SIGNED_URL_TTL_SECONDS): Promise<string | null> {
+export async function signCleanDownloadUrl(
+  generationId: string,
+  ttlSeconds = SIGNED_URL_TTL_SECONDS,
+): Promise<string | null> {
   const { data: gen } = await supabaseAdmin
     .from("generations")
     .select("clean_path, result_url")

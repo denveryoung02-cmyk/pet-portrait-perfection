@@ -89,3 +89,58 @@ Site verified on both Google Search Console (URL prefix) and Bing Webmaster Tool
 - Never commit API keys
 - Conventional commits: `feat`/`fix`/`chore`/`refactor`
 - Cloudflare Workers env vars accessed via `context.env` — never `process.env` or `import.meta.env`
+
+## Token Efficiency Rules (read before every session)
+
+These rules exist to reduce unnecessary token usage. Follow them strictly.
+
+### Before reading ANY file
+1. Check if the answer is already in this CLAUDE.md
+2. Only read files directly relevant to the current task
+3. Never read the full /src directory tree unless explicitly asked
+4. Never audit the whole codebase for a single-file fix
+
+### Key files map — read ONLY what the task needs
+| Task area | File(s) to read |
+|-----------|----------------|
+| Image generation / variants | src/lib/generations.functions.ts |
+| AI prompts / styles / themes | src/services/prompts.ts |
+| Upload wizard UI | src/routes/upload.tsx |
+| Homepage | src/routes/index.tsx |
+| Checkout | src/routes/checkout.tsx |
+| Post-payment / download | src/lib/fulfillment.server.ts + fulfillment.functions.ts |
+| Stripe / payments | src/lib/stripe.functions.ts |
+| Email | src/lib/email.server.ts |
+| Watermark | src/lib/watermark.server.ts |
+| SEO schemas | src/lib/seo-schemas.ts |
+| Analytics / funnel tracking | src/lib/analytics.ts |
+| Nav / Footer layout | src/components/Nav.tsx, src/components/Footer.tsx |
+| SEO landing pages | src/routes/[page-name].tsx |
+| Blog posts | src/routes/blog.[slug].tsx |
+| Sitemap | public/sitemap.xml |
+| Robots | public/robots.txt |
+| Server entry / webhooks | src/server.ts |
+
+### Architecture facts (don't re-read files to confirm these)
+- Auth: Supabase via requireSupabaseAuth middleware — always required on server functions
+- Styling: Tailwind CSS 4, CSS custom properties for design tokens — no inline styles
+- Image generation: gpt-image-1 at 1024×1024, quality:"auto" (= medium)
+- Three variants (v1/v2/v3) generated as separate sequential Worker invocations
+- Variant data stored in generation_params JSONB column (variantPreviews + variantCleanPaths)
+- Watermarks: applied server-side via @cf-wasm/photon, stored in caricature-previews bucket
+- Clean images: stored in caricatures-clean bucket, signed URL delivered post-payment
+- Funnel events: fire-and-forget inserts to funnel_events table in Supabase
+- Worker CPU limit: 30,000ms CPU time (network I/O is free, doesn't count toward limit)
+- Wall-clock limit: ~30s per Worker invocation — sequential OpenAI calls must each fit within this
+- Pawtoons is digital-only — no physical products, no shipping, no merchandise
+
+### Diff output rules
+- Summarise changes in a table — don't reproduce unchanged code
+- Only show full code blocks when the change is complex and context is essential
+- State line numbers for targeted edits
+
+### Known issues / debt (don't re-investigate these)
+- worker pawtoons-pet-portrait-perfection is an unused leftover — ignore it
+- £2.99 NOTE in line 13 is stale — correct price is £1.99, ignore the note
+- Cloudflare Web Analytics is pageview-only — custom events use Supabase funnel_events table instead
+- normalizeCatastrophicSsrResponse in server.ts only applies to GET requests (POST errors pass through as-is — this is intentional, fixed June 2026)

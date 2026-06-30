@@ -54,7 +54,12 @@ function isCatastrophicSsrErrorBody(body: string, responseStatus: number): boole
 
 // h3 swallows in-handler throws into a normal 500 Response with body
 // {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
-async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
+// Only applies to GET requests (SSR page renders). POST requests are createServerFn
+// calls; converting their error response to HTML breaks TanStack Start's client
+// wrapper, which expects structured JSON and routes the parse failure to the
+// root error boundary instead of the Promise .catch() chain.
+async function normalizeCatastrophicSsrResponse(request: Request, response: Response): Promise<Response> {
+  if (request.method !== "GET") return response;
   if (response.status < 500) return response;
   const contentType = response.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) return response;
@@ -120,7 +125,7 @@ export default {
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      return await normalizeCatastrophicSsrResponse(request, response);
     } catch (error) {
       console.error(error);
       return brandedErrorResponse();

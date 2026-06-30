@@ -13,7 +13,6 @@ import astronaut from "@/assets/pet-astronaut.jpg";
 import viking from "@/assets/pet-viking.jpg";
 import pirate from "@/assets/pet-pirate.jpg";
 import royalV1 from "@/assets/gen-royal-v1.jpg";
-import royalV2 from "@/assets/gen-royal-v2.jpg";
 import royalV3 from "@/assets/gen-royal-v3.jpg";
 import mafiaGen from "@/assets/gen-mafia-v1.webp";
 import vikingGen from "@/assets/gen-viking-v1.webp";
@@ -223,7 +222,7 @@ const COLORS = [
 const ART_STYLES = [
   { id: "oil-painting", name: "Oil Painting", emoji: "🎨", desc: "Museum-quality oil painting, rich painterly brush strokes, dramatic lighting, gallery-grade composition" },
   { id: "pixar-3d", name: "Pixar/3D", emoji: "✨", desc: "Pixar 3D animation style, soft volumetric lighting, Disney character aesthetic, rounded forms, high detail render, warm family-friendly colours" },
-  { id: "watercolour", name: "Watercolour", emoji: "🌸", desc: "Delicate watercolour illustration style, soft flowing edges, pastel wash tones, hand-painted feel, gentle artistic atmosphere" },
+  { id: "comic-book", name: "Comic Book", emoji: "💥", desc: "Bold pop art comic style with vibrant colours and dynamic energy" },
 ];
 
 const STEPS = [
@@ -238,8 +237,8 @@ const STEPS = [
 const GEN_STAGES = [
   { label: "Analyzing pet personality", emoji: "🔍" },
   { label: "Reading those soulful eyes", emoji: "👀" },
-  { label: "Building cartoon style", emoji: "🎨" },
-  { label: "Painting the masterpiece", emoji: "🖌️" },
+  { label: "Creating your portrait", emoji: "🎨" },
+  { label: "Painting the finishing details", emoji: "🖌️" },
   { label: "Adding final flourishes", emoji: "✨" },
 ];
 
@@ -282,7 +281,6 @@ function CreateWizard() {
   const [genError, setGenError] = useState<string | null>(null);
   const [genResultUrl, setGenResultUrl] = useState<string | null>(null);
   const [genId, setGenId] = useState<string | null>(null);
-  const [favourite, setFavourite] = useState(1);
   const [zoom, setZoom] = useState<number | null>(null);
 
   // Step 7 — product
@@ -454,7 +452,8 @@ function CreateWizard() {
         if (cancelled) return;
         clearInterval(tick);
         if (res.status === "completed" && res.previewUrl) {
-          setGenId(res.generationId);
+          const genIdVal = res.generationId;
+          setGenId(genIdVal);
           setGenResultUrl(res.previewUrl);
           setGenProgress(100);
           setTimeout(() => setGenDone(true), 250);
@@ -476,7 +475,7 @@ function CreateWizard() {
     };
   }, [step, genDone, genFailed, session, uploadedImageId, themeId, personalityId, sessionLoaded]); // eslint-disable-line
 
-  const toggleTrait = (id: string) =>
+const toggleTrait = (id: string) =>
     setTraits((t) => (t.includes(id) ? t.filter((x) => x !== id) : t.length < 3 ? [...t, id] : t));
 
   /* step gating */
@@ -512,6 +511,7 @@ function CreateWizard() {
     setGenProgress(0);
     setGenStage(0);
     setGenResultUrl(null);
+    setGenId(null);
   };
 
   return (
@@ -527,6 +527,9 @@ function CreateWizard() {
             Step {step} of 6 · {STEPS[step - 1]?.sub}
           </span>
           <h1 className="mt-2 text-2xl sm:text-3xl md:text-5xl font-display leading-tight">{stepHeadline(step)}</h1>
+          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-secondary border border-border px-3 py-1 text-xs text-muted-foreground">
+            👀 You'll see your portrait before you pay · From £1.99
+          </div>
         </header>
 
         <div key={step} className="animate-[fade-up_0.45s_ease-out]">
@@ -569,8 +572,7 @@ function CreateWizard() {
               theme={theme} personality={personality} file={file}
               genProgress={genProgress} genStage={genStage} genDone={genDone}
               genFailed={genFailed} setGenFailed={setGenFailed} retryGen={retryGen}
-              favourite={favourite} setFavourite={setFavourite} setZoom={setZoom}
-              genResultUrl={genResultUrl} genError={genError}
+              setZoom={setZoom} genResultUrl={genResultUrl} genError={genError}
             />
           )}
 
@@ -601,13 +603,23 @@ function CreateWizard() {
             className="rounded-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02] disabled:opacity-40 disabled:shadow-none disabled:hover:scale-100 whitespace-nowrap"
             style={{ background: "var(--gradient-primary)" }}
           >
-            {step === 6 && !genDone ? "Generating…" : step === 6 && genDone ? "Checkout →" : "Next →"}
+            {step === 6 && !genDone
+              ? "Generating…"
+              : step === 6 && genDone
+              ? "Unlock My Portrait — £1.99 →"
+              : "Next →"}
           </button>
         </div>
       </div>
 
       {/* Zoom modal */}
-      {zoom !== null && <ZoomModal img={genResultUrl ?? theme.img} theme={theme} onClose={() => setZoom(null)} />}
+      {zoom !== null && (
+        <ZoomModal
+          img={genResultUrl ?? theme.img}
+          theme={theme}
+          onClose={() => setZoom(null)}
+        />
+      )}
 
       <Footer />
     </div>
@@ -675,7 +687,7 @@ function ProgressBar({ step, onJump }: { step: number; onJump: (n: number) => vo
       </div>
     </div>
   );
-}``
+}
 
 /* ---------------- Step 1: Upload ---------------- */
 
@@ -935,20 +947,9 @@ function StepTraits({ traits, toggleTrait, personalisationText, setPersonalisati
 
 /* ---------------- Step 6: Generate ---------------- */
 
-// Per-theme generated sample shown as the variations fallback before the
-// user's real AI result (genResultUrl) is ready. Royal uses its own 3-up set.
-const THEME_GEN_SAMPLES: Record<string, string> = {
-  mafia: mafiaGen,
-  viking: vikingGen,
-  astronaut: astronautGen,
-  superhero: superheroGen,
-  pirate: pirateGen,
-};
-
 function StepGenerate({
   theme, personality, file, genProgress, genStage, genDone, genFailed,
-  setGenFailed, retryGen, favourite, setFavourite, setZoom,
-  genResultUrl, genError,
+  setGenFailed, retryGen, setZoom, genResultUrl, genError,
 }: any) {
   if (genFailed) {
     return (
@@ -1012,16 +1013,8 @@ function StepGenerate({
     );
   }
 
-  /* RESULTS — use real AI result when available, otherwise theme placeholders */
-  const royalImgs = [royalV1, royalV2, royalV3];
-  const isRoyal = theme.id === "royal";
-  const themeSample = THEME_GEN_SAMPLES[theme.id] ?? theme.img;
-  const heroImg = genResultUrl ?? (isRoyal ? royalImgs[0] : themeSample);
-  const variations = [
-    { id: 0, badge: "Most popular", tone: "Heroic edition", filter: "", img: heroImg, sub: "Cinematic studio lighting" },
-    { id: 1, badge: "Staff pick", tone: "Dramatic edition", filter: "saturate(1.35) contrast(1.12) brightness(0.97)", img: genResultUrl ?? (isRoyal ? royalImgs[1] : themeSample), sub: "Bold expression, deep shadows" },
-    { id: 2, badge: null, tone: "Pastel dream", filter: "saturate(0.78) brightness(1.08) hue-rotate(-8deg)", img: genResultUrl ?? (isRoyal ? royalImgs[2] : themeSample), sub: "Soft glow, dreamy palette" },
-  ];
+  /* RESULT — single generated portrait */
+  const portraitImg = genResultUrl ?? theme.img;
 
   return (
     <div className="relative">
@@ -1057,73 +1050,47 @@ function StepGenerate({
             Your Pawtoon is ready.
           </h2>
           <p className="mt-2 text-primary-foreground/85 text-sm md:text-base">
-            Main character energy unlocked. Pick your favourite cut below.
+            ✨ Your AI portrait is below — unlock the full image from £1.99.
           </p>
         </div>
       </div>
 
-      {/* VARIATIONS GRID */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {variations.map((v, i) => {
-          const isFav = favourite === v.id;
-          return (
-            <div
-              key={v.id}
-              onClick={() => setFavourite(v.id)}
-              className={`group relative rounded-3xl overflow-hidden bg-card border-2 transition-all duration-500 animate-[fade-up_0.7s_ease-out_both] cursor-pointer ${
-                isFav ? "border-primary shadow-[var(--shadow-card)] scale-[1.02]" : "border-transparent hover:border-border hover:-translate-y-1"
-              }`}
-              style={{ animationDelay: `${200 + i * 140}ms` }}
+      {/* SINGLE PORTRAIT */}
+      <div
+        className="group relative rounded-3xl overflow-hidden bg-card border-2 border-primary shadow-[var(--shadow-card)] mx-auto max-w-sm cursor-pointer animate-[fade-up_0.7s_ease-out_both]"
+        style={{ animationDelay: "200ms" }}
+        onClick={() => setZoom(0)}
+      >
+        <div className="relative aspect-[4/5] bg-secondary overflow-hidden">
+          <img
+            src={portraitImg}
+            alt={personality.name}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
+            loading="lazy"
+            width={1024}
+            height={1024}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <span className="absolute top-3 left-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur bg-foreground/90 text-background">
+            🔥 Your portrait
+          </span>
+          <div className="absolute bottom-3 inset-x-3 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+            <button
+              onClick={(e) => { e.stopPropagation(); setZoom(0); }}
+              className="w-full rounded-full bg-background/95 backdrop-blur px-3 py-2 text-xs font-semibold hover:bg-background"
             >
-              <div className="relative aspect-[4/5] bg-secondary overflow-hidden">
-                <img
-                  src={v.img}
-                  alt={v.tone}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
-                  style={{ filter: v.filter }}
-                  loading="lazy"
-                  width={1024}
-                  height={1024}
-                />
-                {!isRoyal && <div className={`absolute inset-0 bg-gradient-to-t ${theme.gradient} mix-blend-overlay opacity-35`} />}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                {v.badge && (
-                  <span className={`absolute top-3 left-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur ${
-                    v.badge === "Most popular" ? "bg-foreground/90 text-background" : "bg-amber-400/95 text-amber-950"
-                  }`}>
-                    {v.badge === "Most popular" ? "🔥 " : "★ "}{v.badge}
-                  </span>
-                )}
-
-                <button
-                  onClick={() => setFavourite(v.id)}
-                  className={`absolute top-3 right-3 size-10 rounded-full grid place-items-center backdrop-blur transition-all ${
-                    isFav ? "bg-primary text-primary-foreground scale-110 shadow-[var(--shadow-glow)]" : "bg-background/85 hover:bg-background hover:scale-110"
-                  }`}
-                  aria-label="Favourite"
-                >
-                  <span className={isFav ? "animate-[bounce-soft_0.6s_ease-out]" : ""}>{isFav ? "♥" : "♡"}</span>
-                </button>
-
-                <div className="absolute bottom-3 inset-x-3 flex gap-2 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                  <button onClick={() => setZoom(v.id)} className="flex-1 rounded-full bg-background/95 backdrop-blur px-3 py-2 text-xs font-semibold hover:bg-background">🔍 Zoom</button>
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="font-display text-lg">{personality.name}</div>
-                  <span className="text-[10px] text-muted-foreground font-mono">v{v.id + 1}</span>
-                </div>
-                <div className="text-xs text-muted-foreground">{v.sub}</div>
-              </div>
-            </div>
-          );
-        })}
+              🔍 Zoom in
+            </button>
+          </div>
+        </div>
+        <div className="p-4">
+          <div className="font-display text-lg">{personality.name}</div>
+          <div className="text-xs text-muted-foreground">{theme.name} · AI portrait ready</div>
+        </div>
       </div>
 
       {/* SHARE STRIP */}
-      <ShareStrip theme={theme} personality={personality} img={isRoyal ? royalImgs[favourite] ?? royalImgs[0] : theme.img} genResultUrl={genResultUrl} />
+      <ShareStrip theme={theme} personality={personality} img={portraitImg} genResultUrl={genResultUrl} />
     </div>
   );
 }

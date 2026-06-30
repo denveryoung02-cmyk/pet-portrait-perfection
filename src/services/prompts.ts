@@ -22,10 +22,11 @@ export type GenerationInput = {
 };
 
 const ART_STYLE_PREFIX: Record<string, string> = {
-  "oil-painting": "cinematic movie poster style, hyper detailed digital art, dramatic studio lighting, sharp focus, rich deep colours, professional concept art, 8K quality, bold composition, photorealistic detail, painterly finish",
-  "pixar-3d": "Pixar 3D animation style, oversized expressive eyes, exaggerated large eyes, soft volumetric lighting, Disney character aesthetic, rounded forms, high detail render, warm family-friendly colours",
-  "watercolour": "delicate watercolour illustration style, soft flowing edges, pastel wash tones, hand-painted feel, gentle artistic atmosphere",
+  "oil-painting": "oil painting portrait, rich impasto brushwork, deep saturated colours, dramatic chiaroscuro lighting, old masters technique, canvas texture visible, professional fine art quality, museum-quality portrait painting, warm golden tones, masterful composition",
+  "pixar-3d": "Pixar 3D animation style, oversized expressive eyes, soft volumetric rim lighting, cinematic depth of field, subsurface skin scattering, Disney Pixar character aesthetic, rounded appealing forms, vibrant saturated colours, high detail render, movie production quality, heroic pose",
+  "comic-book": "bold comic book illustration, thick black ink outlines, Ben-Day dot halftone shading, Roy Lichtenstein pop art influence, primary colour palette with high contrast, dynamic action pose, vintage Marvel or DC panel energy, screen-printed poster quality, graphic and striking, speech bubble optional",
 };
+
 
 const THEME_STYLE: Record<string, string> = {
   royal: "ornate baroque portrait, regal velvet drapery, gold filigree, dramatic candlelight, crown jewels, museum-grade composition",

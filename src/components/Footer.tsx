@@ -26,7 +26,6 @@ export function Footer() {
           <div>
             <h4 className="font-display text-sm sm:text-base mb-3 sm:mb-4">Product</h4>
             <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-background/70">
-              <li><Link to="/products" className="hover:text-primary">Digital Portrait</Link></li>
               <li><Link to="/upload" className="hover:text-primary">Create yours</Link></li>
               <li><a href="/#themes" className="hover:text-primary">Themes</a></li>
               <li><a href="/#how" className="hover:text-primary">How it works</a></li>

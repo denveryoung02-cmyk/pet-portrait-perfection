@@ -5,6 +5,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "src/server.ts",
   "limits": {
-    "cpu_ms": 30000
+    "cpu_ms": 30000,
+    "duration_ms": 120000
   }
 }

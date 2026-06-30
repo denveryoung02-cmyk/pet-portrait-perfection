@@ -2,28 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { organizationSchema, websiteSchema, homepageProductSchema, homepageFAQSchema } from "@/lib/seo-schemas";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { track } from "@/lib/analytics";
 
 import royalV1 from "@/assets/gen-royal-v1.jpg";
-import royalV2 from "@/assets/gen-royal-v2.jpg";
-import royalV3 from "@/assets/gen-royal-v3.jpg";
 import superheroGen from "@/assets/gen-superhero-v1.webp";
 import mafiaGen from "@/assets/gen-mafia-v1.webp";
 import astronautGen from "@/assets/gen-astronaut-v1.webp";
 import vikingGen from "@/assets/gen-viking-v1.webp";
 import pirateGen from "@/assets/gen-pirate-v1.webp";
-import superhero from "@/assets/pet-superhero.jpg";
-import lifestyleMug from "@/assets/lifestyle-mug.jpg";
-import packagingUnbox from "@/assets/packaging-unbox.jpg";
-import mug from "@/assets/product-mug.jpg";
-import tshirt from "@/assets/product-tshirt.jpg";
-import poster from "@/assets/product-poster.jpg";
-import mousemat from "@/assets/product-mousemat.jpg";
-import newMug from "@/assets/New Product Mug.webp";
-import newTshirt from "@/assets/New Product T-Shirt.webp";
-import newPoster from "@/assets/New Product Picture Frame.webp";
-import newMousemat from "@/assets/New Product Mouse Mat.webp";
 import princessGen from "@/assets/Gen-princess-v1.webp";
 import angelGen from "@/assets/gen-angel-v1.webp";
 import mermaidGen from "@/assets/gen-mermaid-v1.webp";
@@ -94,19 +81,18 @@ const themes = [
   { name: "Flower Crown", imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgWatercolour: flowerCrownWatercolour, tag: "Boho vibes", alt: "AI flower crown pet portrait — boho meadow style" },
 ];
 
-const products = [
-  { name: "Ceramic Mug", price: "Coming Soon", img: newMug },
-  { name: "Premium Tee", price: "Coming Soon", img: newTshirt },
-  { name: "Framed Poster", price: "Coming Soon", img: newPoster },
-  { name: "Mouse Mat", price: "Coming Soon", img: newMousemat },
-];
-
-
-
 const faqs = [
   { q: "How long does the AI take?", a: "About 60 seconds. You'll see your caricature preview before checkout." },
   { q: "What photos work best?", a: "Bright, well-lit photos where your pet's face is clearly visible. JPG or PNG, under 10MB." },
   { q: "Can I edit the caricature?", a: "Yes — you can regenerate up to 3 times for free before placing your order." },
+];
+
+const beforeAfterPairs = [
+  { label: "Pirate Captain", before: "/before-after/pair1-before.jpg.jpg", after: "/before-after/pair1-after.webp.png" },
+  { label: "Ballerina", before: "/before-after/pair2-before.jpg.jpg", after: "/before-after/pair2-after.webp.png" },
+  { label: "Royal Pet", before: "/before-after/pair3-before.jpg.jpg", after: "/before-after/pair3-after.webp.png" },
+  { label: "Pirate Captain", before: "/before-after/pair4-before.jpg.avif", after: "/before-after/pair4-after.webp.png" },
+  { label: "Superhero", before: "/before-after/pair5-before.jpg.jpg", after: "/before-after/pair5-after.webp.png" },
 ];
 
 function Home() {
@@ -162,7 +148,7 @@ function Home() {
               ))}
             </div>
             <div>
-              <div className="text-foreground font-semibold text-xs sm:text-sm">See your portrait in 60 seconds</div>
+              <div className="text-foreground font-semibold text-xs sm:text-sm">★★★★★ Loved by pet owners everywhere · Free to preview</div>
             </div>
           </div>
         </div>
@@ -187,6 +173,9 @@ function Home() {
           ))}
         </div>
       </section>
+
+      {/* BEFORE & AFTER */}
+      <BeforeAfterSection />
 
       {/* HOW IT WORKS */}
       <section id="how" className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 py-16 sm:py-20 md:py-28">
@@ -215,58 +204,6 @@ function Home() {
 
       {/* THEMES */}
       <ThemesSection />
-
-      {/* PRODUCTS */}
-      <section id="products" className="mx-auto max-w-7xl px-5 md:px-8 py-20 md:py-28">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Coming Soon</span>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display">Printed products on the way.</h2>
-          <p className="mt-4 text-muted-foreground">Mugs, tees, posters, and more — launching soon with your digital portraits.</p>
-        </div>
-        <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-          {products.map((p) => (
-            <div key={p.name} className="group opacity-75">
-              <div className="aspect-square rounded-3xl overflow-hidden bg-secondary mb-4">
-                <img src={p.img} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-display text-lg">{p.name}</div>
-                  <div className="text-sm text-muted-foreground">{p.price}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* LIFESTYLE / PACKAGING — TRUST */}
-      <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20 md:pb-28">
-        <div className="grid lg:grid-cols-2 gap-5 md:gap-6">
-          <div className="relative rounded-[2rem] overflow-hidden bg-secondary group">
-            <img src={vikingGen} alt="AI viking warrior pet portrait — dog in battle armour" className="w-full h-[420px] md:h-[520px] object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-            <div className="absolute bottom-0 inset-x-0 p-7 text-white">
-              <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">AI-Generated</span>
-              <h3 className="font-display text-2xl md:text-3xl mt-1">Your pet. Reimagined.</h3>
-              <p className="text-sm opacity-85 mt-1.5 max-w-sm">From everyday photo to cinematic portrait in under 60 seconds.</p>
-            </div>
-          </div>
-          <div className="grid grid-rows-2 gap-5 md:gap-6">
-            <div className="relative rounded-[2rem] overflow-hidden bg-secondary group">
-              <img src={mafiaGen} alt="AI mafia boss pet portrait — pet in formal suit" className="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105" loading="lazy" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 p-6 text-white">
-                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold opacity-80">Instant Download</span>
-                <h3 className="font-display text-xl md:text-2xl mt-1">Ready to print. Ready to gift.</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p className="mt-8 text-center text-sm text-muted-foreground italic font-display">
-          "Turn chaos into art. The most fun your pet will ever have."
-        </p>
-      </section>
 
       {/* WHY PAWTOONS */}
       <section className="py-20 md:py-28 bg-secondary/40">
@@ -313,15 +250,21 @@ function Home() {
       <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Sneak peek</span>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display">From upload to doorstep, sorted.</h2>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display">From upload to download, sorted.</h2>
         </div>
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-6 rounded-[2rem] bg-card border border-border p-5 md:p-8 shadow-[var(--shadow-card)]">
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-2xl overflow-hidden aspect-square bg-secondary">
-              <img src={superheroGen} alt="" className="w-full h-full object-cover" loading="lazy" />
+            <div>
+              <div className="rounded-2xl overflow-hidden aspect-square bg-secondary">
+                <img src="/before-after/pair1-before.jpg.jpg" alt="Original pet photo" className="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <p className="mt-1.5 text-center text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Your photo</p>
             </div>
-            <div className="rounded-2xl overflow-hidden aspect-square bg-secondary">
-              <img src={superheroGen} alt="" className="w-full h-full object-cover" loading="lazy" />
+            <div>
+              <div className="rounded-2xl overflow-hidden aspect-square bg-secondary">
+                <img src={superheroGen} alt="AI generated superhero pet portrait" className="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <p className="mt-1.5 text-center text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Your portrait</p>
             </div>
             <div className="col-span-2 rounded-2xl bg-secondary p-4 flex items-center gap-3">
               <span className="text-2xl">⚡</span>
@@ -365,7 +308,7 @@ function Home() {
             Ready to make them famous?
           </h2>
           <p className="relative mt-4 text-primary-foreground/85 max-w-xl mx-auto">
-            Their face. Their personality. Immortalised on a mug your colleagues will fight over.
+            Their face. Their personality. Immortalised as stunning art, ready to download in 60 seconds.
           </p>
           <Link
             to="/upload"
@@ -458,7 +401,7 @@ function ArtStyleCarousel() {
       {styles.map((style, i) => (
         <div
           key={style.name}
-          className="group rounded-3xl overflow-hidden bg-card border border-border shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1"
+          className={`group rounded-3xl overflow-hidden bg-card border border-border shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1${i === 2 ? " hidden md:block" : ""}`}
           style={{ animationDelay: `${i * 120}ms` }}
         >
           <div className="relative aspect-square overflow-hidden bg-secondary">
@@ -483,14 +426,195 @@ function ArtStyleCarousel() {
   );
 }
 
+function BeforeAfterSection() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 py-16 sm:py-20 md:py-28">
+      <div className="text-center max-w-2xl mx-auto mb-10">
+        <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Real results</span>
+        <h2 className="mt-3 text-4xl md:text-5xl font-display">See the Transformation</h2>
+        <p className="mt-4 text-muted-foreground">Drag to reveal · Real pets, real portraits</p>
+      </div>
+
+      {/* Mobile: horizontal scroll row */}
+      <div className="flex md:hidden gap-4 overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4">
+        {beforeAfterPairs.map((pair, i) => (
+          <div key={i} className="snap-center flex-shrink-0">
+            <BeforeAfterCard before={pair.before} after={pair.after} label={pair.label} eager={i === 0} />
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: 3-column grid (3 top, 2 bottom) */}
+      <div className="hidden md:grid md:grid-cols-3 gap-6">
+        {beforeAfterPairs.map((pair, i) => (
+          <BeforeAfterCard key={i} before={pair.before} after={pair.after} label={pair.label} eager={i === 0} />
+        ))}
+      </div>
+
+      <p className="mt-8 text-center text-sm text-muted-foreground">
+        These are real Pawtoons portraits. Upload your pet's photo and see yours in 60 seconds.
+      </p>
+      <div className="mt-6 text-center">
+        <Link
+          to="/upload"
+          onClick={() => track("start_creating_clicked", { source: "before_after" })}
+          className="inline-flex items-center rounded-full px-8 py-4 font-semibold text-primary-foreground shadow-[var(--shadow-glow)] hover:scale-[1.03] transition-transform"
+          style={{ background: "var(--gradient-primary)" }}
+        >
+          ✨ Try It Free →
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function BeforeAfterCard({ before, after, label, eager }: {
+  before: string;
+  after: string;
+  label: string;
+  eager?: boolean;
+}) {
+  const [position, setPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isDraggingRef = useRef(false);
+
+  const getPos = (clientX: number): number => {
+    if (!containerRef.current) return 50;
+    const rect = containerRef.current.getBoundingClientRect();
+    return Math.max(2, Math.min(98, ((clientX - rect.left) / rect.width) * 100));
+  };
+
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      if (isDraggingRef.current) setPosition(getPos(e.clientX));
+    };
+    const onMouseUp = () => {
+      isDraggingRef.current = false;
+      setIsDragging(false);
+    };
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isDraggingRef.current) return;
+      e.preventDefault();
+      setPosition(getPos(e.touches[0].clientX));
+    };
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    return () => el.removeEventListener("touchmove", onTouchMove);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="w-[76vw] max-w-[320px] md:w-auto md:max-w-none">
+      <div
+        ref={containerRef}
+        className="relative aspect-square rounded-3xl overflow-hidden cursor-col-resize select-none bg-secondary shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card)] transition-shadow"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          isDraggingRef.current = true;
+          setIsDragging(true);
+          setPosition(getPos(e.clientX));
+        }}
+        onMouseEnter={() => { if (!isDraggingRef.current) setPosition(75); }}
+        onMouseLeave={() => { if (!isDraggingRef.current) setPosition(50); }}
+        onTouchStart={(e) => {
+          isDraggingRef.current = true;
+          setIsDragging(true);
+          setPosition(getPos(e.touches[0].clientX));
+        }}
+        onTouchEnd={() => {
+          isDraggingRef.current = false;
+          setIsDragging(false);
+        }}
+      >
+        {/* After image — base layer, always fully visible */}
+        <img
+          src={after}
+          alt={`${label} AI pet portrait`}
+          className="absolute inset-0 w-full h-full object-cover"
+          loading={eager ? "eager" : "lazy"}
+          draggable={false}
+        />
+
+        {/* Before image — top layer, clipped to left of divider */}
+        <img
+          src={before}
+          alt={`Original photo — ${label}`}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            clipPath: `inset(0 ${100 - position}% 0 0)`,
+            transition: isDragging ? "none" : "clip-path 0.5s ease",
+          }}
+          loading={eager ? "eager" : "lazy"}
+          draggable={false}
+        />
+
+        {/* Divider line */}
+        <div
+          className="absolute top-0 bottom-0 w-0.5 bg-white/90 pointer-events-none"
+          style={{
+            left: `${position}%`,
+            transform: "translateX(-50%)",
+            boxShadow: "0 0 6px rgba(0,0,0,0.35)",
+            transition: isDragging ? "none" : "left 0.5s ease",
+          }}
+        >
+          {/* Drag handle */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-10 rounded-full bg-white shadow-[0_2px_12px_rgba(0,0,0,0.2)] flex items-center justify-center gap-0.5">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-foreground" style={{ transform: "scaleX(-1)" }}>
+              <polyline points="1 1 6 6 1 11" />
+            </svg>
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-foreground">
+              <polyline points="1 1 6 6 1 11" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Corner labels */}
+        <span className="absolute top-3 left-3 text-[9px] font-bold uppercase tracking-wider text-white bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5 pointer-events-none">
+          Before
+        </span>
+        <span
+          className="absolute top-3 right-3 text-[9px] font-bold uppercase tracking-wider text-white rounded-full px-2 py-0.5 pointer-events-none"
+          style={{ background: "var(--gradient-primary)" }}
+        >
+          After
+        </span>
+      </div>
+      <p className="mt-2.5 text-center text-sm font-semibold">{label}</p>
+    </div>
+  );
+}
+
 function ThemesSection() {
   const [styleFilter, setStyleFilter] = useState<"oil" | "pixar" | "watercolour">("oil");
+  const [showAllThemes, setShowAllThemes] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const getThemeImage = (theme: any) => {
     if (styleFilter === "pixar") return theme.imgPixar;
     if (styleFilter === "watercolour") return theme.imgWatercolour;
     return theme.imgOil;
   };
+
+  useEffect(() => {
+    if (!showAllThemes || !gridRef.current) return;
+    requestAnimationFrame(() => {
+      const seventhCard = gridRef.current?.children[6] as HTMLElement | undefined;
+      seventhCard?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [showAllThemes]);
 
   return (
     <section id="themes" className="py-20 md:py-28" style={{ background: "var(--gradient-warm)" }}>
@@ -527,12 +651,12 @@ function ThemesSection() {
           ))}
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
           {themes.map((t, i) => (
             <Link
               to="/upload"
               key={t.name}
-              className="group relative rounded-3xl overflow-hidden bg-card aspect-[4/5] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1"
+              className={`group relative rounded-3xl overflow-hidden bg-card aspect-[4/5] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1${i >= 6 ? (showAllThemes ? "" : " hidden md:block") : ""}`}
               style={{ animationDelay: `${i * 80}ms` }}
             >
               <img src={getThemeImage(t)} alt={t.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
@@ -543,6 +667,16 @@ function ThemesSection() {
             </Link>
           ))}
         </div>
+        {!showAllThemes && (
+          <div className="mt-6 md:hidden text-center">
+            <button
+              onClick={() => setShowAllThemes(true)}
+              className="inline-flex items-center rounded-full px-6 py-3 text-sm font-semibold border border-foreground/20 hover:bg-card transition"
+            >
+              See all 12 themes →
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

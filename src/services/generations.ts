@@ -57,6 +57,7 @@ export async function startGeneration(input: StartGenerationInput) {
   return generatePawtoon({ data: input } as any);
 }
 
+
 export async function getGeneration(id: string): Promise<GenerationRow | null> {
   const { data, error } = await supabase
     .from("generations")

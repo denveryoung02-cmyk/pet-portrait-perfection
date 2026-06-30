@@ -42,15 +42,24 @@ export function bakeWatermark(imageBytes: Uint8Array): Uint8Array {
   }
 
   const rotated = rotate(overlay, ANGLE);
+  overlay.free(); // release ~9 MB WASM heap — not needed after rotate
+
   const rw = rotated.get_width();
   const rh = rotated.get_height();
   const cx = Math.round((rw - w) / 2);
   const cy = Math.round((rh - h) / 2);
-  const mask = crop(rotated, cx, cy, cx + w, cy + h).get_raw_pixels();
+  const cropped = crop(rotated, cx, cy, cx + w, cy + h);
+  rotated.free(); // release ~18 MB WASM heap — not needed after crop
+
+  // get_raw_pixels() copies pixel data to the JS heap, so freeing is safe here.
+  const mask = cropped.get_raw_pixels();
+  cropped.free();
 
   // Alpha-composite white text over the base, keyed on text whiteness so the
   // rotate fill colour is irrelevant. Gives precise control over opacity.
   const out = base.get_raw_pixels();
+  base.free(); // release source image WASM copy — pixels are now in JS heap
+
   for (let i = 0; i < out.length; i += 4) {
     const strength = ((mask[i] + mask[i + 1] + mask[i + 2]) / 765) * OPACITY;
     out[i] = out[i] * (1 - strength) + 255 * strength;
@@ -58,5 +67,8 @@ export function bakeWatermark(imageBytes: Uint8Array): Uint8Array {
     out[i + 2] = out[i + 2] * (1 - strength) + 255 * strength;
   }
 
-  return new PhotonImage(out, w, h).get_bytes();
+  const result = new PhotonImage(out, w, h);
+  const bytes = result.get_bytes(); // encodes to PNG, copies to JS heap
+  result.free();
+  return bytes;
 }

@@ -184,7 +184,7 @@ function Success() {
             {/* Bundle section */}
             {wantsBundle && (
               <div className="rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-6 text-left space-y-4">
-                <h3 className="font-display text-base sm:text-lg">Your 3-style bundle</h3>
+                <h3 className="font-display text-base sm:text-lg">Your 2 extra styles</h3>
                 {bundlePortraits.length === 0 ? (
                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
                     <span className="animate-spin text-lg inline-block">✨</span>
@@ -231,7 +231,7 @@ function Success() {
                         )}
                       </div>
                     ))}
-                    {bundlePortraits.length < 3 && (
+                    {bundlePortraits.length < 2 && (
                       <div className="rounded-xl border border-border overflow-hidden">
                         <div className="aspect-square bg-secondary grid place-items-center">
                           <div className="text-center p-3">
