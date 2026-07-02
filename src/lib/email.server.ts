@@ -54,3 +54,57 @@ export async function sendOrderConfirmationEmail(opts: {
     throw new Error(`Resend API error (${res.status}): ${errText.slice(0, 300)}`);
   }
 }
+
+export async function sendBundleReadyEmail(opts: {
+  to: string;
+  name: string | null;
+  items: { label: string; downloadUrl: string }[];
+  resendApiKey: string;
+}): Promise<void> {
+  const { to, name, items, resendApiKey } = opts;
+  const displayName = name?.split(" ")[0] ?? "there";
+
+  const linksHtml = items
+    .map(
+      (item) => `
+      <div style="margin-bottom: 20px;">
+        <p style="color: #555; margin: 0 0 8px; font-weight: 600;">${item.label}</p>
+        <a href="${item.downloadUrl}" style="display: inline-block; background: #000; color: #fff; padding: 12px 28px; border-radius: 100px; font-weight: 600; font-size: 14px; text-decoration: none;">Download →</a>
+      </div>`,
+    )
+    .join("");
+
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 24px; color: #111;">
+      <div style="margin-bottom: 32px;">
+        <span style="font-size: 28px;">🐾</span>
+        <span style="font-size: 20px; font-weight: 700; margin-left: 8px; letter-spacing: -0.5px;">Pawtoons</span>
+      </div>
+      <h1 style="font-size: 26px; font-weight: 700; margin: 0 0 16px; line-height: 1.2;">Your 2 extra styles are ready!</h1>
+      <p style="color: #555; margin: 0 0 8px;">Hi ${displayName},</p>
+      <p style="color: #555; margin: 0 0 28px;">The other 2 styles from your Pawtoons bundle have finished generating. Click below to download each full-resolution image — links are valid for 1 hour.</p>
+      ${linksHtml}
+      <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;"/>
+      <p style="color: #bbb; font-size: 12px; margin: 0;">You can also access your portraits anytime from your <a href="https://www.pawtoons.co/dashboard" style="color: #999;">dashboard</a>. Questions? Reply to this email.</p>
+    </div>
+  `;
+
+  const res = await fetch(RESEND_API_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${resendApiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Pawtoons <hello@pawtoons.co>",
+      to: [to],
+      subject: "Your 2 extra Pawtoon styles are ready 🐾",
+      html,
+    }),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "");
+    throw new Error(`Resend API error (${res.status}): ${errText.slice(0, 300)}`);
+  }
+}

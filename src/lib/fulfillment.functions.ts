@@ -13,8 +13,9 @@ import {
   recordPaidOrder,
   signCleanDownloadUrl,
 } from "@/lib/fulfillment.server";
-import { sendOrderConfirmationEmail } from "@/lib/email.server";
-import { generateNextBundlePortrait, getBundlePortraitStatus } from "@/lib/bundle.server";
+import { sendOrderConfirmationEmail, sendBundleReadyEmail } from "@/lib/email.server";
+import { generateNextBundlePortrait, getBundlePortraitStatus, type BundlePortrait } from "@/lib/bundle.server";
+import type { CloudflareEnv } from "@/lib/env.server";
 
 const InputSchema = z.object({
   sessionId: z.string().min(1),
@@ -100,7 +101,7 @@ export const checkBundleReady = createServerFn({ method: "POST" })
     const { userId, env } = context;
 
     // Verify ownership and get current status.
-    const status = await getBundlePortraitStatus(data.orderId, userId);
+    let status = await getBundlePortraitStatus(data.orderId, userId);
     if (!status.ready && status.portraits.length < 2) {
       // Generate the next missing style in this invocation (one at a time).
       try {
@@ -109,8 +110,63 @@ export const checkBundleReady = createServerFn({ method: "POST" })
         console.error("[bundle] checkBundleReady generation error:", err instanceof Error ? err.message : err);
       }
       // Re-fetch status after generation attempt.
-      return getBundlePortraitStatus(data.orderId, userId);
+      status = await getBundlePortraitStatus(data.orderId, userId);
+    }
+
+    if (status.ready) {
+      await sendBundleReadyEmailIfNeeded(data.orderId, userId, status.portraits, env);
     }
 
     return status;
   });
+
+/**
+ * Sends the "your 2 extra styles are ready" email the first time an order's
+ * bundle finishes, guarded by orders.bundle_email_sent. The flag is only set
+ * after a successful send, so a failed send is retried on a later poll
+ * (unless that poll is also the one where ready first became true).
+ */
+async function sendBundleReadyEmailIfNeeded(
+  orderId: string,
+  userId: string,
+  portraits: BundlePortrait[],
+  env: CloudflareEnv,
+): Promise<void> {
+  const resendKey = env?.RESEND_API_KEY;
+  if (!resendKey) return;
+
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("bundle_email_sent")
+    .eq("id", orderId)
+    .single();
+  if (!order || order.bundle_email_sent) return;
+
+  const items = portraits
+    .filter((p): p is BundlePortrait & { downloadUrl: string } => !!p.downloadUrl)
+    .map((p) => ({ label: p.artStyleLabel, downloadUrl: p.downloadUrl }));
+  if (items.length === 0) return;
+
+  try {
+    const { data: authData } = await supabaseAdmin.auth.admin.getUserById(userId);
+    const customerEmail = authData?.user?.email;
+    if (!customerEmail) return;
+
+    await sendBundleReadyEmail({
+      to: customerEmail,
+      name: authData.user?.user_metadata?.full_name ?? null,
+      items,
+      resendApiKey: resendKey,
+    });
+
+    const { error: flagError } = await supabaseAdmin
+      .from("orders")
+      .update({ bundle_email_sent: true })
+      .eq("id", orderId);
+    if (flagError) {
+      console.error("[bundle-email] Failed to set bundle_email_sent flag:", { orderId, error: flagError });
+    }
+  } catch (err) {
+    console.error("[bundle-email] Failed to send bundle-ready email:", err instanceof Error ? err.message : err);
+  }
+}

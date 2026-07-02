@@ -165,6 +165,7 @@ export type Database = {
       }
       orders: {
         Row: {
+          bundle_email_sent: boolean
           created_at: string
           currency: string
           id: string
@@ -183,6 +184,7 @@ export type Database = {
           video_url: string | null
         }
         Insert: {
+          bundle_email_sent?: boolean
           created_at?: string
           currency?: string
           id?: string
@@ -201,6 +203,7 @@ export type Database = {
           video_url?: string | null
         }
         Update: {
+          bundle_email_sent?: boolean
           created_at?: string
           currency?: string
           id?: string
