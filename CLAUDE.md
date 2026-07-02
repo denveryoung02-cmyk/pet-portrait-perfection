@@ -25,7 +25,8 @@ npm run deploy             # Deploy to production (pawtoons.co)
 - Staging: `pawtoons-staging.denveryoung02.workers.dev` (worker: `pawtoons-staging`)
 - Production: `pawtoons.co` (worker: `tanstack-start-app`) — routes `pawtoons.co/*` and `www.pawtoons.co/*`
 - Always deploy staging first, test, then production
-- NOTE: worker `pawtoons-pet-portrait-perfection` is an unused leftover — do not deploy here; safe to ignore or delete in future cleanup
+- `wrangler.jsonc` name is `tanstack-start-app` — `vite build` generates `dist/server/wrangler.json` from this, which `npm run deploy` uses
+- NOTE: worker `pawtoons-pet-portrait-perfection` is an unused leftover — do not deploy here. It was previously the name in `wrangler.jsonc`, causing all production deploys to go to the wrong worker. Fixed 2026-06-30.
 
 ## Key Files
 - `src/server.ts` — Cloudflare Workers entry, env setup, webhook handler
