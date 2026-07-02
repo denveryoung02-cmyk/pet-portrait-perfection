@@ -42,9 +42,6 @@ function Orders() {
                 {(o.order_items ?? []).length} item(s)
                 {o.tracking_number && <> · Tracking: <code className="text-foreground">{o.tracking_number}</code></>}
               </div>
-              <div className="mt-3 flex gap-2">
-                <button className="text-sm font-semibold text-primary hover:underline">Reorder</button>
-              </div>
             </div>
           ))}
         </div>
