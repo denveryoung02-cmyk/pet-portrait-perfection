@@ -17,6 +17,7 @@ function Generations() {
       const { data } = await supabase
         .from("generations")
         .select("id, theme, status, preview_url, created_at")
+        .eq("status", "completed")
         .order("created_at", { ascending: false });
       return data ?? [];
     },
