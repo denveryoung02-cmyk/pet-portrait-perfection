@@ -43,11 +43,24 @@ import ballerinaWatercolour from "@/assets/gen-watercolour-ballerina-v1.webp";
 import flowerCrownPixar from "@/assets/gen-pixar-flower crown-v1.webp";
 import flowerCrownWatercolour from "@/assets/gen-watercolour-flower crown-v1.webp";
 
+import princessComic from "@/assets/gen-comic-princess-v1.webp";
+import royalComic from "@/assets/gen-comic-royal-v1.webp";
+import mafiaComic from "@/assets/gen-comic-mafia-v1.webp";
+import vikingComic from "@/assets/gen-comic-viking-v1.webp";
+import astronautComic from "@/assets/gen-comic-astronaut-v1.webp";
+import superheroComic from "@/assets/gen-comic-superhero-v1.webp";
+import pirateComic from "@/assets/gen-comic-pirate-v1.webp";
+import angelComic from "@/assets/gen-comic-angel-v1.webp";
+import mermaidComic from "@/assets/gen-comic-mermaid-v1.webp";
+import wizardComic from "@/assets/gen-comic-wizard-v1.webp";
+import ballerinaComic from "@/assets/gen-comic-ballerina-v1.webp";
+import flowerCrownComic from "@/assets/gen-comic-flower-crown-v1.webp";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Custom AI Pet Portraits From Your Photo | Pawtoons" },
-      { name: "description", content: "Turn your pet photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D or Watercolour. 12 themes. From £1.99. Instant digital download." },
+      { name: "description", content: "Turn your pet photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D or Comic Book. 12 themes. From £1.99. Instant digital download." },
       { property: "og:title", content: "Custom AI Pet Portraits From Your Photo | Pawtoons" },
       { property: "og:description", content: "Turn your pet photo into AI art in 60 seconds. From £1.99. Instant download." },
       { property: "og:url", content: "https://www.pawtoons.co" },
@@ -67,18 +80,18 @@ export const Route = createFileRoute("/")({
 });
 
 const themes = [
-  { name: "Royal Pet", imgOil: royalV1, imgPixar: royalPixar, imgWatercolour: royalWatercolour, tag: "Crown jewels", alt: "AI royal pet portrait in oil painting style — dog wearing crown" },
-  { name: "Superhero Pet", imgOil: superheroGen, imgPixar: superheroPixar, imgWatercolour: superheroWatercolour, tag: "Cape included", alt: "AI superhero pet portrait — dog in cape, Pixar 3D style" },
-  { name: "Mafia Boss", imgOil: mafiaGen, imgPixar: mafiaPixar, imgWatercolour: mafiaWatercolour, tag: "Don't mess", alt: "AI mafia boss pet portrait — pet in formal suit" },
-  { name: "Viking Warrior", imgOil: vikingGen, imgPixar: vikingPixar, imgWatercolour: vikingWatercolour, tag: "Battle ready", alt: "AI viking warrior pet portrait — dog in battle armour" },
-  { name: "Astronaut Explorer", imgOil: astronautGen, imgPixar: astronautPixar, imgWatercolour: astronautWatercolour, tag: "To infinity", alt: "AI astronaut pet portrait — cat in space suit" },
-  { name: "Pirate Captain", imgOil: pirateGen, imgPixar: piratePixar, imgWatercolour: pirateWatercolour, tag: "Arrr-mazing", alt: "AI pirate captain pet portrait — pet with tricorn hat" },
-  { name: "Princess", imgOil: princessGen, imgPixar: princessPixar, imgWatercolour: princessWatercolour, tag: "Fairy tale", alt: "AI princess pet portrait in fairy tale style" },
-  { name: "Angel", imgOil: angelGen, imgPixar: angelPixar, imgWatercolour: angelWatercolour, tag: "Garden guardian", alt: "AI angel pet portrait with wings and halo" },
-  { name: "Mermaid", imgOil: mermaidGen, imgPixar: mermaidPixar, imgWatercolour: mermaidWatercolour, tag: "Under the sea", alt: "AI mermaid pet portrait — underwater scene" },
-  { name: "Wizard", imgOil: wizardGen, imgPixar: wizardPixar, imgWatercolour: wizardWatercolour, tag: "Magical", alt: "AI wizard pet portrait with staff and magical robes" },
-  { name: "Ballerina", imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgWatercolour: ballerinaWatercolour, tag: "Graceful", alt: "AI ballerina pet portrait in graceful dance pose" },
-  { name: "Flower Crown", imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgWatercolour: flowerCrownWatercolour, tag: "Boho vibes", alt: "AI flower crown pet portrait — boho meadow style" },
+  { name: "Royal Pet", imgOil: royalV1, imgPixar: royalPixar, imgWatercolour: royalWatercolour, imgComic: royalComic, tag: "Crown jewels", alt: "AI royal pet portrait in oil painting style — dog wearing crown" },
+  { name: "Superhero Pet", imgOil: superheroGen, imgPixar: superheroPixar, imgWatercolour: superheroWatercolour, imgComic: superheroComic, tag: "Cape included", alt: "AI superhero pet portrait — dog in cape, Pixar 3D style" },
+  { name: "Mafia Boss", imgOil: mafiaGen, imgPixar: mafiaPixar, imgWatercolour: mafiaWatercolour, imgComic: mafiaComic, tag: "Don't mess", alt: "AI mafia boss pet portrait — pet in formal suit" },
+  { name: "Viking Warrior", imgOil: vikingGen, imgPixar: vikingPixar, imgWatercolour: vikingWatercolour, imgComic: vikingComic, tag: "Battle ready", alt: "AI viking warrior pet portrait — dog in battle armour" },
+  { name: "Astronaut Explorer", imgOil: astronautGen, imgPixar: astronautPixar, imgWatercolour: astronautWatercolour, imgComic: astronautComic, tag: "To infinity", alt: "AI astronaut pet portrait — cat in space suit" },
+  { name: "Pirate Captain", imgOil: pirateGen, imgPixar: piratePixar, imgWatercolour: pirateWatercolour, imgComic: pirateComic, tag: "Arrr-mazing", alt: "AI pirate captain pet portrait — pet with tricorn hat" },
+  { name: "Princess", imgOil: princessGen, imgPixar: princessPixar, imgWatercolour: princessWatercolour, imgComic: princessComic, tag: "Fairy tale", alt: "AI princess pet portrait in fairy tale style" },
+  { name: "Angel", imgOil: angelGen, imgPixar: angelPixar, imgWatercolour: angelWatercolour, imgComic: angelComic, tag: "Garden guardian", alt: "AI angel pet portrait with wings and halo" },
+  { name: "Mermaid", imgOil: mermaidGen, imgPixar: mermaidPixar, imgWatercolour: mermaidWatercolour, imgComic: mermaidComic, tag: "Under the sea", alt: "AI mermaid pet portrait — underwater scene" },
+  { name: "Wizard", imgOil: wizardGen, imgPixar: wizardPixar, imgWatercolour: wizardWatercolour, imgComic: wizardComic, tag: "Magical", alt: "AI wizard pet portrait with staff and magical robes" },
+  { name: "Ballerina", imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgWatercolour: ballerinaWatercolour, imgComic: ballerinaComic, tag: "Graceful", alt: "AI ballerina pet portrait in graceful dance pose" },
+  { name: "Flower Crown", imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgWatercolour: flowerCrownWatercolour, imgComic: flowerCrownComic, tag: "Boho vibes", alt: "AI flower crown pet portrait — boho meadow style" },
 ];
 
 const faqs = [
@@ -115,7 +128,7 @@ function Home() {
               Custom AI Pet Portraits — From Your Photo in 60 Seconds
             </h1>
             <p className="mt-5 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Upload one photo. Pick your art style — Oil Painting, Pixar 3D, or Watercolour. Our AI creates your pet's cinematic portrait. Instant digital download.
+              Upload one photo. Pick your art style — Oil Painting, Pixar 3D, or Comic Book. Our AI creates your pet's cinematic portrait. Instant digital download.
             </p>
           </div>
 
@@ -372,17 +385,17 @@ function ArtStyleCarousel() {
       { name: "Princess Pixar", img: princessPixar, emoji: "👸", desc: "Pixar character magic" },
       { name: "Mermaid Pixar", img: mermaidPixar, emoji: "🧜‍♀️", desc: "Ocean 3D adventure" },
     ],
-    // Day 5 (Friday): superhero, wizard, ballerina watercolour
+    // Day 5 (Friday): superhero, wizard, ballerina comic book
     [
-      { name: "Superhero Watercolour", img: superheroWatercolour, emoji: "🦸", desc: "Soft pastel hero" },
-      { name: "Wizard Watercolour", img: wizardWatercolour, emoji: "🧙", desc: "Delicate magic wash" },
-      { name: "Ballerina Watercolour", img: ballerinaWatercolour, emoji: "🩰", desc: "Flowing watercolour dance" },
+      { name: "Superhero Comic Book", img: superheroComic, emoji: "🦸", desc: "Bold pop art hero" },
+      { name: "Wizard Comic Book", img: wizardComic, emoji: "🧙", desc: "Dynamic ink and action" },
+      { name: "Ballerina Comic Book", img: ballerinaComic, emoji: "🩰", desc: "Vibrant comic-panel dance" },
     ],
-    // Day 6 (Saturday): viking, angel, flower-crown watercolour
+    // Day 6 (Saturday): viking, angel, flower-crown comic book
     [
-      { name: "Viking Watercolour", img: vikingWatercolour, emoji: "⚔️", desc: "Soft warrior tones" },
-      { name: "Angel Watercolour", img: angelWatercolour, emoji: "😇", desc: "Gentle pastel divine" },
-      { name: "Flower Crown Watercolour", img: flowerCrownWatercolour, emoji: "🌸", desc: "Watercolour garden" },
+      { name: "Viking Comic Book", img: vikingComic, emoji: "⚔️", desc: "Bold warrior action lines" },
+      { name: "Angel Comic Book", img: angelComic, emoji: "😇", desc: "Vivid pop art divine" },
+      { name: "Flower Crown Comic Book", img: flowerCrownComic, emoji: "🌸", desc: "Comic-book garden" },
     ],
   ];
 
@@ -598,13 +611,13 @@ function BeforeAfterCard({ before, after, label, eager }: {
 }
 
 function ThemesSection() {
-  const [styleFilter, setStyleFilter] = useState<"oil" | "pixar" | "watercolour">("oil");
+  const [styleFilter, setStyleFilter] = useState<"oil" | "pixar" | "comic-book">("oil");
   const [showAllThemes, setShowAllThemes] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const getThemeImage = (theme: any) => {
     if (styleFilter === "pixar") return theme.imgPixar;
-    if (styleFilter === "watercolour") return theme.imgWatercolour;
+    if (styleFilter === "comic-book") return theme.imgComic;
     return theme.imgOil;
   };
 
@@ -634,7 +647,7 @@ function ThemesSection() {
           {[
             { id: "oil" as const, label: "Oil Painting", emoji: "🎨" },
             { id: "pixar" as const, label: "Pixar/3D", emoji: "✨" },
-            { id: "watercolour" as const, label: "Watercolour", emoji: "🌸" },
+            { id: "comic-book" as const, label: "Comic Book", emoji: "💥" },
           ].map((style) => (
             <button
               key={style.id}
