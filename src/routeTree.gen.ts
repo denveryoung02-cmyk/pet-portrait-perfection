@@ -14,7 +14,6 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SuperheroPetPortraitsRouteImport } from './routes/superhero-pet-portraits'
 import { Route as SuccessRouteImport } from './routes/success'
 import { Route as RoyalPetPortraitsRouteImport } from './routes/royal-pet-portraits'
-import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PetPortraitGiftsRouteImport } from './routes/pet-portrait-gifts'
 import { Route as PetMemorialPortraitsRouteImport } from './routes/pet-memorial-portraits'
@@ -62,11 +61,6 @@ const SuccessRoute = SuccessRouteImport.update({
 const RoyalPetPortraitsRoute = RoyalPetPortraitsRouteImport.update({
   id: '/royal-pet-portraits',
   path: '/royal-pet-portraits',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -204,7 +198,6 @@ export interface FileRoutesByFullPath {
   '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
   '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
   '/privacy': typeof PrivacyRoute
-  '/products': typeof ProductsRoute
   '/royal-pet-portraits': typeof RoyalPetPortraitsRoute
   '/success': typeof SuccessRoute
   '/superhero-pet-portraits': typeof SuperheroPetPortraitsRoute
@@ -234,7 +227,6 @@ export interface FileRoutesByTo {
   '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
   '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
   '/privacy': typeof PrivacyRoute
-  '/products': typeof ProductsRoute
   '/royal-pet-portraits': typeof RoyalPetPortraitsRoute
   '/success': typeof SuccessRoute
   '/superhero-pet-portraits': typeof SuperheroPetPortraitsRoute
@@ -265,7 +257,6 @@ export interface FileRoutesById {
   '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
   '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
   '/privacy': typeof PrivacyRoute
-  '/products': typeof ProductsRoute
   '/royal-pet-portraits': typeof RoyalPetPortraitsRoute
   '/success': typeof SuccessRoute
   '/superhero-pet-portraits': typeof SuperheroPetPortraitsRoute
@@ -297,7 +288,6 @@ export interface FileRouteTypes {
     | '/pet-memorial-portraits'
     | '/pet-portrait-gifts'
     | '/privacy'
-    | '/products'
     | '/royal-pet-portraits'
     | '/success'
     | '/superhero-pet-portraits'
@@ -327,7 +317,6 @@ export interface FileRouteTypes {
     | '/pet-memorial-portraits'
     | '/pet-portrait-gifts'
     | '/privacy'
-    | '/products'
     | '/royal-pet-portraits'
     | '/success'
     | '/superhero-pet-portraits'
@@ -357,7 +346,6 @@ export interface FileRouteTypes {
     | '/pet-memorial-portraits'
     | '/pet-portrait-gifts'
     | '/privacy'
-    | '/products'
     | '/royal-pet-portraits'
     | '/success'
     | '/superhero-pet-portraits'
@@ -389,7 +377,6 @@ export interface RootRouteChildren {
   PetMemorialPortraitsRoute: typeof PetMemorialPortraitsRoute
   PetPortraitGiftsRoute: typeof PetPortraitGiftsRoute
   PrivacyRoute: typeof PrivacyRoute
-  ProductsRoute: typeof ProductsRoute
   RoyalPetPortraitsRoute: typeof RoyalPetPortraitsRoute
   SuccessRoute: typeof SuccessRoute
   SuperheroPetPortraitsRoute: typeof SuperheroPetPortraitsRoute
@@ -436,13 +423,6 @@ declare module '@tanstack/react-router' {
       path: '/royal-pet-portraits'
       fullPath: '/royal-pet-portraits'
       preLoaderRoute: typeof RoyalPetPortraitsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -659,7 +639,6 @@ const rootRouteChildren: RootRouteChildren = {
   PetMemorialPortraitsRoute: PetMemorialPortraitsRoute,
   PetPortraitGiftsRoute: PetPortraitGiftsRoute,
   PrivacyRoute: PrivacyRoute,
-  ProductsRoute: ProductsRoute,
   RoyalPetPortraitsRoute: RoyalPetPortraitsRoute,
   SuccessRoute: SuccessRoute,
   SuperheroPetPortraitsRoute: SuperheroPetPortraitsRoute,

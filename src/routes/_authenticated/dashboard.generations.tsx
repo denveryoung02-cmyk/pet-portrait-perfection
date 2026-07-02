@@ -72,7 +72,7 @@ function Generations() {
                     <StatusPill status={g.status} />
                   </div>
                   {g.status === "completed" && (
-                    <Link to="/products" className="text-xs font-semibold text-primary">Order →</Link>
+                    <Link to="/checkout" search={{ gen: g.id }} className="text-xs font-semibold text-primary">Order →</Link>
                   )}
                 </div>
               </div>

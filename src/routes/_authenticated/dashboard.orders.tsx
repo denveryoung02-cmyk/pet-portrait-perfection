@@ -25,7 +25,7 @@ function Orders() {
       {!data?.length ? (
         <div className="rounded-3xl border border-dashed border-border bg-card p-10 text-center">
           <p className="text-sm text-muted-foreground">No orders yet.</p>
-          <Link to="/products" className="mt-4 inline-block rounded-full px-4 py-2 text-sm font-semibold text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>Browse products</Link>
+          <Link to="/upload" className="mt-4 inline-block rounded-full px-4 py-2 text-sm font-semibold text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>Create a Pawtoon →</Link>
         </div>
       ) : (
         <div className="space-y-3">
