@@ -23,14 +23,14 @@ export type GenerationInput = {
 
 const ART_STYLE_PREFIX: Record<string, string> = {
   "oil-painting": "oil painting portrait, rich impasto brushwork, deep saturated colours, dramatic chiaroscuro lighting, old masters technique, canvas texture visible, professional fine art quality, museum-quality portrait painting, warm golden tones, masterful composition",
-  "pixar-3d": "Pixar 3D animation style, oversized expressive eyes, soft volumetric rim lighting, cinematic depth of field, subsurface skin scattering, Disney Pixar character aesthetic, rounded appealing forms, vibrant saturated colours, high detail render, movie production quality, heroic pose",
+  "pixar-3d": "photorealistic dog portrait, natural fur and anatomy, mouth closed or gently open in a soft smile, no visible teeth, except the eyes: the eyes must be drawn 2x larger than a normal dog's eyes, anime-style oversized eyes, this is the single most important instruction",
   "comic-book": "bold comic book illustration, thick black ink outlines, Ben-Day dot halftone shading, Roy Lichtenstein pop art influence, primary colour palette with high contrast, dynamic action pose, vintage Marvel or DC panel energy, screen-printed poster quality, graphic and striking, speech bubble optional",
 };
 
 
 const THEME_STYLE: Record<string, string> = {
   royal: "ornate baroque portrait, regal velvet drapery, gold filigree, dramatic candlelight, crown jewels, museum-grade composition",
-  mafia: "rich cinematic portrait, dramatic noir lighting, deep shadows, moody atmosphere, museum-grade composition, pinstripe suit, fedora, smoky speakeasy background",
+  mafia: "playful mafia caricature scene, exaggerated cartoon action pose, stylized comic lighting, dramatic but cartoonish atmosphere, pinstripe suit, fedora, smoky speakeasy background",
   viking: "dramatic portrait, epic Norse scene, rich earthy tones, stormy sky backdrop, museum-grade composition, fur cloak, battle-worn warrior",
   astronaut: "rich digital portrait, deep space backdrop, dramatic rim lighting, museum-grade composition, reflective helmet visor, nebula colours",
   superhero: "dramatic portrait, vivid rich colours, museum-grade composition, flowing cape, city skyline backdrop, heroic lighting, head-and-shoulders portrait",
