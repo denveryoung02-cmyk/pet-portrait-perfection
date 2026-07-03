@@ -131,18 +131,30 @@ async function runPortraitGeneration(opts: {
 
     const { data: pub } = supabaseAdmin.storage.from("caricature-previews").getPublicUrl(previewPath);
 
-    await supabaseAdmin
+    const { error: updateErr } = await supabaseAdmin
       .from("generations")
       .update({ status: "completed", preview_url: pub.publicUrl, clean_path: cleanPath, updated_at: new Date().toISOString() })
       .eq("id", generationId);
+    if (updateErr) {
+      console.error("[bundle] Failed to mark generation completed:", {
+        generationId,
+        error: updateErr,
+      });
+    }
 
     return generationId;
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Generation failed.";
-    await supabaseAdmin
+    const { error: updateErr } = await supabaseAdmin
       .from("generations")
       .update({ status: "failed", error: msg, updated_at: new Date().toISOString() })
       .eq("id", generationId);
+    if (updateErr) {
+      console.error("[bundle] Failed to mark generation failed:", {
+        generationId,
+        error: updateErr,
+      });
+    }
     throw err;
   }
 }
@@ -233,10 +245,16 @@ export async function generateNextBundlePortrait(orderId: string, userId: string
 
   if (claimErr) {
     // Clean up the orphaned generations row regardless of error type.
-    await supabaseAdmin
+    const { error: cleanupErr } = await supabaseAdmin
       .from("generations")
       .update({ status: "failed", error: `bundle claim failed: ${claimErr.message}` })
       .eq("id", preGenRow.id);
+    if (cleanupErr) {
+      console.error("[bundle] Failed to mark orphaned generation as failed:", {
+        generationId: preGenRow.id,
+        error: cleanupErr,
+      });
+    }
     if (claimErr.code === "23505") {
       // Unique constraint violation: another concurrent Worker already claimed this
       // style. Nothing to do — the other invocation will handle generation.

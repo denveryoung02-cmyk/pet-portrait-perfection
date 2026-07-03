@@ -93,23 +93,33 @@ export async function recordPaidOrder(opts: {
     .single();
   if (ordErr || !order) throw new Error(ordErr?.message ?? "Could not record order.");
 
-  await supabaseAdmin.from("order_items").insert({
+  const { error: itemErr } = await supabaseAdmin.from("order_items").insert({
     order_id: order.id,
     generation_id: generationId,
     quantity: 1,
     unit_price_cents: total,
     options: { type: "digital_download" },
   });
+  if (itemErr) {
+    console.error("[order] Failed to insert order_item:", {
+      orderId: order.id,
+      generationId,
+      error: itemErr,
+    });
+  }
 
   return { orderId: order.id };
 }
 
 /** Store the AIML video task ID on an order row once generation has been kicked off. */
 export async function storeVideoTaskId(orderId: string, taskId: string): Promise<void> {
-  await supabaseAdmin
+  const { error: videoErr } = await supabaseAdmin
     .from("orders")
     .update({ video_task_id: taskId })
     .eq("id", orderId);
+  if (videoErr) {
+    console.error("[video] Failed to store video_task_id:", { orderId, taskId, error: videoErr });
+  }
 }
 
 /**
