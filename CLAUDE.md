@@ -30,7 +30,7 @@ npm run deploy             # Deploy to production (pawtoons.co)
 
 ## Key Files
 - `src/server.ts` — Cloudflare Workers entry, env setup, webhook handler
-- `src/lib/generations.functions.ts` — OpenAI generation (GPT-4 Vision + gpt-image-1)
+- `src/lib/generations.functions.ts` — OpenAI generation (GPT-4 Vision + gpt-image-2)
 - `src/lib/stripe.functions.ts` — Stripe checkout session
 - `src/lib/fulfillment.functions.ts` — payment verification
 - `src/lib/email.server.ts` — Resend transactional email (order confirmation)
@@ -125,14 +125,14 @@ These rules exist to reduce unnecessary token usage. Follow them strictly.
 ### Architecture facts (don't re-read files to confirm these)
 - Auth: Supabase via requireSupabaseAuth middleware — always required on server functions
 - Styling: Tailwind CSS 4, CSS custom properties for design tokens — no inline styles
-- Image generation: gpt-image-1 at 1024×1024, quality:"auto" (= medium)
+- Image generation: gpt-image-2 at 1024×1024, quality:"auto" (= medium)
 - Three variants (v1/v2/v3) generated as separate sequential Worker invocations
 - Variant data stored in generation_params JSONB column (variantPreviews + variantCleanPaths)
 - Watermarks: applied server-side via @cf-wasm/photon, stored in caricature-previews bucket
 - Clean images: stored in caricatures-clean bucket, signed URL delivered post-payment
 - Funnel events: fire-and-forget inserts to funnel_events table in Supabase
 - Worker CPU limit: 30,000ms CPU time (network I/O is free, doesn't count toward limit)
-- Wall-clock limit: ~30s per Worker invocation — sequential OpenAI calls must each fit within this
+- Wall-clock limit: 120s per Worker invocation (duration_ms: 120000 in wrangler.jsonc / wrangler.staging.jsonc) — separate from the 30,000ms CPU-time limit on the line above; do not confuse the two.
 - Pawtoons is digital-only — no physical products, no shipping, no merchandise
 
 ### Diff output rules
