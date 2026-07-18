@@ -1,5 +1,7 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 
 type Role = "admin" | "user";
@@ -26,6 +28,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  // Tracks the last known signed-in user id so router/query invalidation only
+  // fires on an actual identity change (sign-in, sign-out, account switch),
+  // not on every auth event — a token refresh for the same user fires
+  // onAuthStateChange too, but nothing about the user actually changed.
+  const lastUserIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_evt, s) => {
@@ -36,6 +45,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setRoles([]);
       }
+
+      const newUserId = s?.user?.id ?? null;
+      if (newUserId !== lastUserIdRef.current) {
+        lastUserIdRef.current = newUserId;
+        router.invalidate();
+        queryClient.invalidateQueries();
+      }
     });
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
@@ -43,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
     return () => sub.subscription.unsubscribe();
-  }, []);
+  }, [router, queryClient]);
 
   async function loadRoles(userId: string) {
     const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
