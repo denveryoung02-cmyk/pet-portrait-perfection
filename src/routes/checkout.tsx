@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { useEffect, useState } from "react";
+import { Gift } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { createCheckoutSession } from "@/lib/stripe.functions";
@@ -22,21 +23,29 @@ function Checkout() {
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [petName, setPetName] = useState<string | null>(null);
   const [addBundle, setAddBundle] = useState(false);
 
   useEffect(() => { track("checkout_reached"); }, []);
 
-  // Load the generated portrait for the order summary preview.
+  // Load the generated portrait (and pet name, for the Hero Pack teaser) for
+  // the order summary preview. Pet name comes from uploaded_images — the same
+  // source hero_profiles.pet_name uses throughout the rest of the Hero Pack
+  // (hero-pack.server.ts), not generation_params, so the teaser never
+  // promises a name the actual Hero Pack content won't show.
   useEffect(() => {
     if (!generationId) return;
     let cancelled = false;
     (async () => {
       const { data } = await supabase
         .from("generations")
-        .select("preview_url")
+        .select("preview_url, uploaded_images(pet_name)")
         .eq("id", generationId)
         .single();
-      if (!cancelled && data?.preview_url) setPreviewUrl(data.preview_url);
+      if (cancelled) return;
+      if (data?.preview_url) setPreviewUrl(data.preview_url);
+      const uploadedImage = data?.uploaded_images as { pet_name: string | null } | null;
+      if (uploadedImage?.pet_name) setPetName(uploadedImage.pet_name);
     })();
     return () => {
       cancelled = true;
@@ -105,6 +114,14 @@ function Checkout() {
                 <div className="text-xs text-muted-foreground mt-0.5">Oil Painting, Pixar 3D &amp; Watercolour versions of your portrait. Save £1.98.</div>
               </div>
             </label>
+
+            <div className="flex items-start gap-3 rounded-xl border border-dashed border-border p-4">
+              <Gift className="size-4 mt-0.5 text-primary flex-shrink-0" />
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                <span className="font-semibold text-foreground">Free with every order:</span>{" "}
+                {petName ? `${petName}'s` : "your pet's"} hero portrait, phone wallpaper, collectible character card, and certificate — ready to reveal after checkout.
+              </p>
+            </div>
 
             <p className="text-xs sm:text-sm text-muted-foreground">
               You'll be redirected to Stripe — the same secure payment platform used by Amazon and millions of other businesses. Your card details are never stored by Pawtoons.
