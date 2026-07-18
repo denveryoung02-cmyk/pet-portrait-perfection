@@ -241,12 +241,12 @@ const ART_STYLES = [
 ];
 
 const STEPS = [
-  { n: 1, title: "Upload photo", sub: "Add a clear pet pic" },
-  { n: 2, title: "Art style", sub: "Pick your look" },
-  { n: 3, title: "Theme", sub: "Pick a universe" },
-  { n: 4, title: "Personality", sub: "Set the vibe" },
-  { n: 5, title: "Traits", sub: "Optional flavour" },
-  { n: 6, title: "Generate", sub: "AI does the magic" },
+  { n: 1, title: "Meet your hero", sub: "Upload their photo" },
+  { n: 2, title: "Choose their style", sub: "Pick the art style" },
+  { n: 3, title: "Choose their world", sub: "Pick a universe" },
+  { n: 4, title: "Give them personality", sub: "Set the vibe" },
+  { n: 5, title: "Finishing touches", sub: "Optional flavour" },
+  { n: 6, title: "Prepare the Hero Pack", sub: "AI does the magic" },
 ];
 
 const MAX_PET_NAME_LENGTH = 40;
@@ -655,12 +655,12 @@ const toggleTrait = (id: string) =>
 
 function stepHeadline(s: number) {
   return {
-    1: "Drop in your best pet pic.",
-    2: "Choose your art style.",
-    3: "Pick your pet's cinematic universe.",
+    1: "Meet your hero.",
+    2: "Choose your hero's style.",
+    3: "Choose their world.",
     4: "Who are they, really?",
-    5: "Add a sprinkle of chaos.",
-    6: "Painting their movie poster moment ✨",
+    5: "A few finishing touches.",
+    6: "Preparing your hero's Pack ✨",
     7: "Pick where the magic lives.",
     8: "One last look before glory.",
   }[s as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8];
