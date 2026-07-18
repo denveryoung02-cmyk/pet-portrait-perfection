@@ -56,6 +56,18 @@ import wizardComic from "@/assets/gen-comic-wizard-v1.webp";
 import ballerinaComic from "@/assets/gen-comic-ballerina-v1.webp";
 import flowerCrownComic from "@/assets/gen-comic-flower-crown-v1.webp";
 
+// Hero Pack demo assets (Kobi & Buddy) — real generated output from
+// denveryoung02@gmail.com's own account, used deliberately so there is no
+// customer-consent issue displaying it publicly. Served as static files
+// under public/hero-pack-demo, not hot-linked from the hero-pack-assets
+// storage bucket or a signed URL — matches the existing public/before-after
+// convention for real marketing imagery instead of a dynamic user-content path.
+const kobiHdPortrait = "/hero-pack-demo/kobi-hd-portrait.png";
+const kobiPhoneWallpaper = "/hero-pack-demo/kobi-phone-wallpaper.png";
+const kobiCharacterCard = "/hero-pack-demo/kobi-character-card.png";
+const kobiHeroCertificate = "/hero-pack-demo/kobi-hero-certificate.png";
+const buddyCharacterCard = "/hero-pack-demo/buddy-character-card.png";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -104,8 +116,6 @@ const beforeAfterPairs = [
   { label: "Pirate Captain", before: "/before-after/pair1-before.jpg.jpg", after: "/before-after/pair1-after.webp.png" },
   { label: "Ballerina", before: "/before-after/pair2-before.jpg.jpg", after: "/before-after/pair2-after.webp.png" },
   { label: "Royal Pet", before: "/before-after/pair3-before.jpg.jpg", after: "/before-after/pair3-after.webp.png" },
-  { label: "Pirate Captain", before: "/before-after/pair4-before.jpg.avif", after: "/before-after/pair4-after.webp.png" },
-  { label: "Superhero", before: "/before-after/pair5-before.jpg.jpg", after: "/before-after/pair5-after.webp.png" },
 ];
 
 function Home() {
@@ -125,10 +135,10 @@ function Home() {
               AI-powered • Made in 60 seconds
             </div>
             <h1 className="mt-5 sm:mt-6 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight">
-              Custom AI Pet Portraits — From Your Photo in 60 Seconds
+              Every pet has a hidden hero waiting to be discovered.
             </h1>
             <p className="mt-5 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Upload one photo. Pick your art style — Oil Painting, Pixar 3D, or Comic Book. Our AI creates your pet's cinematic portrait. Instant digital download.
+              Upload one photo. We'll reveal your pet's Hero Pack.
             </p>
           </div>
 
@@ -142,7 +152,7 @@ function Home() {
               className="group relative rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
               style={{ background: "var(--gradient-primary)" }}
             >
-              ✨ Start Creating — it's free to try
+              ✨ Start Your Hero Journey — it's free to try
             </Link>
             <a href="#how" className="rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold border border-foreground/15 hover:bg-card transition">
               See how it works
@@ -163,6 +173,38 @@ function Home() {
             <div>
               <div className="text-foreground font-semibold text-xs sm:text-sm">★★★★★ Loved by pet owners everywhere · Free to preview</div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* HERO PACK — WHAT'S INCLUDED */}
+      <section className="border-y border-border bg-card/40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 py-12 sm:py-16 md:py-20">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Every order includes</span>
+            <h2 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-display">Your pet's Hero Pack — free with every order.</h2>
+            <p className="mt-4 text-muted-foreground">Not just a portrait. Four keepsakes, revealed after checkout — like Kobi's, below.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {[
+              { img: kobiHdPortrait, title: "HD Portrait", desc: "Full-resolution artwork" },
+              { img: kobiCharacterCard, title: "Character Card", desc: "A collectible hero stat card" },
+              { img: kobiHeroCertificate, title: "Hero Certificate", desc: "Official recognition, framed" },
+              { img: kobiPhoneWallpaper, title: "Phone Wallpaper", desc: "Their hero era, everywhere" },
+            ].map((item, i) => (
+              <div key={item.title} className="relative rounded-3xl bg-card border border-border overflow-hidden text-center">
+                <div className="aspect-square bg-secondary overflow-hidden">
+                  <img src={item.img} alt={`${item.title} example — Kobi`} className="w-full h-full object-cover" loading="lazy" />
+                </div>
+                <div className="p-4 sm:p-5">
+                  <div className="font-display text-base sm:text-lg">{item.title}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground mt-1">{item.desc}</div>
+                </div>
+                {i < 3 && (
+                  <div className="hidden md:block absolute top-[calc(50%-1.75rem)] -right-3 -translate-y-1/2 text-muted-foreground/40 text-xl z-10">→</div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -312,6 +354,31 @@ function Home() {
         </div>
       </section>
 
+      {/* MEET SOME PAWTOONS HEROES */}
+      <section className="mx-auto max-w-7xl px-5 md:px-8 py-20 md:py-28">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Hero Pack examples</span>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display">Meet some Pawtoons Heroes.</h2>
+          <p className="mt-4 text-muted-foreground">Every character card is written from your pet's own personality.</p>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {[
+            { name: "Kobi", heroName: "Kobi the Courageous", theme: "Canine Crusader", img: kobiCharacterCard },
+            { name: "Buddy", heroName: "Captain Buddy Paws", theme: "Buccaneer of Bones", img: buddyCharacterCard },
+          ].map((hero) => (
+            <div key={hero.name} className="rounded-3xl overflow-hidden bg-card border border-border shadow-[var(--shadow-soft)]">
+              <div className="aspect-[3/4.2] bg-secondary overflow-hidden">
+                <img src={hero.img} alt={`${hero.heroName} — Pawtoons character card`} className="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <div className="p-4 text-center">
+                <div className="font-display text-lg">{hero.heroName}</div>
+                <div className="text-xs text-muted-foreground mt-1">{hero.theme}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20">
         <div className="relative rounded-[2.5rem] overflow-hidden p-10 md:p-20 text-center" style={{ background: "var(--gradient-primary)" }}>
@@ -457,7 +524,7 @@ function BeforeAfterSection() {
         ))}
       </div>
 
-      {/* Desktop: 3-column grid (3 top, 2 bottom) */}
+      {/* Desktop: 3-column grid */}
       <div className="hidden md:grid md:grid-cols-3 gap-6">
         {beforeAfterPairs.map((pair, i) => (
           <BeforeAfterCard key={i} before={pair.before} after={pair.after} label={pair.label} eager={i === 0} />
