@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pawtoons Hero Pack — Reveal Prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0c1f33;
+    --navy-deep:#081522;
+    --gold:#d8b872;
+    --gold-soft:#f0dfae;
+    --cream:#f6f1e4;
+    --muted:#9aa9bb;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:#e9e6dd;
+    font-family:'Inter',sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px 60px;
+  }
+  .caption{
+    max-width:390px;
+    text-align:center;
+    color:#555;
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:18px;
+  }
+  .stage{
+    width:390px;
+    height:720px;
+    background:radial-gradient(circle at 50% 30%, var(--navy) 0%, var(--navy-deep) 75%);
+    border-radius:28px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+    color:var(--cream);
+  }
+  .layer{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:0 32px;
+    opacity:0;
+    transform:scale(0.96);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+    pointer-events:none;
+  }
+  .layer.on{
+    opacity:1;
+    transform:scale(1);
+    pointer-events:auto;
+  }
+  .line{
+    font-family:'Cormorant Garamond',serif;
+    font-size:22px;
+    font-weight:500;
+    color:var(--gold-soft);
+    letter-spacing:0.02em;
+  }
+  .glow-ring{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:1px solid var(--gold);
+    margin-bottom:22px;
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:0.35; transform:scale(0.94); }
+    50%{ opacity:0.9; transform:scale(1.04); }
+  }
+  .portrait-frame{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:72px;
+    background:rgba(216,184,114,0.08);
+    margin-bottom:18px;
+  }
+  .hero-name{
+    font-family:'Cormorant Garamond',serif;
+    font-size:28px;
+    font-weight:600;
+    color:var(--cream);
+  }
+  .pet-sub{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:4px;
+  }
+  .phone-mock{
+    width:130px;
+    height:230px;
+    border-radius:18px;
+    border:2px solid var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:44px;
+    background:rgba(216,184,114,0.08);
+    margin-bottom:20px;
+    transform:rotateY(0deg);
+  }
+  .cert-mock{
+    position:relative;
+    width:264px;
+    height:214px;
+    border:1px solid var(--gold);
+    border-radius:4px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:rgba(216,184,114,0.05);
+    margin-bottom:14px;
+    padding:20px 24px;
+    text-align:center;
+  }
+  .cert-corner{
+    position:absolute;
+    width:14px;
+    height:14px;
+    border:1px solid var(--gold);
+  }
+  .cert-corner-tl{ top:9px; left:9px; border-right:none; border-bottom:none; }
+  .cert-corner-tr{ top:9px; right:9px; border-left:none; border-bottom:none; }
+  .cert-corner-bl{ bottom:9px; left:9px; border-right:none; border-top:none; }
+  .cert-corner-br{ bottom:9px; right:9px; border-left:none; border-top:none; }
+  .cert-eyebrow{
+    font-size:9.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .cert-awarded{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:12px;
+    color:var(--muted);
+    margin-top:16px;
+  }
+  .cert-name{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;
+    font-size:26px;
+    color:var(--gold-soft);
+    margin-top:6px;
+  }
+  .cert-line{
+    font-size:10.5px;
+    color:var(--muted);
+    line-height:1.5;
+    margin-top:16px;
+    max-width:190px;
+  }
+  .asset-title{
+    font-size:13px;
+    color:var(--muted);
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+  .rarity-word{
+    font-family:'Cormorant Garamond',serif;
+    font-size:26px;
+    font-weight:600;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--gold);
+    opacity:0;
+    transition:opacity 0.5s ease;
+  }
+  .rarity-word.show{ opacity:1; }
+  .card{
+    width:220px;
+    height:310px;
+    border:1px solid var(--gold);
+    border-radius:14px;
+    background:linear-gradient(180deg, rgba(216,184,114,0.10), rgba(216,184,114,0.02));
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:16px;
+    transform:rotateY(90deg);
+    transition:transform 0.7s cubic-bezier(.2,.8,.3,1.1);
+  }
+  .card.flipped{ transform:rotateY(0deg); }
+  .card-portrait{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    border:1.5px solid var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    margin-bottom:10px;
+    background:rgba(216,184,114,0.08);
+  }
+  .card-hero-name{
+    font-family:'Cormorant Garamond',serif;
+    font-size:19px;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .stat-row{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    font-size:11.5px;
+    padding:5px 0;
+    border-top:0.5px solid rgba(216,184,114,0.2);
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity 0.45s ease, transform 0.45s ease;
+  }
+  .stat-row.show{ opacity:1; transform:translateY(0); }
+  .stat-label{ color:var(--muted); }
+  .stat-value{ color:var(--cream); font-weight:500; }
+  .badge-row{
+    margin-top:10px;
+    text-align:center;
+    opacity:0;
+    transform:translateY(-8px) scale(0.8);
+    transition:opacity 0.5s ease, transform 0.5s cubic-bezier(.3,1.4,.5,1);
+  }
+  .badge-row.show{ opacity:1; transform:translateY(0) scale(1); }
+  .badge-icon{ font-size:20px; }
+  .badge-label{ font-size:10.5px; color:var(--muted); margin-top:2px; letter-spacing:0.04em; text-transform:uppercase; }
+  .badge-value{ font-size:12.5px; color:var(--gold-soft); font-weight:500; }
+  .serial{
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:0.08em;
+    margin-top:10px;
+    opacity:0;
+    transition:opacity 0.6s ease;
+  }
+  .serial.show{ opacity:1; }
+  .grid-final{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    width:100%;
+    margin-top:14px;
+  }
+  .mini-card{
+    border:0.5px solid rgba(216,184,114,0.35);
+    border-radius:10px;
+    padding:12px 8px;
+    text-align:center;
+    background:rgba(216,184,114,0.05);
+  }
+  .mini-icon{ font-size:20px; }
+  .mini-label{ font-size:10.5px; color:var(--cream); margin-top:6px; }
+  .final-line{
+    font-family:'Cormorant Garamond',serif;
+    font-size:19px;
+    color:var(--cream);
+    margin:16px 0 14px;
+  }
+  .show-off-btn{
+    background:var(--gold);
+    color:var(--navy-deep);
+    border:none;
+    border-radius:22px;
+    padding:11px 22px;
+    font-size:13.5px;
+    font-weight:500;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+    animation:softpulse 2.2s ease-in-out infinite;
+  }
+  @keyframes softpulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(216,184,114,0.0); }
+    50%{ box-shadow:0 0 0 6px rgba(216,184,114,0.12); }
+  }
+  .skip-btn{
+    position:absolute;
+    bottom:16px;
+    right:16px;
+    background:transparent;
+    border:0.5px solid rgba(246,241,228,0.35);
+    color:var(--cream);
+    font-size:11px;
+    padding:6px 12px;
+    border-radius:14px;
+    cursor:pointer;
+    opacity:0;
+    transition:opacity 0.5s ease;
+    z-index:5;
+  }
+  .skip-btn.show{ opacity:0.85; }
+  .timeline-bar{
+    width:390px;
+    height:3px;
+    background:#d8d3c4;
+    border-radius:2px;
+    margin-top:14px;
+    overflow:hidden;
+  }
+  .timeline-fill{
+    height:100%;
+    width:0%;
+    background:var(--navy);
+    transition:width 0.1s linear;
+  }
+  .controls{
+    width:390px;
+    display:flex;
+    justify-content:space-between;
+    margin-top:10px;
+    font-size:12px;
+  }
+  .controls button{
+    background:none;
+    border:none;
+    color:#555;
+    text-decoration:underline;
+    cursor:pointer;
+    font-size:12px;
+    font-family:'Inter',sans-serif;
+    padding:0;
+  }
+  .replay-wrap{
+    position:absolute;
+    top:16px;
+    right:16px;
+    z-index:5;
+  }
+  .replay-btn{
+    background:transparent;
+    border:0.5px solid rgba(246,241,228,0.35);
+    color:var(--cream);
+    font-size:11px;
+    padding:6px 12px;
+    border-radius:14px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<p class="caption">Working prototype of the real ~20 second timeline — not final art. Portrait is a placeholder; swap for actual generation output. Reload the page to see it play as a first-time visitor again, or use the controls below.</p>
+
+<div class="stage" id="stage">
+
+  <button class="skip-btn" id="skipBtn">Skip to my pack</button>
+  <div class="replay-wrap" id="replayWrap" style="display:none;">
+    <button class="replay-btn" id="replayBtn">Replay the reveal ✨</button>
+  </div>
+
+  <div class="layer" id="l-analysing">
+    <div class="glow-ring"></div>
+    <div class="line" id="openingLine">Analysing Charlie's heroic potential…</div>
+  </div>
+
+  <div class="layer" id="l-origin">
+    <div class="line">In a world of squeaky toys and forbidden socks, one dog rises.</div>
+  </div>
+
+  <div class="layer" id="l-portrait">
+    <div class="portrait-frame">🐕</div>
+    <div class="hero-name">Captain Charlie</div>
+    <div class="pet-sub">Charlie's Hero Pack</div>
+  </div>
+
+  <div class="layer" id="l-wallpaper">
+    <div class="asset-title" style="margin-bottom:14px;">Phone wallpaper</div>
+    <div class="phone-mock">🐕</div>
+  </div>
+
+  <div class="layer" id="l-cert">
+    <div class="asset-title" style="margin-bottom:14px;">Hero certificate</div>
+    <div class="cert-mock">
+      <div class="cert-corner cert-corner-tl"></div>
+      <div class="cert-corner cert-corner-tr"></div>
+      <div class="cert-corner cert-corner-bl"></div>
+      <div class="cert-corner cert-corner-br"></div>
+      <div class="cert-eyebrow">Official Pawtoons Hero Certificate</div>
+      <div class="cert-awarded">awarded to</div>
+      <div class="cert-name">Captain Charlie</div>
+      <div class="cert-line">for outstanding bravery and legendary treat hunting</div>
+    </div>
+  </div>
+
+  <div class="layer" id="l-cardstage">
+    <div class="glow-ring" id="rarityGlow" style="margin-bottom:16px;"></div>
+    <div class="rarity-word" id="rarityWord">Legendary Guardian</div>
+    <div class="card" id="card">
+      <div class="card-portrait">🐕</div>
+      <div class="card-hero-name">Captain Charlie</div>
+
+      <div class="stat-row" id="stat1"><span class="stat-label">Hero name</span><span class="stat-value">Captain Charlie</span></div>
+      <div class="stat-row" id="stat2"><span class="stat-label">Adventure class</span><span class="stat-value">Guardian</span></div>
+      <div class="stat-row" id="stat3"><span class="stat-label">Special ability</span><span class="stat-value">Master ball finder</span></div>
+      <div class="stat-row" id="stat4"><span class="stat-label">Favourite snack</span><span class="stat-value">Cheese, obviously</span></div>
+      <div class="stat-row" id="stat5"><span class="stat-label">Adventure rank</span><span class="stat-value">S-Tier</span></div>
+      <div class="stat-row" id="stat6"><span class="stat-label">Mission</span><span class="stat-value">Protect the yard</span></div>
+
+      <div class="badge-row" id="badgeRow">
+        <div class="badge-icon">🏅</div>
+        <div class="badge-label">Unlocked</div>
+        <div class="badge-value">Sock Thief</div>
+      </div>
+
+      <div class="serial" id="serial">HP-2026-004128</div>
+    </div>
+  </div>
+
+  <div class="layer" id="l-final">
+    <div class="final-line">Charlie's Hero Pack is complete.</div>
+    <div class="grid-final">
+      <div class="mini-card"><div class="mini-icon">🖼️</div><div class="mini-label">HD portrait</div></div>
+      <div class="mini-card"><div class="mini-icon">📱</div><div class="mini-label">Phone wallpaper</div></div>
+      <div class="mini-card"><div class="mini-icon">🎴</div><div class="mini-label">Character card</div></div>
+      <div class="mini-card"><div class="mini-icon">📜</div><div class="mini-label">Hero certificate</div></div>
+    </div>
+    <button class="show-off-btn" style="margin-top:18px;">Show off Charlie →</button>
+  </div>
+
+</div>
+
+<div class="timeline-bar"><div class="timeline-fill" id="timelineFill"></div></div>
+<div class="controls">
+  <span id="timeLabel">0.0s / ~20.5s</span>
+  <button id="resetBtn">Reset demo (simulate first-time visitor)</button>
+</div>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'pawtoons_hero_pack_seen_demo';
+  var stage = document.getElementById('stage');
+  var timers = [];
+  var startTime = null;
+  var rafId = null;
+  var totalMs = 20500;
+
+  var layers = ['l-analysing','l-origin','l-portrait','l-wallpaper','l-cert','l-cardstage','l-final'];
+
+  function showLayer(id){
+    layers.forEach(function(l){
+      document.getElementById(l).classList.toggle('on', l === id);
+    });
+  }
+
+  function clearTimers(){
+    timers.forEach(clearTimeout);
+    timers = [];
+    if(rafId) cancelAnimationFrame(rafId);
+  }
+
+  function at(ms, fn){
+    timers.push(setTimeout(fn, ms));
+  }
+
+  function tickProgress(){
+    if(startTime === null) return;
+    var elapsed = Date.now() - startTime;
+    var pct = Math.min(100, (elapsed / totalMs) * 100);
+    document.getElementById('timelineFill').style.width = pct + '%';
+    document.getElementById('timeLabel').textContent = (elapsed/1000).toFixed(1) + 's / ~20.5s';
+    if(elapsed < totalMs){
+      rafId = requestAnimationFrame(tickProgress);
+    }
+  }
+
+  function playSequence(){
+    clearTimers();
+    startTime = Date.now();
+    tickProgress();
+    document.getElementById('replayWrap').style.display = 'none';
+    document.getElementById('skipBtn').classList.remove('show');
+
+    // reset all micro states
+    document.getElementById('openingLine').textContent = "Analysing Charlie's heroic potential…";
+    document.getElementById('card').classList.remove('flipped');
+    document.getElementById('rarityWord').classList.remove('show');
+    ['stat1','stat2','stat3','stat4','stat5','stat6'].forEach(function(id){
+      document.getElementById(id).classList.remove('show');
+    });
+    document.getElementById('badgeRow').classList.remove('show');
+    document.getElementById('serial').classList.remove('show');
+
+    showLayer('l-analysing');
+
+    at(1500, function(){ document.getElementById('openingLine').textContent = 'Preparing Hero Pack…'; });
+    at(2000, function(){ document.getElementById('skipBtn').classList.add('show'); });
+    at(3000, function(){ showLayer('l-origin'); });
+    at(4500, function(){ showLayer('l-portrait'); });
+    at(7000, function(){ showLayer('l-wallpaper'); });
+    at(9500, function(){ showLayer('l-cert'); });
+    at(12000, function(){ showLayer('l-cardstage'); });
+    at(14000, function(){ document.getElementById('rarityWord').classList.add('show'); });
+    at(14800, function(){ document.getElementById('card').classList.add('flipped'); });
+    at(15500, function(){ document.getElementById('stat1').classList.add('show'); });
+    at(16000, function(){ document.getElementById('stat2').classList.add('show'); });
+    at(16500, function(){ document.getElementById('stat3').classList.add('show'); });
+    at(17000, function(){
+      ['stat4','stat5','stat6'].forEach(function(id){ document.getElementById(id).classList.add('show'); });
+    });
+    at(18000, function(){ document.getElementById('badgeRow').classList.add('show'); });
+    at(19000, function(){ document.getElementById('serial').classList.add('show'); });
+    at(19500, function(){ showLayer('l-final'); });
+    at(20500, function(){
+      document.getElementById('replayWrap').style.display = 'block';
+      localStorage.setItem(STORAGE_KEY, '1');
+    });
+  }
+
+  function jumpToFinal(){
+    clearTimers();
+    document.getElementById('skipBtn').classList.remove('show');
+    document.getElementById('card').classList.add('flipped');
+    document.getElementById('rarityWord').classList.add('show');
+    ['stat1','stat2','stat3','stat4','stat5','stat6'].forEach(function(id){
+      document.getElementById(id).classList.add('show');
+    });
+    document.getElementById('badgeRow').classList.add('show');
+    document.getElementById('serial').classList.add('show');
+    showLayer('l-final');
+    document.getElementById('timelineFill').style.width = '100%';
+    document.getElementById('timeLabel').textContent = 'skipped / ~20.5s';
+    document.getElementById('replayWrap').style.display = 'block';
+    localStorage.setItem(STORAGE_KEY, '1');
+  }
+
+  document.getElementById('skipBtn').addEventListener('click', jumpToFinal);
+  document.getElementById('replayBtn').addEventListener('click', playSequence);
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    localStorage.removeItem(STORAGE_KEY);
+    playSequence();
+  });
+
+  // Returning visitor: skip straight to the settled pack, no animation delay
+  if(localStorage.getItem(STORAGE_KEY)){
+    jumpToFinal();
+    document.getElementById('timeLabel').textContent = 'returning visitor — instant view';
+  } else {
+    playSequence();
+  }
+})();
+</script>
+
+</body>
+</html>

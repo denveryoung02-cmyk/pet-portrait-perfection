@@ -15,7 +15,8 @@ import {
 } from "@/lib/fulfillment.server";
 import { sendOrderConfirmationEmail, sendBundleReadyEmail } from "@/lib/email.server";
 import { generateNextBundlePortrait, getBundlePortraitStatus, type BundlePortrait } from "@/lib/bundle.server";
-import type { CloudflareEnv } from "@/lib/env.server";
+import { generateHeroPack } from "@/lib/hero-pack.server";
+import { getExecutionCtx, type CloudflareEnv } from "@/lib/env.server";
 
 const InputSchema = z.object({
   sessionId: z.string().min(1),
@@ -32,7 +33,7 @@ export const confirmCheckout = createServerFn({ method: "POST" })
     // The generation must belong to the caller.
     const { data: gen } = await supabaseAdmin
       .from("generations")
-      .select("user_id, theme")
+      .select("user_id, theme, generation_params")
       .eq("id", generationId)
       .single();
     if (!gen || gen.user_id !== userId) {
@@ -54,6 +55,19 @@ export const confirmCheckout = createServerFn({ method: "POST" })
     });
     const downloadUrl = await signCleanDownloadUrl(generationId);
 
+    // Fire-and-forget: Hero Pack generation must not delay this response.
+    // generateHeroPack is idempotent per order_id, so it's safe to also
+    // trigger it from the Stripe webhook (src/server.ts) — whichever of the
+    // two fires first wins, the other exits immediately.
+    const heroPackPromise = generateHeroPack(orderId, generationId, env).catch((err) => {
+      console.error("[hero-pack] generation failed (confirmCheckout trigger):", {
+        orderId,
+        generationId,
+        error: err instanceof Error ? err.message : err,
+      });
+    });
+    getExecutionCtx()?.waitUntil(heroPackPromise);
+
     // Send confirmation email (best-effort — failure does not affect the download URL).
     try {
       const resendKey = env?.RESEND_API_KEY;
@@ -66,12 +80,15 @@ export const confirmCheckout = createServerFn({ method: "POST" })
           const emailDownloadUrl = await signCleanDownloadUrl(generationId, 86400);
           console.log("[email/confirmCheckout] emailDownloadUrl generated:", !!emailDownloadUrl);
           if (emailDownloadUrl) {
+            const petName = (gen.generation_params as { petName?: string } | null)?.petName ?? null;
             await sendOrderConfirmationEmail({
               to: customerEmail,
               name: authData.user?.user_metadata?.full_name ?? null,
               theme: gen.theme ?? "portrait",
               downloadUrl: emailDownloadUrl,
               resendApiKey: resendKey,
+              orderId,
+              petName,
             });
             console.log("[email/confirmCheckout] email sent successfully");
           }
@@ -152,11 +169,18 @@ async function sendBundleReadyEmailIfNeeded(
     const customerEmail = authData?.user?.email;
     if (!customerEmail) return;
 
+    // hero_profiles.pet_name is denormalized at Hero Pack generation time —
+    // may not exist yet if that background job hasn't finished, which is
+    // fine, the email just falls back to "your pet's Hero Pack".
+    const { data: heroProfile } = await supabaseAdmin.from("hero_profiles").select("pet_name").eq("order_id", orderId).maybeSingle();
+
     await sendBundleReadyEmail({
       to: customerEmail,
       name: authData.user?.user_metadata?.full_name ?? null,
       items,
       resendApiKey: resendKey,
+      orderId,
+      petName: heroProfile?.pet_name ?? null,
     });
 
     const { error: flagError } = await supabaseAdmin

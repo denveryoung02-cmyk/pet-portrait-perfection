@@ -3,7 +3,8 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { verifyStripeWebhook, recordPaidOrder } from "./lib/fulfillment.server";
-import { setEnv, type CloudflareEnv } from "./lib/env.server";
+import { setEnv, setExecutionCtx, getExecutionCtx, type CloudflareEnv } from "./lib/env.server";
+import { generateHeroPack } from "./lib/hero-pack.server";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -93,12 +94,24 @@ async function handleStripeWebhook(request: Request, env: CloudflareEnv): Promis
       const session = event.data?.object ?? {};
       const generationId: string | undefined = session?.metadata?.generationId;
       if (session?.payment_status === "paid" && session?.id && generationId) {
-        await recordPaidOrder({
+        const { orderId } = await recordPaidOrder({
           sessionId: session.id,
           generationId,
           amountTotalCents: typeof session.amount_total === "number" ? session.amount_total : null,
           wantsBundle: session.metadata?.wantsBundle === "true",
         });
+
+        // Fire-and-forget: Hero Pack generation must not delay the webhook's
+        // 200 response to Stripe. generateHeroPack is idempotent per order_id,
+        // so it's safe to also trigger it from confirmCheckout below.
+        const heroPackPromise = generateHeroPack(orderId, generationId, env).catch((err) => {
+          console.error("[hero-pack] generation failed (webhook trigger):", {
+            orderId,
+            generationId,
+            error: err instanceof Error ? err.message : err,
+          });
+        });
+        getExecutionCtx()?.waitUntil(heroPackPromise);
       }
     }
   } catch (error) {
@@ -116,6 +129,7 @@ export default {
 
     // Store Cloudflare Workers env bindings for webhook handler and fallback access
     setEnv(cfEnv);
+    setExecutionCtx(ctx as { waitUntil(promise: Promise<unknown>): void });
 
     try {
       const url = new URL(request.url);

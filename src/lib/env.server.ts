@@ -36,6 +36,22 @@ export function setEnv(env: CloudflareEnv): void {
   console.log('[setEnv] Stored env globally - STRIPE_SECRET_KEY exists:', !!env.STRIPE_SECRET_KEY);
 }
 
+// Cloudflare Workers ExecutionContext (has .waitUntil), captured once per request
+// from the top-level fetch handler in server.ts so fire-and-forget background
+// work (e.g. Hero Pack generation) can outlive the response. Same
+// request-scoped-global caveat as _globalEnv above: fine for a single in-flight
+// request, not a guarantee under concurrent requests in the same isolate.
+type MinimalExecutionContext = { waitUntil(promise: Promise<unknown>): void };
+let _globalCtx: MinimalExecutionContext | null = null;
+
+export function setExecutionCtx(ctx: MinimalExecutionContext): void {
+  _globalCtx = ctx;
+}
+
+export function getExecutionCtx(): MinimalExecutionContext | null {
+  return _globalCtx;
+}
+
 export function getEnv(): CloudflareEnv {
   try {
     // PRIMARY: Get env from request context (works in TanStack Start server functions)

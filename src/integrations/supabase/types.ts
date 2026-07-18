@@ -14,6 +14,108 @@ export type Database = {
   }
   public: {
     Tables: {
+      adventure_pack_assets: {
+        Row: {
+          asset_type: string
+          created_at: string
+          id: string
+          order_id: string
+          primary_generation_id: string
+          public_url: string | null
+          status: string
+          storage_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          asset_type: string
+          created_at?: string
+          id?: string
+          order_id: string
+          primary_generation_id: string
+          public_url?: string | null
+          status?: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          asset_type?: string
+          created_at?: string
+          id?: string
+          order_id?: string
+          primary_generation_id?: string
+          public_url?: string | null
+          status?: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "adventure_pack_assets_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "adventure_pack_assets_primary_generation_id_fkey"
+            columns: ["primary_generation_id"]
+            isOneToOne: false
+            referencedRelation: "generations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_jobs: {
+        Row: {
+          cost: number | null
+          created_at: string | null
+          error_log: string | null
+          final_video_path: string | null
+          hashtags: string | null
+          id: string
+          portrait_path: string | null
+          post_description: string | null
+          publer_job_id: string | null
+          script: string | null
+          status: string
+          topic: string | null
+          updated_at: string | null
+          video_url: string | null
+        }
+        Insert: {
+          cost?: number | null
+          created_at?: string | null
+          error_log?: string | null
+          final_video_path?: string | null
+          hashtags?: string | null
+          id?: string
+          portrait_path?: string | null
+          post_description?: string | null
+          publer_job_id?: string | null
+          script?: string | null
+          status?: string
+          topic?: string | null
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          cost?: number | null
+          created_at?: string | null
+          error_log?: string | null
+          final_video_path?: string | null
+          hashtags?: string | null
+          id?: string
+          portrait_path?: string | null
+          post_description?: string | null
+          publer_job_id?: string | null
+          script?: string | null
+          status?: string
+          topic?: string | null
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string
@@ -43,8 +145,30 @@ export type Database = {
           },
         ]
       }
+      funnel_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          properties: Json | null
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          properties?: Json | null
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          properties?: Json | null
+        }
+        Relationships: []
+      }
       generations: {
         Row: {
+          art_style: string | null
           clean_path: string | null
           created_at: string
           error: string | null
@@ -63,6 +187,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          art_style?: string | null
           clean_path?: string | null
           created_at?: string
           error?: string | null
@@ -81,6 +206,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          art_style?: string | null
           clean_path?: string | null
           created_at?: string
           error?: string | null
@@ -104,6 +230,75 @@ export type Database = {
             columns: ["uploaded_image_id"]
             isOneToOne: false
             referencedRelation: "uploaded_images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hero_profiles: {
+        Row: {
+          achievement_badge: string | null
+          adventure_class: string | null
+          adventure_rank: string | null
+          favourite_snack: string | null
+          first_viewed_at: string | null
+          generated_at: string
+          hero_name: string | null
+          id: string
+          mission_statement: string | null
+          order_id: string
+          origin_story: string | null
+          pack_number: number
+          pet_name: string | null
+          primary_generation_id: string
+          special_ability: string | null
+        }
+        Insert: {
+          achievement_badge?: string | null
+          adventure_class?: string | null
+          adventure_rank?: string | null
+          favourite_snack?: string | null
+          first_viewed_at?: string | null
+          generated_at?: string
+          hero_name?: string | null
+          id?: string
+          mission_statement?: string | null
+          order_id: string
+          origin_story?: string | null
+          pack_number?: number
+          pet_name?: string | null
+          primary_generation_id: string
+          special_ability?: string | null
+        }
+        Update: {
+          achievement_badge?: string | null
+          adventure_class?: string | null
+          adventure_rank?: string | null
+          favourite_snack?: string | null
+          first_viewed_at?: string | null
+          generated_at?: string
+          hero_name?: string | null
+          id?: string
+          mission_statement?: string | null
+          order_id?: string
+          origin_story?: string | null
+          pack_number?: number
+          pet_name?: string | null
+          primary_generation_id?: string
+          special_ability?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hero_profiles_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hero_profiles_primary_generation_id_fkey"
+            columns: ["primary_generation_id"]
+            isOneToOne: false
+            referencedRelation: "generations"
             referencedColumns: ["id"]
           },
         ]
@@ -178,10 +373,10 @@ export type Database = {
           tracking_number: string | null
           updated_at: string
           user_id: string
-          wants_bundle: boolean
-          wants_video: boolean
           video_task_id: string | null
           video_url: string | null
+          wants_bundle: boolean | null
+          wants_video: boolean | null
         }
         Insert: {
           bundle_email_sent?: boolean
@@ -197,10 +392,10 @@ export type Database = {
           tracking_number?: string | null
           updated_at?: string
           user_id: string
-          wants_bundle?: boolean
-          wants_video?: boolean
           video_task_id?: string | null
           video_url?: string | null
+          wants_bundle?: boolean | null
+          wants_video?: boolean | null
         }
         Update: {
           bundle_email_sent?: boolean
@@ -216,10 +411,10 @@ export type Database = {
           tracking_number?: string | null
           updated_at?: string
           user_id?: string
-          wants_bundle?: boolean
-          wants_video?: boolean
           video_task_id?: string | null
           video_url?: string | null
+          wants_bundle?: boolean | null
+          wants_video?: boolean | null
         }
         Relationships: []
       }
@@ -514,7 +709,7 @@ export type CompositeTypes<
 }
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    ? DefaultSchema["CompositeTypes"][CompositeTypeName]
     : never
 
 export const Constants = {
