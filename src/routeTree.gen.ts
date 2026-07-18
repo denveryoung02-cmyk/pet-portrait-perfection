@@ -17,6 +17,7 @@ import { Route as RoyalPetPortraitsRouteImport } from './routes/royal-pet-portra
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PetPortraitGiftsRouteImport } from './routes/pet-portrait-gifts'
 import { Route as PetMemorialPortraitsRouteImport } from './routes/pet-memorial-portraits'
+import { Route as HeroPackRouteImport } from './routes/hero-pack'
 import { Route as FunnyPetPortraitsRouteImport } from './routes/funny-pet-portraits'
 import { Route as DogPortraitsRouteImport } from './routes/dog-portraits'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -76,6 +77,11 @@ const PetPortraitGiftsRoute = PetPortraitGiftsRouteImport.update({
 const PetMemorialPortraitsRoute = PetMemorialPortraitsRouteImport.update({
   id: '/pet-memorial-portraits',
   path: '/pet-memorial-portraits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeroPackRoute = HeroPackRouteImport.update({
+  id: '/hero-pack',
+  path: '/hero-pack',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FunnyPetPortraitsRoute = FunnyPetPortraitsRouteImport.update({
@@ -195,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/dog-portraits': typeof DogPortraitsRoute
   '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
+  '/hero-pack': typeof HeroPackRoute
   '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
   '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
   '/privacy': typeof PrivacyRoute
@@ -224,6 +231,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/dog-portraits': typeof DogPortraitsRoute
   '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
+  '/hero-pack': typeof HeroPackRoute
   '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
   '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
   '/privacy': typeof PrivacyRoute
@@ -254,6 +262,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/dog-portraits': typeof DogPortraitsRoute
   '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
+  '/hero-pack': typeof HeroPackRoute
   '/pet-memorial-portraits': typeof PetMemorialPortraitsRoute
   '/pet-portrait-gifts': typeof PetPortraitGiftsRoute
   '/privacy': typeof PrivacyRoute
@@ -285,6 +294,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/dog-portraits'
     | '/funny-pet-portraits'
+    | '/hero-pack'
     | '/pet-memorial-portraits'
     | '/pet-portrait-gifts'
     | '/privacy'
@@ -314,6 +324,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/dog-portraits'
     | '/funny-pet-portraits'
+    | '/hero-pack'
     | '/pet-memorial-portraits'
     | '/pet-portrait-gifts'
     | '/privacy'
@@ -343,6 +354,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/dog-portraits'
     | '/funny-pet-portraits'
+    | '/hero-pack'
     | '/pet-memorial-portraits'
     | '/pet-portrait-gifts'
     | '/privacy'
@@ -374,6 +386,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   DogPortraitsRoute: typeof DogPortraitsRoute
   FunnyPetPortraitsRoute: typeof FunnyPetPortraitsRoute
+  HeroPackRoute: typeof HeroPackRoute
   PetMemorialPortraitsRoute: typeof PetMemorialPortraitsRoute
   PetPortraitGiftsRoute: typeof PetPortraitGiftsRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -444,6 +457,13 @@ declare module '@tanstack/react-router' {
       path: '/pet-memorial-portraits'
       fullPath: '/pet-memorial-portraits'
       preLoaderRoute: typeof PetMemorialPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hero-pack': {
+      id: '/hero-pack'
+      path: '/hero-pack'
+      fullPath: '/hero-pack'
+      preLoaderRoute: typeof HeroPackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/funny-pet-portraits': {
@@ -636,6 +656,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   DogPortraitsRoute: DogPortraitsRoute,
   FunnyPetPortraitsRoute: FunnyPetPortraitsRoute,
+  HeroPackRoute: HeroPackRoute,
   PetMemorialPortraitsRoute: PetMemorialPortraitsRoute,
   PetPortraitGiftsRoute: PetPortraitGiftsRoute,
   PrivacyRoute: PrivacyRoute,

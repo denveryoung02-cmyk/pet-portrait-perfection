@@ -13,7 +13,7 @@ function Orders() {
     queryFn: async () => {
       const { data } = await supabase
         .from("orders")
-        .select("id, status, total_cents, currency, created_at, tracking_number, order_items(id, quantity, unit_price_cents, products(name, image_url))")
+        .select("id, status, total_cents, currency, created_at, tracking_number, order_items(id, quantity, unit_price_cents, products(name, image_url)), hero_profiles(id)")
         .order("created_at", { ascending: false });
       return data ?? [];
     },
@@ -42,6 +42,15 @@ function Orders() {
                 {(o.order_items ?? []).length} item(s)
                 {o.tracking_number && <> · Tracking: <code className="text-foreground">{o.tracking_number}</code></>}
               </div>
+              {o.hero_profiles && (
+                <Link
+                  to="/hero-pack"
+                  search={{ order: o.id }}
+                  className="mt-3 inline-block rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-secondary"
+                >
+                  View Hero Pack →
+                </Link>
+              )}
             </div>
           ))}
         </div>
