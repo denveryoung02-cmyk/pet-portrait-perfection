@@ -239,6 +239,7 @@ export type Database = {
           achievement_badge: string | null
           adventure_class: string | null
           adventure_rank: string | null
+          certificate_virtue: string | null
           favourite_snack: string | null
           first_viewed_at: string | null
           generated_at: string
@@ -256,6 +257,7 @@ export type Database = {
           achievement_badge?: string | null
           adventure_class?: string | null
           adventure_rank?: string | null
+          certificate_virtue?: string | null
           favourite_snack?: string | null
           first_viewed_at?: string | null
           generated_at?: string
@@ -273,6 +275,7 @@ export type Database = {
           achievement_badge?: string | null
           adventure_class?: string | null
           adventure_rank?: string | null
+          certificate_virtue?: string | null
           favourite_snack?: string | null
           first_viewed_at?: string | null
           generated_at?: string

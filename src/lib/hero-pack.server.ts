@@ -114,6 +114,7 @@ type HeroContent = {
   missionStatement: string;
   achievementBadge: string;
   originStory: string;
+  certificateVirtue: string;
 };
 
 const HERO_CONTENT_SYSTEM_PROMPT = `You write short, warm, playful "trading card" hero profiles for a paid pet-portrait keepsake called the Pawtoons Hero Pack. Non-negotiable rules:
@@ -122,9 +123,10 @@ const HERO_CONTENT_SYSTEM_PROMPT = `You write short, warm, playful "trading card
 - No real people, no trademarked characters or franchises.
 - Family-friendly, gentle humour only. Assume this will be screenshotted and shared — nothing that reads oddly out of context.
 - Register is clever, not childish. The buyer is an adult who loves their pet, not a child playing a game.
+- Match your vocabulary and tone to the theme throughout every field — a graceful theme should sound graceful, an adventurous theme should sound adventurous, a regal theme should sound regal.
 - Respond with strict JSON only, no markdown, no commentary, matching exactly this shape:
-{"hero_name": string, "adventure_class": string, "special_ability": string, "favourite_snack": string, "mission_statement": string, "achievement_badge": string, "origin_story": string}
-"origin_story" is 2-3 short narrative sentences that set a heroic, playful tone (style example: "In a world of squeaky toys and forbidden socks, one dog rises."). "achievement_badge" is a short 2-4 word fun title (example: "Sock Thief"). Do not include a rank or tier field of any kind — that is assigned separately.`;
+{"hero_name": string, "adventure_class": string, "special_ability": string, "favourite_snack": string, "mission_statement": string, "achievement_badge": string, "origin_story": string, "certificate_virtue": string}
+"origin_story" is 2-3 short narrative sentences that set a heroic, playful tone (style example: "In a world of squeaky toys and forbidden socks, one dog rises."). "achievement_badge" is a short 2-4 word fun title (example: "Sock Thief"). "certificate_virtue" is a short 2-4 word virtue or quality phrase completing the sentence "for ___ and [special ability]" on a formal certificate — theme-appropriate, and standalone (do not prepend "outstanding" or similar, the phrase itself is the whole clause) (examples: "elegance and grace" for a graceful theme, "boundless courage" for an adventurous theme, "cunning and charm" for a sly theme, "regal kindness" for a noble theme). Do not include a rank or tier field of any kind — that is assigned separately.`;
 
 async function generateHeroContent(petName: string, artStyleOrTheme: string, env: CloudflareEnv): Promise<HeroContent> {
   const apiKey = env.OPENAI_API_KEY;
@@ -151,7 +153,7 @@ async function generateHeroContent(petName: string, artStyleOrTheme: string, env
   if (!raw) throw new Error("OpenAI did not return content.");
 
   const parsed = JSON.parse(raw);
-  const required = ["hero_name", "adventure_class", "special_ability", "favourite_snack", "mission_statement", "achievement_badge", "origin_story"];
+  const required = ["hero_name", "adventure_class", "special_ability", "favourite_snack", "mission_statement", "achievement_badge", "origin_story", "certificate_virtue"];
   for (const key of required) {
     if (typeof parsed[key] !== "string" || !parsed[key].trim()) {
       throw new Error(`OpenAI response missing/invalid field: ${key}`);
@@ -167,6 +169,7 @@ async function generateHeroContent(petName: string, artStyleOrTheme: string, env
     missionStatement: parsed.mission_statement,
     achievementBadge: parsed.achievement_badge,
     originStory: parsed.origin_story,
+    certificateVirtue: parsed.certificate_virtue,
   };
 }
 
@@ -229,6 +232,7 @@ export async function generateHeroPack(orderId: string, primaryGenerationId: str
         mission_statement: content.missionStatement,
         achievement_badge: content.achievementBadge,
         origin_story: content.originStory,
+        certificate_virtue: content.certificateVirtue,
       }
     : { pet_name: petName };
   const { error: profileUpdateErr } = await supabaseAdmin.from("hero_profiles").update(profileUpdate).eq("order_id", orderId);
@@ -628,7 +632,7 @@ function buildCertificateVNode(content: HeroContent) {
           type: "div",
           props: {
             style: { fontSize: 26, color: MUTED, marginTop: 40, maxWidth: 820, textAlign: "center", display: "flex" },
-            children: `for outstanding bravery and ${content.specialAbility.toLowerCase()}`,
+            children: `for ${(content.certificateVirtue || "their heroic heart").toLowerCase()} and ${content.specialAbility.toLowerCase()}`,
           },
         },
       ],
