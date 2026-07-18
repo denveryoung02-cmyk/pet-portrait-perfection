@@ -90,6 +90,17 @@ export async function uploadPetPhoto(
   };
 }
 
+/**
+ * Update the pet name on an already-created uploaded_images row. Needed
+ * because the upload itself fires as soon as a photo is picked (see
+ * uploadPetPhoto above) — if the user types the name after picking the
+ * photo rather than before, this reconciles the row once they do.
+ */
+export async function updatePetName(uploadedImageId: string, petName: string): Promise<void> {
+  const { error } = await supabase.from("uploaded_images").update({ pet_name: petName }).eq("id", uploadedImageId);
+  if (error) throw new Error(`Could not save pet name: ${error.message}`);
+}
+
 /** Create a short-lived signed URL for previewing a private upload. */
 export async function getSignedPreview(storagePath: string, expiresInSeconds = 60 * 30): Promise<string> {
   const { data, error } = await supabase.storage.from("pet-uploads").createSignedUrl(storagePath, expiresInSeconds);

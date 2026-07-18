@@ -3,7 +3,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { uploadPetPhoto, validateImage } from "@/services/uploads";
+import { uploadPetPhoto, updatePetName, validateImage } from "@/services/uploads";
 import { startGeneration } from "@/services/generations";
 import { track } from "@/lib/analytics";
 import royal from "@/assets/pet-royal.jpg";
@@ -249,6 +249,8 @@ const STEPS = [
   { n: 6, title: "Generate", sub: "AI does the magic" },
 ];
 
+const MAX_PET_NAME_LENGTH = 40;
+
 const GEN_STAGES = [
   { label: "Analyzing pet personality", emoji: "🔍" },
   { label: "Reading those soulful eyes", emoji: "👀" },
@@ -271,6 +273,7 @@ function CreateWizard() {
 
   // Step 1 — upload
   const [file, setFile] = useState<string | null>(null);
+  const [petName, setPetName] = useState("");
   // Step 2 — art style
   const [artStyleId, setArtStyleId] = useState("oil-painting");
   const [fileName, setFileName] = useState("");
@@ -373,7 +376,7 @@ function CreateWizard() {
     }
 
     try {
-      const uploaded = await uploadPetPhoto(f, { onProgress: (n) => setUploadProgress(n) });
+      const uploaded = await uploadPetPhoto(f, { petName: petName.trim() || undefined, onProgress: (n) => setUploadProgress(n) });
       setUploadedImageId(uploaded.id);
       track("photo_uploaded");
     } catch (err) {
@@ -494,8 +497,9 @@ const toggleTrait = (id: string) =>
     setTraits((t) => (t.includes(id) ? t.filter((x) => x !== id) : t.length < 3 ? [...t, id] : t));
 
   /* step gating */
+  const trimmedPetName = petName.trim();
   const canNext = () => {
-    if (step === 1) return !!file;
+    if (step === 1) return !!file && trimmedPetName.length > 0 && trimmedPetName.length <= MAX_PET_NAME_LENGTH;
     if (step === 5 && !session) return false;
     if (step === 5) return !!session;
     if (step === 6) return genDone;
@@ -511,6 +515,13 @@ const toggleTrait = (id: string) =>
     if (step === 6 && genDone) {
       navigate({ to: "/checkout", search: { gen: genId ?? undefined } as any });
       return;
+    }
+    if (step === 1 && uploadedImageId) {
+      // Reconciles the row in case the name was typed after the photo
+      // triggered the upload (uploadPetPhoto fires immediately on pick).
+      updatePetName(uploadedImageId, trimmedPetName).catch((err) => {
+        console.error("[upload] Failed to save pet name:", err);
+      });
     }
     setStep((s) => Math.min(6, s + 1) as any);
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
@@ -553,6 +564,7 @@ const toggleTrait = (id: string) =>
               file={file} fileName={fileName} uploadProgress={uploadProgress}
               uploadError={uploadError} dragOver={dragOver} inputRef={inputRef}
               setDragOver={setDragOver} onPick={onPick} onDrop={onDrop} removeFile={removeFile}
+              petName={petName} setPetName={setPetName}
             />
           )}
           {step === 2 && <StepArtStyle artStyleId={artStyleId} setArtStyleId={setArtStyleId} />}
@@ -708,11 +720,28 @@ function ProgressBar({ step, onJump }: { step: number; onJump: (n: number) => vo
 
 function StepUpload({
   file, fileName, uploadProgress, uploadError, dragOver, inputRef,
-  setDragOver, onPick, onDrop, removeFile,
+  setDragOver, onPick, onDrop, removeFile, petName, setPetName,
 }: any) {
   return (
     <div className="grid lg:grid-cols-[1fr_360px] gap-6 sm:gap-8">
       <div>
+        <div className="mb-4 sm:mb-5">
+          <label htmlFor="pet-name" className="block text-sm font-semibold mb-2">
+            What's your pet's name?
+          </label>
+          <input
+            id="pet-name"
+            type="text"
+            required
+            maxLength={MAX_PET_NAME_LENGTH}
+            value={petName}
+            onChange={(e) => setPetName(e.target.value)}
+            placeholder="e.g. Charlie"
+            className="w-full rounded-xl border border-input bg-background px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <p className="text-xs text-muted-foreground mt-1.5">Their Hero Pack, certificate, and character card will use this name.</p>
+        </div>
+
         {!file ? (
           <div
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
