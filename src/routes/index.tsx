@@ -66,7 +66,10 @@ const kobiHdPortrait = "/hero-pack-demo/kobi-hd-portrait.png";
 const kobiPhoneWallpaper = "/hero-pack-demo/kobi-phone-wallpaper.png";
 const kobiCharacterCard = "/hero-pack-demo/kobi-character-card.png";
 const kobiHeroCertificate = "/hero-pack-demo/kobi-hero-certificate.png";
+const buddyHdPortrait = "/hero-pack-demo/buddy-hd-portrait.png";
+const buddyPhoneWallpaper = "/hero-pack-demo/buddy-phone-wallpaper.png";
 const buddyCharacterCard = "/hero-pack-demo/buddy-character-card.png";
+const buddyHeroCertificate = "/hero-pack-demo/buddy-hero-certificate.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -142,8 +145,8 @@ function Home() {
             </p>
           </div>
 
-          {/* Art Style Samples */}
-          <ArtStyleCarousel />
+          {/* Hero Pack Preview */}
+          <HeroPackPreview />
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
@@ -418,90 +421,49 @@ function Home() {
   );
 }
 
-function ArtStyleCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const dailySets = [
-    // Day 0 (Sunday): royal, mafia, viking oil painting
-    [
-      { name: "Royal", img: royalV1, emoji: "👑", desc: "Cinematic movie poster style" },
-      { name: "Mafia", img: mafiaGen, emoji: "🎩", desc: "Dramatic noir lighting" },
-      { name: "Viking", img: vikingGen, emoji: "⚔️", desc: "Epic Norse scene" },
-    ],
-    // Day 1 (Monday): astronaut, superhero, pirate oil painting
-    [
-      { name: "Astronaut", img: astronautGen, emoji: "🚀", desc: "Deep space backdrop" },
-      { name: "Superhero", img: superheroGen, emoji: "🦸", desc: "Heroic cape flowing" },
-      { name: "Pirate", img: pirateGen, emoji: "🏴‍☠️", desc: "Swashbuckling adventure" },
-    ],
-    // Day 2 (Tuesday): princess, angel, mermaid oil painting
-    [
-      { name: "Princess", img: princessGen, emoji: "👸", desc: "Fairy tale elegance" },
-      { name: "Angel", img: angelGen, emoji: "😇", desc: "Ethereal heavenly glow" },
-      { name: "Mermaid", img: mermaidGen, emoji: "🧜‍♀️", desc: "Enchanting underwater" },
-    ],
-    // Day 3 (Wednesday): wizard, ballerina, flower-crown oil painting
-    [
-      { name: "Wizard", img: wizardGen, emoji: "🧙", desc: "Mystical magical spells" },
-      { name: "Ballerina", img: ballerinaGen, emoji: "🩰", desc: "Graceful stage spotlight" },
-      { name: "Flower Crown", img: flowerCrownGen, emoji: "🌸", desc: "Boho meadow vibes" },
-    ],
-    // Day 4 (Thursday): royal, princess, mermaid pixar
-    [
-      { name: "Royal Pixar", img: royalPixar, emoji: "👑", desc: "Disney 3D animation" },
-      { name: "Princess Pixar", img: princessPixar, emoji: "👸", desc: "Pixar character magic" },
-      { name: "Mermaid Pixar", img: mermaidPixar, emoji: "🧜‍♀️", desc: "Ocean 3D adventure" },
-    ],
-    // Day 5 (Friday): superhero, wizard, ballerina comic book
-    [
-      { name: "Superhero Comic Book", img: superheroComic, emoji: "🦸", desc: "Bold pop art hero" },
-      { name: "Wizard Comic Book", img: wizardComic, emoji: "🧙", desc: "Dynamic ink and action" },
-      { name: "Ballerina Comic Book", img: ballerinaComic, emoji: "🩰", desc: "Vibrant comic-panel dance" },
-    ],
-    // Day 6 (Saturday): viking, angel, flower-crown comic book
-    [
-      { name: "Viking Comic Book", img: vikingComic, emoji: "⚔️", desc: "Bold warrior action lines" },
-      { name: "Angel Comic Book", img: angelComic, emoji: "😇", desc: "Vivid pop art divine" },
-      { name: "Flower Crown Comic Book", img: flowerCrownComic, emoji: "🌸", desc: "Comic-book garden" },
-    ],
-  ];
-
-  const dayOfWeek = new Date().getDay();
-  const styles = dailySets[dayOfWeek];
+function HeroPackPreview() {
+  const [visibleStep, setVisibleStep] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % styles.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [styles.length]);
+    const timers = [0, 500, 1000, 1500].map((delay, i) =>
+      setTimeout(() => setVisibleStep(i + 1), delay)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const packItems = [
+    { img: buddyCharacterCard, label: "Character Card" },
+    { img: buddyHeroCertificate, label: "Hero Certificate" },
+    { img: buddyPhoneWallpaper, label: "Phone Wallpaper" },
+  ];
 
   return (
-    <div className="mt-12 grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      {styles.map((style, i) => (
-        <div
-          key={style.name}
-          className={`group rounded-3xl overflow-hidden bg-card border border-border shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1${i === 2 ? " hidden md:block" : ""}`}
-          style={{ animationDelay: `${i * 120}ms` }}
-        >
-          <div className="relative aspect-square overflow-hidden bg-secondary">
-            <img
-              src={style.img}
-              alt={style.name}
-              className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-500 ${currentIndex === i ? 'opacity-100' : 'opacity-60'}`}
-              loading="eager"
-              fetchPriority={i === 0 ? "high" : "auto"}
-            />
-            <div className={`absolute top-3 left-3 size-12 rounded-2xl bg-background/90 backdrop-blur grid place-items-center text-2xl transition-all duration-500 ${currentIndex === i ? 'scale-110' : 'scale-100'}`}>
-              {style.emoji}
+    <div className="mt-6 max-w-[200px] mx-auto">
+      <div
+        className={`rounded-2xl overflow-hidden bg-card border border-border shadow-[var(--shadow-card)] aspect-square transition-all duration-500 ease-out ${visibleStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+      >
+        <img
+          src={buddyHdPortrait}
+          alt="Buddy's AI-generated Hero Pack portrait"
+          className="w-full h-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+        />
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {packItems.map((item, i) => (
+          <div
+            key={item.label}
+            className={`transition-all duration-500 ease-out ${visibleStep >= i + 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          >
+            <div className="aspect-square rounded-lg overflow-hidden bg-secondary border border-border">
+              <img src={item.img} alt={`${item.label} example — Buddy`} className="w-full h-full object-cover" loading="eager" />
             </div>
+            <div className="mt-1 text-center text-[8px] sm:text-[9px] text-muted-foreground leading-tight">{item.label}</div>
           </div>
-          <div className="p-5 text-center">
-            <div className="font-display text-xl mb-1">{style.name}</div>
-            <div className="text-sm text-muted-foreground">{style.desc}</div>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
