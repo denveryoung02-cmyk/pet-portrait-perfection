@@ -23,7 +23,7 @@ export type GenerationInput = {
 
 const ART_STYLE_PREFIX: Record<string, string> = {
   "oil-painting": "oil painting portrait, rich impasto brushwork, deep saturated colours, dramatic chiaroscuro lighting, old masters technique, canvas texture visible, professional fine art quality, museum-quality portrait painting, warm golden tones, masterful composition",
-  "pixar-3d": "photorealistic dog portrait, natural fur and anatomy, mouth closed or gently open in a soft smile, no visible teeth, except the eyes: the eyes must be drawn 2x larger than a normal dog's eyes, anime-style oversized eyes, this is the single most important instruction",
+  "pixar-3d": "photorealistic pet portrait, natural fur and anatomy, mouth closed or gently open in a soft smile, no visible teeth, except the eyes: the eyes must be drawn 2x larger than a normal pet's eyes, anime-style oversized eyes, this is the single most important instruction",
   "comic-book": "bold comic book illustration, thick black ink outlines, Ben-Day dot halftone shading, Roy Lichtenstein pop art influence, primary colour palette with high contrast, dynamic action pose, vintage Marvel or DC panel energy, screen-printed poster quality, graphic and striking, speech bubble optional",
 };
 
