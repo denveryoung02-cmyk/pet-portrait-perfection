@@ -52,21 +52,26 @@ export const confirmCheckout = createServerFn({ method: "POST" })
       generationId,
       amountTotalCents: session.amountTotalCents,
       wantsBundle: session.wantsBundle,
+      orderType: session.orderType,
     });
     const downloadUrl = await signCleanDownloadUrl(generationId);
 
-    // Fire-and-forget: Hero Pack generation must not delay this response.
-    // generateHeroPack is idempotent per order_id, so it's safe to also
-    // trigger it from the Stripe webhook (src/server.ts) — whichever of the
-    // two fires first wins, the other exits immediately.
-    const heroPackPromise = generateHeroPack(orderId, generationId, env).catch((err) => {
-      console.error("[hero-pack] generation failed (confirmCheckout trigger):", {
-        orderId,
-        generationId,
-        error: err instanceof Error ? err.message : err,
+    // Hero Pack (certificate/card/wallpaper) only applies to the single-pet
+    // flow — multi-subject orders never generate one.
+    if (session.orderType !== "multi_subject") {
+      // Fire-and-forget: Hero Pack generation must not delay this response.
+      // generateHeroPack is idempotent per order_id, so it's safe to also
+      // trigger it from the Stripe webhook (src/server.ts) — whichever of the
+      // two fires first wins, the other exits immediately.
+      const heroPackPromise = generateHeroPack(orderId, generationId, env).catch((err) => {
+        console.error("[hero-pack] generation failed (confirmCheckout trigger):", {
+          orderId,
+          generationId,
+          error: err instanceof Error ? err.message : err,
+        });
       });
-    });
-    getExecutionCtx()?.waitUntil(heroPackPromise);
+      getExecutionCtx()?.waitUntil(heroPackPromise);
+    }
 
     // Send confirmation email (best-effort — failure does not affect the download URL).
     try {
@@ -98,7 +103,7 @@ export const confirmCheckout = createServerFn({ method: "POST" })
       console.error("[email/confirmCheckout] Failed to send order confirmation email:", emailErr);
     }
 
-    return { paid: true as const, downloadUrl, orderId, wantsBundle: session.wantsBundle };
+    return { paid: true as const, downloadUrl, orderId, wantsBundle: session.wantsBundle, orderType: session.orderType };
   });
 
 const CheckBundleInput = z.object({

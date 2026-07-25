@@ -67,9 +67,11 @@ const kobiPhoneWallpaper = "/hero-pack-demo/kobi-phone-wallpaper.png";
 const kobiCharacterCard = "/hero-pack-demo/kobi-character-card.png";
 const kobiHeroCertificate = "/hero-pack-demo/kobi-hero-certificate.png";
 const buddyHdPortrait = "/hero-pack-demo/buddy-hd-portrait.png";
-const buddyPhoneWallpaper = "/hero-pack-demo/buddy-phone-wallpaper.png";
 const buddyCharacterCard = "/hero-pack-demo/buddy-character-card.png";
-const buddyHeroCertificate = "/hero-pack-demo/buddy-hero-certificate.png";
+
+// Owner+pet example — same public/ convention as hero-pack-demo above (real
+// example imagery, not baked-in theme art, so it lives outside src/assets).
+const ownerPetExample = "/owner-pet-demo/owner-pet-example.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -141,22 +143,14 @@ function Home() {
               Every pet has a hidden hero waiting to be discovered.
             </h1>
             <p className="mt-5 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Upload one photo. We'll reveal your pet's Hero Pack.
+              Upload one photo. Create hero artwork starring your pet — or bring the whole family into the adventure.
             </p>
           </div>
 
-          {/* Hero Pack Preview */}
-          <HeroPackPreview />
+          {/* Hero comparison: single-pet vs owner+pet */}
+          <HeroComparisonPreview />
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              to="/upload"
-              onClick={() => track("start_creating_clicked", { source: "hero" })}
-              className="group relative rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
-              style={{ background: "var(--gradient-primary)" }}
-            >
-              ✨ Start Your Hero Journey — it's free to try
-            </Link>
+          <div className="mt-10 flex justify-center">
             <a href="#how" className="rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold border border-foreground/15 hover:bg-card transition">
               See how it works
             </a>
@@ -236,29 +230,7 @@ function Home() {
       <BeforeAfterSection />
 
       {/* HOW IT WORKS */}
-      <section id="how" className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 py-16 sm:py-20 md:py-28">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">How it works</span>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display">Three steps. One masterpiece.</h2>
-        </div>
-        <div className="mt-14 grid md:grid-cols-3 gap-6">
-          {[
-            { n: "01", title: "Upload photo", desc: "Drag in any clear photo of your pet. We handle the rest.", emoji: "📸" },
-            { n: "02", title: "AI creates caricature", desc: "Pick a theme — Royal, Superhero, Viking — and watch the magic.", emoji: "✨" },
-            { n: "03", title: "Download instantly", desc: "Pay once, download your high-quality portrait immediately.", emoji: "⚡" },
-          ].map((s) => (
-            <div key={s.n} className="group relative rounded-3xl bg-card border border-border p-8 hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1">
-              <div className="text-6xl">{s.emoji}</div>
-              <div className="mt-6 flex items-center gap-3">
-                <span className="text-xs font-mono text-primary">{s.n}</span>
-                <div className="h-px flex-1 bg-border" />
-              </div>
-              <h3 className="mt-4 text-2xl font-display">{s.title}</h3>
-              <p className="mt-2 text-muted-foreground leading-relaxed">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <HowItWorksSection />
 
       {/* THEMES */}
       <ThemesSection />
@@ -382,6 +354,42 @@ function Home() {
         </div>
       </section>
 
+      {/* OWNER + PET — /create-group entry point */}
+      <section className="py-16 sm:py-20 md:py-28 bg-secondary/40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">For the whole crew</span>
+            <h2 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-display">Up to 3 people, 3 pets, one scene.</h2>
+            <p className="mt-4 text-muted-foreground">Same AI, same 60 seconds — everyone and every pet painted together in one portrait.</p>
+          </div>
+
+          <div className="max-w-3xl mx-auto rounded-3xl overflow-hidden border border-border shadow-[var(--shadow-card)]">
+            <div className="aspect-[16/10] bg-secondary">
+              <img
+                src={ownerPetExample}
+                alt="AI-generated owner and pet portrait — 2 people and 3 pets together, Pixar 3D style"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <Link
+              to="/create-group"
+              onClick={() => track("start_creating_clicked", { source: "owner_pet_section" })}
+              className="group relative rounded-full px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
+              style={{ background: "var(--gradient-primary)" }}
+            >
+              ✨ Create Your Group Portrait →
+            </Link>
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/30 px-4 py-1.5 text-sm font-semibold text-primary shadow-[var(--shadow-soft)]">
+              From £2.99 · Instant digital download
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-5 md:px-8 pb-20">
         <div className="relative rounded-[2.5rem] overflow-hidden p-10 md:p-20 text-center" style={{ background: "var(--gradient-primary)" }}>
@@ -391,7 +399,7 @@ function Home() {
             Ready to make them famous?
           </h2>
           <p className="relative mt-4 text-primary-foreground/85 max-w-xl mx-auto">
-            Their face. Their personality. Immortalised as stunning art, ready to download in 60 seconds.
+            Their face — or the whole crew's. Immortalised as stunning art, ready to download in 60 seconds.
           </p>
           <Link
             to="/upload"
@@ -421,48 +429,78 @@ function Home() {
   );
 }
 
-function HeroPackPreview() {
-  const [visibleStep, setVisibleStep] = useState(0);
+function HeroComparisonPreview() {
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const timers = [0, 500, 1000, 1500].map((delay, i) =>
-      setTimeout(() => setVisibleStep(i + 1), delay)
-    );
-    return () => timers.forEach(clearTimeout);
+    const timer = setTimeout(() => setVisible(true), 150);
+    return () => clearTimeout(timer);
   }, []);
 
-  const packItems = [
-    { img: buddyCharacterCard, label: "Character Card" },
-    { img: buddyHeroCertificate, label: "Hero Certificate" },
-    { img: buddyPhoneWallpaper, label: "Phone Wallpaper" },
-  ];
-
   return (
-    <div className="mt-6 max-w-[200px] mx-auto">
+    <div className="mt-6 flex flex-row items-start justify-center gap-3 sm:gap-4">
       <div
-        className={`rounded-2xl overflow-hidden bg-card border border-border shadow-[var(--shadow-card)] aspect-square transition-all duration-500 ease-out ${visibleStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        className={`flex flex-col items-center gap-2 w-[130px] sm:w-[170px] transition-all duration-500 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
       >
-        <img
-          src={buddyHdPortrait}
-          alt="Buddy's AI-generated Hero Pack portrait"
-          className="w-full h-full object-cover"
-          loading="eager"
-          fetchPriority="high"
-        />
+        <Link
+          to="/upload"
+          onClick={() => track("start_creating_clicked", { source: "hero_comparison_pet" })}
+          className="group relative w-full hover:-translate-y-1 transition-transform"
+        >
+          <div className="rounded-2xl overflow-hidden bg-card border border-border shadow-[var(--shadow-card)] aspect-square group-hover:shadow-[var(--shadow-card)] transition-shadow">
+            <img
+              src={buddyHdPortrait}
+              alt="Buddy's AI-generated Hero Pack portrait"
+              className="w-full h-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+            />
+          </div>
+          <span className="absolute top-2 left-2 text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-white bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5">
+            🐾 Pet Portrait
+          </span>
+        </Link>
+        <Link
+          to="/upload"
+          onClick={() => track("start_creating_clicked", { source: "hero_comparison_pet_button" })}
+          className="w-full text-center rounded-full px-3 py-2 text-[11px] sm:text-xs font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
+          style={{ background: "var(--gradient-primary)" }}
+        >
+          Create Your Hero →
+        </Link>
       </div>
 
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        {packItems.map((item, i) => (
-          <div
-            key={item.label}
-            className={`transition-all duration-500 ease-out ${visibleStep >= i + 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-          >
-            <div className="aspect-square rounded-lg overflow-hidden bg-secondary border border-border">
-              <img src={item.img} alt={`${item.label} example — Buddy`} className="w-full h-full object-cover" loading="eager" />
-            </div>
-            <div className="mt-1 text-center text-[8px] sm:text-[9px] text-muted-foreground leading-tight">{item.label}</div>
+      <div
+        className={`flex flex-col items-center gap-2 w-[130px] sm:w-[170px] transition-all duration-500 ease-out delay-150 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+      >
+        <Link
+          to="/create-group"
+          onClick={() => track("start_creating_clicked", { source: "hero_comparison_group" })}
+          className="group relative w-full hover:-translate-y-1 transition-transform"
+        >
+          <div className="rounded-2xl overflow-hidden bg-card border border-border shadow-[var(--shadow-card)] aspect-square group-hover:shadow-[var(--shadow-card)] transition-shadow">
+            <img
+              src={ownerPetExample}
+              alt="AI-generated owner and pet portrait — 2 people and 3 pets together, Pixar 3D style"
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
           </div>
-        ))}
+          <span
+            className="absolute top-2 left-2 text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-white rounded-full px-2 py-0.5"
+            style={{ background: "var(--gradient-primary)" }}
+          >
+            👨‍👩‍👧‍👦 Family Portrait
+          </span>
+        </Link>
+        <Link
+          to="/create-group"
+          onClick={() => track("start_creating_clicked", { source: "hero_comparison_group_button" })}
+          className="w-full text-center rounded-full px-3 py-2 text-[11px] sm:text-xs font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
+          style={{ background: "var(--gradient-primary)" }}
+        >
+          Create Family Portrait →
+        </Link>
       </div>
     </div>
   );
@@ -636,6 +674,70 @@ function BeforeAfterCard({ before, after, label, eager }: {
       </div>
       <p className="mt-2.5 text-center text-sm font-semibold">{label}</p>
     </div>
+  );
+}
+
+function HowItWorksSection() {
+  const [mode, setMode] = useState<"pet" | "family">("pet");
+
+  const petSteps = [
+    { n: "01", title: "Upload photo", desc: "Drag in any clear photo of your pet. We handle the rest.", emoji: "📸" },
+    { n: "02", title: "AI creates caricature", desc: "Pick a theme — Royal, Superhero, Viking — and watch the magic.", emoji: "✨" },
+    { n: "03", title: "Download instantly", desc: "Pay once, download your high-quality Hero Pack immediately.", emoji: "⚡" },
+  ];
+
+  const familySteps = [
+    { n: "01", title: "Upload your crew", desc: "1 pet, multiple pets, or up to 3 people and 3 pets — however your family looks.", emoji: "📸" },
+    { n: "02", title: "AI paints your scene", desc: "Everyone and every pet, painted together in one theme.", emoji: "✨" },
+    { n: "03", title: "Download instantly", desc: "Pay once, download your high-quality family portrait immediately.", emoji: "⚡" },
+  ];
+
+  const steps = mode === "pet" ? petSteps : familySteps;
+
+  return (
+    <section id="how" className="mx-auto max-w-7xl px-4 sm:px-5 md:px-8 py-16 sm:py-20 md:py-28">
+      <div className="text-center max-w-2xl mx-auto">
+        <span className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">How it works</span>
+        <h2 className="mt-3 text-4xl md:text-5xl font-display">Three steps. One masterpiece.</h2>
+      </div>
+
+      <div className="mt-8 flex justify-center">
+        <div className="flex w-full sm:w-auto rounded-full bg-card border border-border p-1.5 shadow-[var(--shadow-soft)]">
+          <button
+            onClick={() => setMode("pet")}
+            className={`flex-1 sm:flex-none rounded-full px-5 sm:px-7 py-3 text-sm sm:text-base font-semibold transition-all whitespace-nowrap ${
+              mode === "pet" ? "text-primary-foreground shadow-[var(--shadow-glow)]" : "text-muted-foreground hover:text-foreground"
+            }`}
+            style={mode === "pet" ? { background: "var(--gradient-primary)" } : undefined}
+          >
+            🐾 Just your pet
+          </button>
+          <button
+            onClick={() => setMode("family")}
+            className={`flex-1 sm:flex-none rounded-full px-5 sm:px-7 py-3 text-sm sm:text-base font-semibold transition-all whitespace-nowrap ${
+              mode === "family" ? "text-primary-foreground shadow-[var(--shadow-glow)]" : "text-muted-foreground hover:text-foreground"
+            }`}
+            style={mode === "family" ? { background: "var(--gradient-primary)" } : undefined}
+          >
+            👨‍👩‍👧‍👦 The whole family
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-10 grid md:grid-cols-3 gap-6">
+        {steps.map((s) => (
+          <div key={s.n} className="group relative rounded-3xl bg-card border border-border p-8 hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1">
+            <div className="text-6xl">{s.emoji}</div>
+            <div className="mt-6 flex items-center gap-3">
+              <span className="text-xs font-mono text-primary">{s.n}</span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+            <h3 className="mt-4 text-2xl font-display">{s.title}</h3>
+            <p className="mt-2 text-muted-foreground leading-relaxed">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 

@@ -93,25 +93,32 @@ async function handleStripeWebhook(request: Request, env: CloudflareEnv): Promis
     if (event.type === "checkout.session.completed") {
       const session = event.data?.object ?? {};
       const generationId: string | undefined = session?.metadata?.generationId;
+      const orderType: "single_pet" | "multi_subject" =
+        session?.metadata?.orderType === "multi_subject" ? "multi_subject" : "single_pet";
       if (session?.payment_status === "paid" && session?.id && generationId) {
         const { orderId } = await recordPaidOrder({
           sessionId: session.id,
           generationId,
           amountTotalCents: typeof session.amount_total === "number" ? session.amount_total : null,
           wantsBundle: session.metadata?.wantsBundle === "true",
+          orderType,
         });
 
-        // Fire-and-forget: Hero Pack generation must not delay the webhook's
-        // 200 response to Stripe. generateHeroPack is idempotent per order_id,
-        // so it's safe to also trigger it from confirmCheckout below.
-        const heroPackPromise = generateHeroPack(orderId, generationId, env).catch((err) => {
-          console.error("[hero-pack] generation failed (webhook trigger):", {
-            orderId,
-            generationId,
-            error: err instanceof Error ? err.message : err,
+        // Hero Pack (certificate/card/wallpaper) only applies to the
+        // single-pet flow — multi-subject orders never generate one.
+        if (orderType !== "multi_subject") {
+          // Fire-and-forget: Hero Pack generation must not delay the webhook's
+          // 200 response to Stripe. generateHeroPack is idempotent per order_id,
+          // so it's safe to also trigger it from confirmCheckout below.
+          const heroPackPromise = generateHeroPack(orderId, generationId, env).catch((err) => {
+            console.error("[hero-pack] generation failed (webhook trigger):", {
+              orderId,
+              generationId,
+              error: err instanceof Error ? err.message : err,
+            });
           });
-        });
-        getExecutionCtx()?.waitUntil(heroPackPromise);
+          getExecutionCtx()?.waitUntil(heroPackPromise);
+        }
       }
     }
   } catch (error) {

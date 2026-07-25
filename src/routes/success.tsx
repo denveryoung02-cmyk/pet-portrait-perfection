@@ -32,9 +32,11 @@ function Success() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [orderType, setOrderType] = useState<"single_pet" | "multi_subject" | null>(null);
   const [wantsBundle, setWantsBundle] = useState(false);
   const [bundlePortraits, setBundlePortraits] = useState<BundlePortrait[]>([]);
   const [bundleReady, setBundleReady] = useState(false);
+  const [heroPackReady, setHeroPackReady] = useState(false);
 
   useEffect(() => {
     if (!generationId || !sessionId) {
@@ -68,6 +70,7 @@ function Success() {
         setDownloadUrl(res.downloadUrl);
         if (res.orderId) setOrderId(res.orderId);
         if (res.wantsBundle) setWantsBundle(true);
+        if (res.orderType) setOrderType(res.orderType);
         track("payment_completed", { bundle: !!res.wantsBundle });
       } catch {
         setError("Something went wrong confirming your purchase.");
@@ -103,6 +106,34 @@ function Success() {
     }, 10000);
     return () => clearInterval(interval);
   }, [orderId, wantsBundle, bundleReady]);
+
+  // Poll for the Hero Pack (certificate/card/wallpaper) every 10s, same
+  // shape as the bundle poller above. generateHeroPack (confirmCheckout /
+  // server.ts) runs fire-and-forget, so the hero_profiles row may not exist
+  // yet when this page first loads even for a legitimate single-pet order —
+  // a one-time check would false-negative. Never polls for multi_subject
+  // orders, since those never get a Hero Pack. Reads hero_profiles directly
+  // via the client (RLS-scoped by hero_profiles_owner_select) rather than a
+  // new server function, per the existing dashboard.orders.tsx pattern.
+  useEffect(() => {
+    if (!orderId || orderType === "multi_subject" || heroPackReady) return;
+    const interval = setInterval(async () => {
+      try {
+        const { data } = await supabase
+          .from("hero_profiles")
+          .select("id")
+          .eq("order_id", orderId)
+          .maybeSingle();
+        if (data) {
+          setHeroPackReady(true);
+          clearInterval(interval);
+        }
+      } catch {
+        // best-effort — keep polling
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [orderId, orderType, heroPackReady]);
 
   async function handleDownload(url: string, filename: string) {
     try {
@@ -179,6 +210,35 @@ function Success() {
                   High-resolution PNG · Yours to keep, share &amp; print
                 </p>
               </div>
+            )}
+
+            {/* Hero Pack reveal — never shown for multi_subject orders */}
+            {orderId && orderType !== "multi_subject" && (
+              heroPackReady ? (
+                <div className="rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-6 text-left space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="text-3xl">🏆</div>
+                    <div>
+                      <h3 className="font-display text-base sm:text-lg">Your Hero Pack is ready!</h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                        Certificate, character card &amp; phone wallpaper — all waiting to be revealed.
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    to="/hero-pack"
+                    search={{ order: orderId }}
+                    className="inline-flex items-center gap-2 rounded-full px-5 sm:px-6 py-2.5 sm:py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.02]"
+                    style={{ background: "var(--gradient-primary)" }}
+                  >
+                    🎉 View My Hero Pack →
+                  </Link>
+                </div>
+              ) : (
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  ✨ Your Hero Pack (certificate, wallpaper &amp; character card) is being prepared — this page will update automatically.
+                </p>
+              )
             )}
 
             {/* Bundle section */}

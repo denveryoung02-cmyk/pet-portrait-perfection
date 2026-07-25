@@ -16,7 +16,7 @@ Stack: React 19 + TanStack Start + Vite + TypeScript + Tailwind 4 + Supabase + S
 
 ## Commands
 ```bash
-npm run dev                # Local dev (localhost:8082)
+npm run dev                # Local dev (localhost:8080)
 npm run deploy:staging     # Deploy to staging
 npm run deploy             # Deploy to production (pawtoons.co)
 ```

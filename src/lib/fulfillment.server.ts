@@ -24,6 +24,7 @@ export type StripeSessionResult = {
   generationId: string | null;
   amountTotalCents: number | null;
   wantsBundle: boolean;
+  orderType: "single_pet" | "multi_subject";
 };
 
 /** Retrieve a Checkout Session from Stripe and report whether it is paid. */
@@ -38,7 +39,7 @@ export async function retrieveStripeSession(
     `https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionId)}`,
     { headers: { Authorization: `Bearer ${key}` } },
   );
-  if (!res.ok) return { paid: false, generationId: null, amountTotalCents: null, wantsBundle: false };
+  if (!res.ok) return { paid: false, generationId: null, amountTotalCents: null, wantsBundle: false, orderType: "single_pet" };
 
   const session: any = await res.json();
   return {
@@ -46,30 +47,32 @@ export async function retrieveStripeSession(
     generationId: session?.metadata?.generationId ?? null,
     amountTotalCents: typeof session?.amount_total === "number" ? session.amount_total : null,
     wantsBundle: session?.metadata?.wantsBundle === "true",
+    orderType: session?.metadata?.orderType === "multi_subject" ? "multi_subject" : "single_pet",
   };
 }
 
 /**
  * Idempotently record a paid order for a Stripe session. Keyed on
- * stripe_session_id so repeated calls (success page + webhook) are safe.
- * Derives the owning user from the generation row.
+ * stripe_session_id (now a unique column — see the
+ * orders_stripe_session_id_unique migration) so repeated calls (success
+ * page + webhook, or a Stripe webhook retry) are safe even under real
+ * concurrency. Derives the owning user from the generation row.
+ *
+ * Uses an atomic upsert+onConflict claim, the same pattern as
+ * generateHeroPack (hero-pack.server.ts:180-184), instead of a
+ * select-then-insert: the old check-then-act had a real race window between
+ * the webhook and success-page paths that produced duplicate orders rows in
+ * production data (found and cleaned up before this fix landed).
  */
 export async function recordPaidOrder(opts: {
   sessionId: string;
   generationId: string;
   amountTotalCents?: number | null;
   wantsBundle?: boolean;
+  orderType?: "single_pet" | "multi_subject";
 }): Promise<{ orderId: string }> {
   const { sessionId, generationId } = opts;
   const total = opts.amountTotalCents ?? DIGITAL_PRICE_CENTS;
-
-  // Already recorded? (idempotency)
-  const { data: existing } = await supabaseAdmin
-    .from("orders")
-    .select("id")
-    .eq("stripe_session_id", sessionId)
-    .maybeSingle();
-  if (existing) return { orderId: existing.id };
 
   const { data: gen } = await supabaseAdmin
     .from("generations")
@@ -78,37 +81,52 @@ export async function recordPaidOrder(opts: {
     .single();
   if (!gen?.user_id) throw new Error("Generation not found for order.");
 
-  const { data: order, error: ordErr } = await supabaseAdmin
+  const { data: claimed, error: upsertErr } = await supabaseAdmin
     .from("orders")
-    .insert({
-      user_id: gen.user_id,
-      status: "paid",
-      currency: "gbp",
-      subtotal_cents: total,
-      total_cents: total,
-      stripe_session_id: sessionId,
-      wants_bundle: opts.wantsBundle ?? false,
-    })
+    .upsert(
+      {
+        user_id: gen.user_id,
+        status: "paid",
+        currency: "gbp",
+        subtotal_cents: total,
+        total_cents: total,
+        stripe_session_id: sessionId,
+        wants_bundle: opts.wantsBundle ?? false,
+        order_type: opts.orderType ?? "single_pet",
+      },
+      { onConflict: "stripe_session_id", ignoreDuplicates: true }
+    )
     .select("id")
-    .single();
-  if (ordErr || !order) throw new Error(ordErr?.message ?? "Could not record order.");
+    .maybeSingle();
+  if (upsertErr) throw new Error(upsertErr.message);
 
-  const { error: itemErr } = await supabaseAdmin.from("order_items").insert({
-    order_id: order.id,
-    generation_id: generationId,
-    quantity: 1,
-    unit_price_cents: total,
-    options: { type: "digital_download" },
-  });
-  if (itemErr) {
-    console.error("[order] Failed to insert order_item:", {
-      orderId: order.id,
-      generationId,
-      error: itemErr,
+  if (claimed) {
+    // We won the claim — this is the only call that writes order_items too.
+    const { error: itemErr } = await supabaseAdmin.from("order_items").insert({
+      order_id: claimed.id,
+      generation_id: generationId,
+      quantity: 1,
+      unit_price_cents: total,
+      options: { type: "digital_download" },
     });
+    if (itemErr) {
+      console.error("[order] Failed to insert order_item:", {
+        orderId: claimed.id,
+        generationId,
+        error: itemErr,
+      });
+    }
+    return { orderId: claimed.id };
   }
 
-  return { orderId: order.id };
+  // Another call already claimed this session — look up its order id instead.
+  const { data: existing, error: existingErr } = await supabaseAdmin
+    .from("orders")
+    .select("id")
+    .eq("stripe_session_id", sessionId)
+    .single();
+  if (existingErr || !existing) throw new Error(existingErr?.message ?? "Could not find existing order for session.");
+  return { orderId: existing.id };
 }
 
 /** Store the AIML video task ID on an order row once generation has been kicked off. */

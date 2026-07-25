@@ -554,7 +554,7 @@ const toggleTrait = (id: string) =>
           </span>
           <h1 className="mt-2 text-2xl sm:text-3xl md:text-5xl font-display leading-tight">{stepHeadline(step)}</h1>
           <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-secondary border border-border px-3 py-1 text-xs text-muted-foreground">
-            👀 You'll see your portrait before you pay · From £1.99
+            👀 You'll see your portrait before you pay · Hero Pack included · From £1.99
           </div>
         </header>
 
@@ -633,7 +633,7 @@ const toggleTrait = (id: string) =>
             {step === 6 && !genDone
               ? "Generating…"
               : step === 6 && genDone
-              ? "Unlock My Portrait — £1.99 →"
+              ? "Unlock My Hero Pack — £1.99 →"
               : "Next →"}
           </button>
         </div>

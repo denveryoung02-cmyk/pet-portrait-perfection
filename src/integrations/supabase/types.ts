@@ -367,6 +367,7 @@ export type Database = {
           created_at: string
           currency: string
           id: string
+          order_type: string
           shipping_address: Json | null
           shipping_cents: number
           status: Database["public"]["Enums"]["order_status"]
@@ -386,6 +387,7 @@ export type Database = {
           created_at?: string
           currency?: string
           id?: string
+          order_type?: string
           shipping_address?: Json | null
           shipping_cents?: number
           status?: Database["public"]["Enums"]["order_status"]
@@ -405,6 +407,7 @@ export type Database = {
           created_at?: string
           currency?: string
           id?: string
+          order_type?: string
           shipping_address?: Json | null
           shipping_cents?: number
           status?: Database["public"]["Enums"]["order_status"]
@@ -521,6 +524,7 @@ export type Database = {
           pet_name: string | null
           public_url: string | null
           storage_path: string
+          subject_type: string | null
           user_id: string
         }
         Insert: {
@@ -529,6 +533,7 @@ export type Database = {
           pet_name?: string | null
           public_url?: string | null
           storage_path: string
+          subject_type?: string | null
           user_id: string
         }
         Update: {
@@ -537,6 +542,7 @@ export type Database = {
           pet_name?: string | null
           public_url?: string | null
           storage_path?: string
+          subject_type?: string | null
           user_id?: string
         }
         Relationships: []

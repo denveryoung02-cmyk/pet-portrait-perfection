@@ -20,6 +20,7 @@ import { Route as PetMemorialPortraitsRouteImport } from './routes/pet-memorial-
 import { Route as HeroPackRouteImport } from './routes/hero-pack'
 import { Route as FunnyPetPortraitsRouteImport } from './routes/funny-pet-portraits'
 import { Route as DogPortraitsRouteImport } from './routes/dog-portraits'
+import { Route as CreateGroupRouteImport } from './routes/create-group'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CatPortraitsRouteImport } from './routes/cat-portraits'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -92,6 +93,11 @@ const FunnyPetPortraitsRoute = FunnyPetPortraitsRouteImport.update({
 const DogPortraitsRoute = DogPortraitsRouteImport.update({
   id: '/dog-portraits',
   path: '/dog-portraits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateGroupRoute = CreateGroupRouteImport.update({
+  id: '/create-group',
+  path: '/create-group',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cat-portraits': typeof CatPortraitsRoute
   '/checkout': typeof CheckoutRoute
+  '/create-group': typeof CreateGroupRoute
   '/dog-portraits': typeof DogPortraitsRoute
   '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
   '/hero-pack': typeof HeroPackRoute
@@ -229,6 +236,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cat-portraits': typeof CatPortraitsRoute
   '/checkout': typeof CheckoutRoute
+  '/create-group': typeof CreateGroupRoute
   '/dog-portraits': typeof DogPortraitsRoute
   '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
   '/hero-pack': typeof HeroPackRoute
@@ -260,6 +268,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/cat-portraits': typeof CatPortraitsRoute
   '/checkout': typeof CheckoutRoute
+  '/create-group': typeof CreateGroupRoute
   '/dog-portraits': typeof DogPortraitsRoute
   '/funny-pet-portraits': typeof FunnyPetPortraitsRoute
   '/hero-pack': typeof HeroPackRoute
@@ -292,6 +301,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cat-portraits'
     | '/checkout'
+    | '/create-group'
     | '/dog-portraits'
     | '/funny-pet-portraits'
     | '/hero-pack'
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cat-portraits'
     | '/checkout'
+    | '/create-group'
     | '/dog-portraits'
     | '/funny-pet-portraits'
     | '/hero-pack'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cat-portraits'
     | '/checkout'
+    | '/create-group'
     | '/dog-portraits'
     | '/funny-pet-portraits'
     | '/hero-pack'
@@ -384,6 +396,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CatPortraitsRoute: typeof CatPortraitsRoute
   CheckoutRoute: typeof CheckoutRoute
+  CreateGroupRoute: typeof CreateGroupRoute
   DogPortraitsRoute: typeof DogPortraitsRoute
   FunnyPetPortraitsRoute: typeof FunnyPetPortraitsRoute
   HeroPackRoute: typeof HeroPackRoute
@@ -478,6 +491,13 @@ declare module '@tanstack/react-router' {
       path: '/dog-portraits'
       fullPath: '/dog-portraits'
       preLoaderRoute: typeof DogPortraitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create-group': {
+      id: '/create-group'
+      path: '/create-group'
+      fullPath: '/create-group'
+      preLoaderRoute: typeof CreateGroupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -654,6 +674,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CatPortraitsRoute: CatPortraitsRoute,
   CheckoutRoute: CheckoutRoute,
+  CreateGroupRoute: CreateGroupRoute,
   DogPortraitsRoute: DogPortraitsRoute,
   FunnyPetPortraitsRoute: FunnyPetPortraitsRoute,
   HeroPackRoute: HeroPackRoute,
