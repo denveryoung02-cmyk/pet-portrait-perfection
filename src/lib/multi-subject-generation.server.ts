@@ -74,6 +74,42 @@ function buildMultiSubjectEditPrompt(subjects: MultiSubjectSubject[], artStyleId
   ].join(" ");
 }
 
+// Validated in the OpenAI Playground on 2026-07-04 for a 2-person + 2-pet scene.
+// The shared ART_STYLE_PREFIX["pixar-3d"] (see prompts.ts:26) is pure pet-anatomy
+// language with no human-stylization instruction at all, which is why humans
+// rendered photorealistic in multi-subject Pixar 3D portraits. This template
+// instead declares the whole scene as animated/non-photoreal up front and gives
+// humans and pets their own separate stylization instructions. Used only when
+// artStyleId === "pixar-3d" — oil-painting and comic-book still go through
+// buildMultiSubjectEditPrompt above, unchanged.
+function buildMultiSubjectPixar3DPrompt(subjects: MultiSubjectSubject[]): string {
+  const listed = subjects
+    .map((s, i) => `${i + 1}) ${s.subjectType === "person" ? "a person" : "a pet"} named ${s.name}`)
+    .join(" ");
+  const hasHuman = subjects.some((s) => s.subjectType === "person");
+  const hasPet = subjects.some((s) => s.subjectType === "pet");
+
+  return [
+    `This entire image is a single Pixar 3D animated movie still — not a photorealistic photo.`,
+    `Every person and animal in this scene is a fully stylized 3D animated character, rendered in one consistent style, same lighting, same surface texture. Nothing in this image should look photorealistic.`,
+    `Render all ${subjects.length} reference subjects together in one scene: ${listed}, standing/sitting together as a group, same Pixar 3D animated world.`,
+    `STYLE (whole scene): Pixar 3D animation style, smooth clay-like surface texture, Disney Pixar character aesthetic, bright saturated colours, soft studio lighting, stylized cartoon proportions, heroic group pose.`,
+    hasHuman
+      ? `HUMANS: rounded, simplified facial features, smooth stylized Pixar-style skin texture and proportions, while keeping each person's facial structure recognisable as their reference photo — this is not a caricature, it's a Pixar-style animated version of the same person.`
+      : "",
+    hasPet
+      ? `PETS: exaggerated oversized eyes (roughly 2x larger than a real animal's eyes), anime-style oversized eyes, simplified rounded features, mouth closed or gently open in a soft smile, no visible teeth.`
+      : "",
+    `BACKGROUND: simple neutral studio background, soft gradient, no photoreal elements.`,
+    `This is the single most important instruction: the whole scene — every human and every animal — must look like a single frame from an animated 3D movie, not a photo edited to look cartoonish.`,
+    `Keep every subject clearly recognisable and faithful to their reference photo — preserve each person's face and each pet's breed, fur colour and markings.`,
+    `High-quality digital illustration, premium gifting product art, square 1:1 composition, centred subjects, clean background.`,
+    `No text, no watermarks, no logos.`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 export type GenerateMultiSubjectDeps = {
   supabaseAdmin: SupabaseClient<Database>;
   openaiApiKey: string;
@@ -117,7 +153,12 @@ export async function runMultiSubjectGeneration(
   // generatePawtoon (generations.functions.ts:68-91). uploaded_image_id
   // points at the first subject for traceability; the full subject list
   // lives in generation_params per the Step 1 migration comment.
-  const prompt = buildMultiSubjectEditPrompt(input.subjects, input.artStyleId);
+  // pixar-3d gets its own template (see buildMultiSubjectPixar3DPrompt comment
+  // for why) — oil-painting and comic-book are unaffected, unchanged path.
+  const prompt =
+    input.artStyleId === "pixar-3d"
+      ? buildMultiSubjectPixar3DPrompt(input.subjects)
+      : buildMultiSubjectEditPrompt(input.subjects, input.artStyleId);
   const { data: genRow, error: insErr } = await db
     .from("generations")
     .insert({
