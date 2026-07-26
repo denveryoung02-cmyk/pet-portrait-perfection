@@ -229,10 +229,16 @@ export async function runMultiSubjectGeneration(
     return { status: "completed", generationId, previewUrl };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Generation failed.";
-    await db
+    const { error: failUpdateErr } = await db
       .from("generations")
       .update({ status: "failed", error: message, updated_at: new Date().toISOString() })
       .eq("id", generationId);
+    if (failUpdateErr) {
+      console.error(
+        `[multi-subject-generation] Failed to mark generation ${generationId} as failed:`,
+        failUpdateErr.message
+      );
+    }
     return { status: "failed", generationId, error: message };
   }
 }
