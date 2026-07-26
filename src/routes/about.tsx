@@ -30,7 +30,7 @@ export const Route = createFileRoute("/about")({
             "url": "https://www.pawtoons.co",
             "foundingDate": "2024",
             "description":
-              "Pawtoons is a UK-based AI pet portrait service. We create custom AI-generated pet portraits from a single photo in approximately 60 seconds. Our portraits are available in three art styles (Oil Painting, Pixar 3D, Watercolour) across 12 unique themes. Instant digital download from £1.99.",
+              "Pawtoons is a UK-based AI pet portrait service. We create custom AI-generated pet portraits from a single photo in approximately 60 seconds. Our portraits are available in three art styles (Oil Painting, Pixar 3D, Comic Book) across 12 unique themes. Instant digital download from £1.99.",
             "areaServed": "GB",
             "contactPoint": {
               "@type": "ContactPoint",
@@ -84,7 +84,7 @@ function AboutPage() {
         <p className="text-gray-700 mb-4">
           Pawtoons is an AI pet portrait service based in the UK. You upload a
           single photo of your pet, choose an art style (Oil Painting, Pixar 3D,
-          or Watercolour) and a theme (Royal, Superhero, Viking, and 9 more), and
+          or Comic Book) and a theme (Royal, Superhero, Viking, and 9 more), and
           our AI generates a high-resolution custom portrait in approximately 60
           seconds.
         </p>

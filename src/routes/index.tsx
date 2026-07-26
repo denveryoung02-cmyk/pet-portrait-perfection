@@ -19,29 +19,17 @@ import ballerinaGen from "@/assets/gen-ballerina-v1.webp";
 import flowerCrownGen from "@/assets/gen-flower crown-v1.webp";
 import royalPixar from "@/assets/gen-pixar-royal-v1.webp";
 import superheroPixar from "@/assets/gen-Pixar-Superhero-v1.webp";
-import princessWatercolour from "@/assets/gen-watercolour-princess-v1.webp";
 
-import royalWatercolour from "@/assets/gen-watercolour-royal-v1.webp";
 import mafiaPixar from "@/assets/gen-pixar-mafia-v1.webp";
-import mafiaWatercolour from "@/assets/gen-watercolour-mafia-v1.webp";
 import vikingPixar from "@/assets/gen-pixar-viking-v1.webp";
-import vikingWatercolour from "@/assets/gen-watercolour-viking-v1.webp";
 import astronautPixar from "@/assets/gen-pixar-astronaut-v1.webp";
-import astronautWatercolour from "@/assets/gen-Watercolour-astronaut-v1.webp";
-import superheroWatercolour from "@/assets/gen-watercolour-superhero-v1.webp";
 import piratePixar from "@/assets/gen-pixar-pirate-v1.webp";
-import pirateWatercolour from "@/assets/gen-watercolour-pirate-v1.webp";
 import princessPixar from "@/assets/gen-pixar-princess-v1.webp";
 import angelPixar from "@/assets/gen-pixar-angel-v1.webp";
-import angelWatercolour from "@/assets/gen-watercolour-angel-v1.webp";
 import mermaidPixar from "@/assets/gen-pixar-mermaid-v1.webp";
-import mermaidWatercolour from "@/assets/gen-watercolour-mermaid-v1.webp";
 import wizardPixar from "@/assets/gen-pixar-wizard-v1.webp";
-import wizardWatercolour from "@/assets/gen-watercolour-wizard-v1.webp";
 import ballerinaPixar from "@/assets/gen-pixar-ballerina-v1.webp";
-import ballerinaWatercolour from "@/assets/gen-watercolour-ballerina-v1.webp";
 import flowerCrownPixar from "@/assets/gen-pixar-flower crown-v1.webp";
-import flowerCrownWatercolour from "@/assets/gen-watercolour-flower crown-v1.webp";
 
 import princessComic from "@/assets/gen-comic-princess-v1.webp";
 import royalComic from "@/assets/gen-comic-royal-v1.webp";
@@ -97,18 +85,18 @@ export const Route = createFileRoute("/")({
 });
 
 const themes = [
-  { name: "Royal Pet", imgOil: royalV1, imgPixar: royalPixar, imgWatercolour: royalWatercolour, imgComic: royalComic, tag: "Crown jewels", alt: "AI royal pet portrait in oil painting style — dog wearing crown" },
-  { name: "Superhero Pet", imgOil: superheroGen, imgPixar: superheroPixar, imgWatercolour: superheroWatercolour, imgComic: superheroComic, tag: "Cape included", alt: "AI superhero pet portrait — dog in cape, Pixar 3D style" },
-  { name: "Mafia Boss", imgOil: mafiaGen, imgPixar: mafiaPixar, imgWatercolour: mafiaWatercolour, imgComic: mafiaComic, tag: "Don't mess", alt: "AI mafia boss pet portrait — pet in formal suit" },
-  { name: "Viking Warrior", imgOil: vikingGen, imgPixar: vikingPixar, imgWatercolour: vikingWatercolour, imgComic: vikingComic, tag: "Battle ready", alt: "AI viking warrior pet portrait — dog in battle armour" },
-  { name: "Astronaut Explorer", imgOil: astronautGen, imgPixar: astronautPixar, imgWatercolour: astronautWatercolour, imgComic: astronautComic, tag: "To infinity", alt: "AI astronaut pet portrait — cat in space suit" },
-  { name: "Pirate Captain", imgOil: pirateGen, imgPixar: piratePixar, imgWatercolour: pirateWatercolour, imgComic: pirateComic, tag: "Arrr-mazing", alt: "AI pirate captain pet portrait — pet with tricorn hat" },
-  { name: "Princess", imgOil: princessGen, imgPixar: princessPixar, imgWatercolour: princessWatercolour, imgComic: princessComic, tag: "Fairy tale", alt: "AI princess pet portrait in fairy tale style" },
-  { name: "Angel", imgOil: angelGen, imgPixar: angelPixar, imgWatercolour: angelWatercolour, imgComic: angelComic, tag: "Garden guardian", alt: "AI angel pet portrait with wings and halo" },
-  { name: "Mermaid", imgOil: mermaidGen, imgPixar: mermaidPixar, imgWatercolour: mermaidWatercolour, imgComic: mermaidComic, tag: "Under the sea", alt: "AI mermaid pet portrait — underwater scene" },
-  { name: "Wizard", imgOil: wizardGen, imgPixar: wizardPixar, imgWatercolour: wizardWatercolour, imgComic: wizardComic, tag: "Magical", alt: "AI wizard pet portrait with staff and magical robes" },
-  { name: "Ballerina", imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgWatercolour: ballerinaWatercolour, imgComic: ballerinaComic, tag: "Graceful", alt: "AI ballerina pet portrait in graceful dance pose" },
-  { name: "Flower Crown", imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgWatercolour: flowerCrownWatercolour, imgComic: flowerCrownComic, tag: "Boho vibes", alt: "AI flower crown pet portrait — boho meadow style" },
+  { name: "Royal Pet", imgOil: royalV1, imgPixar: royalPixar, imgComic: royalComic, tag: "Crown jewels", alt: "AI royal pet portrait in oil painting style — dog wearing crown" },
+  { name: "Superhero Pet", imgOil: superheroGen, imgPixar: superheroPixar, imgComic: superheroComic, tag: "Cape included", alt: "AI superhero pet portrait — dog in cape, Pixar 3D style" },
+  { name: "Mafia Boss", imgOil: mafiaGen, imgPixar: mafiaPixar, imgComic: mafiaComic, tag: "Don't mess", alt: "AI mafia boss pet portrait — pet in formal suit" },
+  { name: "Viking Warrior", imgOil: vikingGen, imgPixar: vikingPixar, imgComic: vikingComic, tag: "Battle ready", alt: "AI viking warrior pet portrait — dog in battle armour" },
+  { name: "Astronaut Explorer", imgOil: astronautGen, imgPixar: astronautPixar, imgComic: astronautComic, tag: "To infinity", alt: "AI astronaut pet portrait — cat in space suit" },
+  { name: "Pirate Captain", imgOil: pirateGen, imgPixar: piratePixar, imgComic: pirateComic, tag: "Arrr-mazing", alt: "AI pirate captain pet portrait — pet with tricorn hat" },
+  { name: "Princess", imgOil: princessGen, imgPixar: princessPixar, imgComic: princessComic, tag: "Fairy tale", alt: "AI princess pet portrait in fairy tale style" },
+  { name: "Angel", imgOil: angelGen, imgPixar: angelPixar, imgComic: angelComic, tag: "Garden guardian", alt: "AI angel pet portrait with wings and halo" },
+  { name: "Mermaid", imgOil: mermaidGen, imgPixar: mermaidPixar, imgComic: mermaidComic, tag: "Under the sea", alt: "AI mermaid pet portrait — underwater scene" },
+  { name: "Wizard", imgOil: wizardGen, imgPixar: wizardPixar, imgComic: wizardComic, tag: "Magical", alt: "AI wizard pet portrait with staff and magical robes" },
+  { name: "Ballerina", imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgComic: ballerinaComic, tag: "Graceful", alt: "AI ballerina pet portrait in graceful dance pose" },
+  { name: "Flower Crown", imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgComic: flowerCrownComic, tag: "Boho vibes", alt: "AI flower crown pet portrait — boho meadow style" },
 ];
 
 const faqs = [

@@ -46,20 +46,6 @@ import wizardPixar from "@/assets/gen-pixar-wizard-v1.webp";
 import ballerinaPixar from "@/assets/gen-pixar-ballerina-v1.webp";
 import flowerCrownPixar from "@/assets/gen-pixar-flower crown-v1.webp";
 
-// Watercolour style images
-import royalWatercolour from "@/assets/gen-watercolour-royal-v1.webp";
-import mafiaWatercolour from "@/assets/gen-watercolour-mafia-v1.webp";
-import vikingWatercolour from "@/assets/gen-watercolour-viking-v1.webp";
-import astronautWatercolour from "@/assets/gen-Watercolour-astronaut-v1.webp";
-import superheroWatercolour from "@/assets/gen-watercolour-superhero-v1.webp";
-import pirateWatercolour from "@/assets/gen-watercolour-pirate-v1.webp";
-import princessWatercolour from "@/assets/gen-watercolour-princess-v1.webp";
-import angelWatercolour from "@/assets/gen-watercolour-angel-v1.webp";
-import mermaidWatercolour from "@/assets/gen-watercolour-mermaid-v1.webp";
-import wizardWatercolour from "@/assets/gen-watercolour-wizard-v1.webp";
-import ballerinaWatercolour from "@/assets/gen-watercolour-ballerina-v1.webp";
-import flowerCrownWatercolour from "@/assets/gen-watercolour-flower crown-v1.webp";
-
 // Comic Book style images
 import royalComic from "@/assets/gen-comic-royal-v1.webp";
 import mafiaComic from "@/assets/gen-comic-mafia-v1.webp";
@@ -95,7 +81,6 @@ type Theme = {
   img: string;
   imgOil: string;
   imgPixar: string;
-  imgWatercolour: string;
   imgComic: string;
   emoji: string;
   gradient: string;
@@ -103,7 +88,7 @@ type Theme = {
 };
 
 const themes: Theme[] = [
-  { id: "royal", name: "Royal", tag: "Crown jewels included", img: royalV1, imgOil: royalV1, imgPixar: royalPixar, imgWatercolour: royalWatercolour, imgComic: royalComic, emoji: "👑",
+  { id: "royal", name: "Royal", tag: "Crown jewels included", img: royalV1, imgOil: royalV1, imgPixar: royalPixar, imgComic: royalComic, emoji: "👑",
     gradient: "from-amber-200 via-rose-200 to-purple-300",
     personalities: [
       { id: "noble-king", name: "Noble King", emoji: "👑", desc: "Wise, regal, slightly stuck-up.", recommended: true },
@@ -111,7 +96,7 @@ const themes: Theme[] = [
       { id: "tiny-tyrant", name: "Tiny Tyrant", emoji: "😤", desc: "Small body. Huge ego." },
       { id: "elegant-queen", name: "Elegant Queen", emoji: "👸", desc: "Effortlessly fabulous." },
     ] },
-  { id: "mafia", name: "Mafia", tag: "Don't make it personal", img: mafiaGen, imgOil: mafiaGen, imgPixar: mafiaPixar, imgWatercolour: mafiaWatercolour, imgComic: mafiaComic, emoji: "🎩",
+  { id: "mafia", name: "Mafia", tag: "Don't make it personal", img: mafiaGen, imgOil: mafiaGen, imgPixar: mafiaPixar, imgComic: mafiaComic, emoji: "🎩",
     gradient: "from-stone-300 via-stone-500 to-stone-800",
     personalities: [
       { id: "crime-boss", name: "Crime Boss", emoji: "🎩", desc: "Runs the block. And the couch.", recommended: true },
@@ -119,7 +104,7 @@ const themes: Theme[] = [
       { id: "chaotic-gremlin", name: "Chaotic Gremlin", emoji: "😈", desc: "Pure unhinged energy." },
       { id: "smooth-talker", name: "Smooth Talker", emoji: "😎", desc: "Charm-first, paws second." },
     ] },
-  { id: "viking", name: "Viking", tag: "Battle ready, belly rubs", img: vikingGen, imgOil: vikingGen, imgPixar: vikingPixar, imgWatercolour: vikingWatercolour, imgComic: vikingComic, emoji: "⚔️",
+  { id: "viking", name: "Viking", tag: "Battle ready, belly rubs", img: vikingGen, imgOil: vikingGen, imgPixar: vikingPixar, imgComic: vikingComic, emoji: "⚔️",
     gradient: "from-orange-300 via-red-400 to-stone-700",
     personalities: [
       { id: "berserker", name: "Berserker", emoji: "🪓", desc: "Charges first. Naps later." },
@@ -127,7 +112,7 @@ const themes: Theme[] = [
       { id: "tiny-but-violent", name: "Tiny But Violent", emoji: "💢", desc: "Small. Furious. Iconic." },
       { id: "fearless-explorer", name: "Fearless Explorer", emoji: "🧭", desc: "Bold seas, bolder treats." },
     ] },
-  { id: "astronaut", name: "Astronaut", tag: "To infinity and treats", img: astronautGen, imgOil: astronautGen, imgPixar: astronautPixar, imgWatercolour: astronautWatercolour, imgComic: astronautComic, emoji: "🚀",
+  { id: "astronaut", name: "Astronaut", tag: "To infinity and treats", img: astronautGen, imgOil: astronautGen, imgPixar: astronautPixar, imgComic: astronautComic, emoji: "🚀",
     gradient: "from-indigo-300 via-violet-500 to-slate-900",
     personalities: [
       { id: "space-commander", name: "Space Commander", emoji: "🚀", desc: "Calm under cosmic pressure.", recommended: true },
@@ -135,7 +120,7 @@ const themes: Theme[] = [
       { id: "galactic-genius", name: "Galactic Genius", emoji: "🧠", desc: "Solves quantum kibble." },
       { id: "cosmic-menace", name: "Cosmic Menace", emoji: "👽", desc: "A threat to all known galaxies." },
     ] },
-  { id: "superhero", name: "Superhero", tag: "Cape, drama, glory", img: superheroGen, imgOil: superheroGen, imgPixar: superheroPixar, imgWatercolour: superheroWatercolour, imgComic: superheroComic, emoji: "🦸",
+  { id: "superhero", name: "Superhero", tag: "Cape, drama, glory", img: superheroGen, imgOil: superheroGen, imgPixar: superheroPixar, imgComic: superheroComic, emoji: "🦸",
     gradient: "from-sky-300 via-blue-500 to-red-500",
     personalities: [
       { id: "city-protector", name: "City Protector", emoji: "🛡️", desc: "Saves the day, every day." },
@@ -143,7 +128,7 @@ const themes: Theme[] = [
       { id: "overconfident-legend", name: "Overconfident Legend", emoji: "💪", desc: "Believes their own hype." },
       { id: "secret-villain", name: "Secret Villain", emoji: "😼", desc: "Plotting world domination." },
     ] },
-  { id: "pirate", name: "Pirate", tag: "Arrr-mazing", img: pirateGen, imgOil: pirateGen, imgPixar: piratePixar, imgWatercolour: pirateWatercolour, imgComic: pirateComic, emoji: "🏴‍☠️",
+  { id: "pirate", name: "Pirate", tag: "Arrr-mazing", img: pirateGen, imgOil: pirateGen, imgPixar: piratePixar, imgComic: pirateComic, emoji: "🏴‍☠️",
     gradient: "from-teal-300 via-cyan-600 to-slate-800",
     personalities: [
       { id: "treasure-hunter", name: "Treasure Hunter", emoji: "💰", desc: "Will dig for snacks." },
@@ -151,7 +136,7 @@ const themes: Theme[] = [
       { id: "chaos-goblin", name: "Chaos Goblin", emoji: "🤪", desc: "Lives only for destruction." },
       { id: "sea-monster-slayer", name: "Sea Monster Slayer", emoji: "🐙", desc: "Bath time = epic battle." },
     ] },
-  { id: "princess", name: "Princess", tag: "Fairy tale dreams", img: princessGen, imgOil: princessGen, imgPixar: princessPixar, imgWatercolour: princessWatercolour, imgComic: princessComic, emoji: "👸",
+  { id: "princess", name: "Princess", tag: "Fairy tale dreams", img: princessGen, imgOil: princessGen, imgPixar: princessPixar, imgComic: princessComic, emoji: "👸",
     gradient: "from-pink-200 via-purple-200 to-blue-200",
     personalities: [
       { id: "royal-princess", name: "Royal Princess", emoji: "👸", desc: "Grace and elegance.", recommended: true },
@@ -159,7 +144,7 @@ const themes: Theme[] = [
       { id: "shy-princess", name: "Shy Princess", emoji: "🌸", desc: "Quiet but magical." },
       { id: "rebel-princess", name: "Rebel Princess", emoji: "⚡", desc: "Breaks the rules." },
     ] },
-  { id: "angel", name: "Angel", tag: "Garden guardian", img: angelGen, imgOil: angelGen, imgPixar: angelPixar, imgWatercolour: angelWatercolour, imgComic: angelComic, emoji: "😇",
+  { id: "angel", name: "Angel", tag: "Garden guardian", img: angelGen, imgOil: angelGen, imgPixar: angelPixar, imgComic: angelComic, emoji: "😇",
     gradient: "from-sky-100 via-pink-100 to-yellow-100",
     personalities: [
       { id: "gentle-angel", name: "Gentle Angel", emoji: "😇", desc: "Pure and kind.", recommended: true },
@@ -167,7 +152,7 @@ const themes: Theme[] = [
       { id: "guardian-angel", name: "Guardian Angel", emoji: "🛡️", desc: "Protects all creatures." },
       { id: "sleepy-angel", name: "Sleepy Angel", emoji: "😴", desc: "Naps on clouds." },
     ] },
-  { id: "mermaid", name: "Mermaid", tag: "Under the sea", img: mermaidGen, imgOil: mermaidGen, imgPixar: mermaidPixar, imgWatercolour: mermaidWatercolour, imgComic: mermaidComic, emoji: "🧜‍♀️",
+  { id: "mermaid", name: "Mermaid", tag: "Under the sea", img: mermaidGen, imgOil: mermaidGen, imgPixar: mermaidPixar, imgComic: mermaidComic, emoji: "🧜‍♀️",
     gradient: "from-cyan-200 via-teal-300 to-blue-400",
     personalities: [
       { id: "ocean-explorer", name: "Ocean Explorer", emoji: "🧜‍♀️", desc: "Curious and brave.", recommended: true },
@@ -175,7 +160,7 @@ const themes: Theme[] = [
       { id: "singing-mermaid", name: "Singing Mermaid", emoji: "🎵", desc: "Voice of the sea." },
       { id: "treasure-collector", name: "Treasure Collector", emoji: "💎", desc: "Loves shiny things." },
     ] },
-  { id: "wizard", name: "Wizard", tag: "Magical and mystical", img: wizardGen, imgOil: wizardGen, imgPixar: wizardPixar, imgWatercolour: wizardWatercolour, imgComic: wizardComic, emoji: "🧙",
+  { id: "wizard", name: "Wizard", tag: "Magical and mystical", img: wizardGen, imgOil: wizardGen, imgPixar: wizardPixar, imgComic: wizardComic, emoji: "🧙",
     gradient: "from-purple-300 via-indigo-400 to-violet-500",
     personalities: [
       { id: "wise-wizard", name: "Wise Wizard", emoji: "🧙", desc: "Ancient and powerful.", recommended: true },
@@ -183,7 +168,7 @@ const themes: Theme[] = [
       { id: "dark-wizard", name: "Dark Wizard", emoji: "🌑", desc: "Master of shadows." },
       { id: "young-wizard", name: "Young Wizard", emoji: "📚", desc: "Still learning magic." },
     ] },
-  { id: "ballerina", name: "Ballerina", tag: "Grace and poise", img: ballerinaGen, imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgWatercolour: ballerinaWatercolour, imgComic: ballerinaComic, emoji: "🩰",
+  { id: "ballerina", name: "Ballerina", tag: "Grace and poise", img: ballerinaGen, imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgComic: ballerinaComic, emoji: "🩰",
     gradient: "from-pink-100 via-rose-200 to-pink-300",
     personalities: [
       { id: "prima-ballerina", name: "Prima Ballerina", emoji: "🩰", desc: "Star of the stage.", recommended: true },
@@ -191,7 +176,7 @@ const themes: Theme[] = [
       { id: "graceful-swan", name: "Graceful Swan", emoji: "🦢", desc: "Elegant and poised." },
       { id: "energetic-dancer", name: "Energetic Dancer", emoji: "⚡", desc: "Never stops moving." },
     ] },
-  { id: "flower-crown", name: "Flower Crown", tag: "Boho vibes", img: flowerCrownGen, imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgWatercolour: flowerCrownWatercolour, imgComic: flowerCrownComic, emoji: "🌸",
+  { id: "flower-crown", name: "Flower Crown", tag: "Boho vibes", img: flowerCrownGen, imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgComic: flowerCrownComic, emoji: "🌸",
     gradient: "from-green-200 via-yellow-200 to-pink-200",
     personalities: [
       { id: "nature-lover", name: "Nature Lover", emoji: "🌸", desc: "One with the earth.", recommended: true },

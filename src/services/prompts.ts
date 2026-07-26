@@ -10,7 +10,7 @@
 
 export type GenerationInput = {
   petType?: string;           // "golden retriever", "tabby cat", "pet" (fallback)
-  artStyleId?: string;        // "oil-painting" | "pixar-3d" | "watercolour"
+  artStyleId?: string;        // "oil-painting" | "pixar-3d" | "comic-book"
   themeId: string;            // "royal" | "mafia" | "viking" | ...
   themeName?: string;         // "Royal" — human readable
   personalityId: string;      // "noble-king" | "tiny-tyrant" | ...

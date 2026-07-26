@@ -111,7 +111,7 @@ function Checkout() {
                   Get all 3 styles — <span className="text-primary">£4.99</span>
                   <span className="ml-2 text-xs font-normal text-muted-foreground line-through">£5.97</span>
                 </div>
-                <div className="text-xs text-muted-foreground mt-0.5">Oil Painting, Pixar 3D &amp; Watercolour versions of your portrait. Save £1.98.</div>
+                <div className="text-xs text-muted-foreground mt-0.5">Oil Painting, Pixar 3D &amp; Comic Book versions of your portrait. Save £1.98.</div>
               </div>
             </label>
 
@@ -159,7 +159,7 @@ function Checkout() {
               <div className="flex-1 min-w-0">
                 <div className="font-semibold text-xs sm:text-sm">{addBundle ? "Pawtoons — All 3 Styles Bundle" : "Pawtoons Digital Portrait"}</div>
                 <div className="text-[10px] sm:text-xs text-muted-foreground">
-                  {addBundle ? "Oil Painting + Pixar 3D + Watercolour · instant download" : "High-resolution PNG · instant download"}
+                  {addBundle ? "Oil Painting + Pixar 3D + Comic Book · instant download" : "High-resolution PNG · instant download"}
                 </div>
                 <div className="text-[10px] sm:text-xs text-muted-foreground mt-1">🔒 Watermark removed instantly after payment</div>
               </div>

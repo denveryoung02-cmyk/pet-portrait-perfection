@@ -11,7 +11,7 @@ export const Route = createFileRoute("/cat-portraits")({
       {
         name: "description",
         content:
-          "Transform your cat's photo into beautiful AI artwork in 60 seconds. Oil Painting, Pixar 3D, Watercolour. Royal, Wizard, Angel & 9 more themes. Instant download from £1.99.",
+          "Transform your cat's photo into beautiful AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book. Royal, Wizard, Angel & 9 more themes. Instant download from £1.99.",
       },
       {
         property: "og:title",
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/cat-portraits")({
           "@type": "Product",
           "name": "Custom AI Cat Portrait — Digital Download",
           "description":
-            "AI-generated custom cat portrait from your photo. Oil Painting, Pixar 3D, or Watercolour style. 12 themes including Royal, Wizard, Angel, Mermaid. Instant download from £1.99.",
+            "AI-generated custom cat portrait from your photo. Oil Painting, Pixar 3D, or Comic Book style. 12 themes including Royal, Wizard, Angel, Mermaid. Instant download from £1.99.",
           "brand": { "@type": "Brand", "name": "Pawtoons" },
           "offers": {
             "@type": "AggregateOffer",
@@ -206,11 +206,11 @@ function CatPortraitsPage() {
             </p>
           </div>
           <div className="p-6">
-            <div className="text-4xl mb-3">🌸</div>
-            <h3 className="font-bold text-lg mb-2">Watercolour</h3>
+            <div className="text-4xl mb-3">💥</div>
+            <h3 className="font-bold text-lg mb-2">Comic Book</h3>
             <p className="text-gray-600 text-sm">
-              Soft washes, delicate detail, artistic charm. Beautiful for
-              printing and gifting. Especially gorgeous for light-coloured cats.
+              Bold outlines, vibrant colours, dynamic energy. Perfect for a
+              cat with big personality and even bigger attitude.
             </p>
           </div>
         </div>

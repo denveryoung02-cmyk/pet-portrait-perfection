@@ -5,7 +5,7 @@ export const organizationSchema = {
   "url": "https://www.pawtoons.co",
   "logo": "https://www.pawtoons.co/assets/pawtoons-logo.png",
   "description":
-    "Pawtoons creates custom AI pet portraits from your photos in 60 seconds. Choose from Oil Painting, Pixar 3D, and Watercolour styles. 12 unique themes including Royal, Superhero, Viking, and more. Instant digital download from £1.99.",
+    "Pawtoons creates custom AI pet portraits from your photos in 60 seconds. Choose from Oil Painting, Pixar 3D, and Comic Book styles. 12 unique themes including Royal, Superhero, Viking, and more. Instant digital download from £1.99.",
   "foundingDate": "2024",
   "areaServed": "GB",
   "contactPoint": {
@@ -36,7 +36,7 @@ export const homepageProductSchema = {
   "@type": "Product",
   "name": "Custom AI Pet Portrait — Instant Digital Download",
   "description":
-    "Transform your pet photo into a stunning custom AI portrait. Choose from Oil Painting, Pixar 3D, or Watercolour art style. 12 unique themes: Royal, Superhero, Viking Warrior, Pirate Captain, Wizard, Ballerina, Astronaut, Princess, Angel, Mermaid, Mafia Boss, and Flower Crown. Generated in 60 seconds. Instant digital download. High-resolution print-ready file.",
+    "Transform your pet photo into a stunning custom AI portrait. Choose from Oil Painting, Pixar 3D, or Comic Book art style. 12 unique themes: Royal, Superhero, Viking Warrior, Pirate Captain, Wizard, Ballerina, Astronaut, Princess, Angel, Mermaid, Mafia Boss, and Flower Crown. Generated in 60 seconds. Instant digital download. High-resolution print-ready file.",
   "brand": {
     "@type": "Brand",
     "name": "Pawtoons",
@@ -117,7 +117,7 @@ export const homepageFAQSchema = {
       "name": "What art styles are available?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Three art styles are available: Oil Painting (rich, classical), Pixar/3D (fun and colourful), and Watercolour (soft and delicate). Each style works with all 12 portrait themes.",
+        "text": "Three art styles are available: Oil Painting (rich, classical), Pixar/3D (fun and colourful), and Comic Book (bold and graphic). Each style works with all 12 portrait themes.",
       },
     },
     {

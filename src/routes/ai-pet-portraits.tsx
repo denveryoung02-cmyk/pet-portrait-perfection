@@ -164,7 +164,7 @@ function AIPetPortraitsPage() {
           <ol className="space-y-3 mb-6">
             {[
               "Analyses your pet's facial features, colouring, fur patterns, and expression",
-              "Applies the chosen art style — oil painting techniques, 3D rendering, or watercolour washes",
+              "Applies the chosen art style — oil painting techniques, 3D rendering, or bold comic-book linework",
               "Incorporates the selected theme — a royal costume, superhero cape, viking armour, and so on",
               "Generates a high-resolution image that captures your pet's likeness in the new style",
             ].map((step, i) => (

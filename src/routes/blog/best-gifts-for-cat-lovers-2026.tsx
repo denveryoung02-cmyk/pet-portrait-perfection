@@ -337,7 +337,7 @@ function BestGiftsForCatLoversPage() {
             </h3>
             <p className="text-gray-300 text-sm mb-4">
               Royal, Wizard, Angel, Mermaid, and more themes. Oil Painting,
-              Pixar 3D, or Watercolour styles. Free preview before you pay.
+              Pixar 3D, or Comic Book styles. Free preview before you pay.
             </p>
             <Link
               to="/cat-portraits"

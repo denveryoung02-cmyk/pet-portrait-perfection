@@ -22,7 +22,8 @@ export const Route = createFileRoute("/success")({
 const ART_STYLE_LABELS: Record<string, string> = {
   "oil-painting": "Oil Painting",
   "pixar-3d": "Pixar 3D",
-  "watercolour": "Watercolour",
+  "comic-book": "Comic Book",
+  "watercolour": "Watercolour", // kept for historical orders placed before 2026-06-30
 };
 
 function Success() {

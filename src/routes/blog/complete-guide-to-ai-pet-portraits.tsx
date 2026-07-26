@@ -220,7 +220,7 @@ function AIPetPortraitGuidePage() {
               },
               {
                 title: "Choose a style and theme",
-                body: "Style determines the artistic medium (oil painting, watercolour, 3D animation). Theme determines the creative concept (royal, superhero, viking, and so on).",
+                body: "Style determines the artistic medium (oil painting, comic book illustration, 3D animation). Theme determines the creative concept (royal, superhero, viking, and so on).",
               },
               {
                 title: "AI generation",
@@ -363,10 +363,10 @@ function AIPetPortraitGuidePage() {
             </p>
           </div>
           <div className="border-l-4 border-gray-200 pl-4">
-            <h3 className="font-semibold mb-1">🌸 Watercolour</h3>
+            <h3 className="font-semibold mb-1">💥 Comic Book</h3>
             <p className="text-gray-600 text-sm">
-              Soft edges, delicate colour washes, artistic charm. Best for a
-              gentle, elegant aesthetic — popular for gifts and nursery decor.
+              Bold outlines, vibrant colours, dynamic energy. Best for a fun,
+              graphic aesthetic — popular for playful, larger-than-life portraits.
             </p>
           </div>
         </div>
@@ -395,7 +395,7 @@ function AIPetPortraitGuidePage() {
             <li><strong>For a gift:</strong> Superhero or Royal tend to land well with most recipients</li>
             <li><strong>For framing/home decor:</strong> Royal or Wizard in Oil Painting style</li>
             <li><strong>For a laugh:</strong> Mafia Boss, Pirate Captain, or Viking Warrior</li>
-            <li><strong>For a memorial:</strong> Angel or Flower Crown in Watercolour</li>
+            <li><strong>For a memorial:</strong> Angel or Flower Crown in Oil Painting</li>
             <li><strong>For social sharing:</strong> Astronaut or Superhero in Pixar/3D</li>
           </ul>
         </div>
@@ -518,7 +518,7 @@ function AIPetPortraitGuidePage() {
               },
               {
                 q: "Can I use an AI pet portrait as a memorial?",
-                a: "Yes — this is one of the most common and meaningful uses. Even older photos of pets that have passed away can produce a beautiful memorial portrait, particularly in Watercolour or Angel-themed styles.",
+                a: "Yes — this is one of the most common and meaningful uses. Even older photos of pets that have passed away can produce a beautiful memorial portrait, particularly in Oil Painting or Angel-themed styles.",
               },
             ].map(({ q, a }) => (
               <details key={q} className="border border-gray-200 bg-white rounded-xl px-5 py-4">

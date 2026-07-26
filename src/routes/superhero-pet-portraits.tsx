@@ -5,7 +5,7 @@ export const Route = createFileRoute("/superhero-pet-portraits")({
   head: () => ({
     meta: [
       { title: "Superhero Pet Portraits from Photo | AI Art | From £1.99 | Pawtoons" },
-      { name: "description", content: "Give your dog or cat superpowers. AI superhero pet portraits from your photo. Cape included. Oil Painting, Pixar 3D or Watercolour. From £1.99. Instant download." },
+      { name: "description", content: "Give your dog or cat superpowers. AI superhero pet portraits from your photo. Cape included. Oil Painting, Pixar 3D or Comic Book. From £1.99. Instant download." },
       { property: "og:title", content: "Superhero Pet Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/superhero-pet-portraits" },
     ],
@@ -21,7 +21,7 @@ function SuperheroPetPortraitsPage() {
       <section className="py-16 px-4 text-center max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6"><Link to="/">Home</Link><span className="mx-2">/</span><span>Superhero Pet Portraits</span></nav>
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Superhero Pet Portraits — Your Pet Saves the Day</h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">Cape? Check. Superpowers? Obviously. Your dog or cat as a fully-kitted superhero — in stunning AI artwork. Oil Painting, Pixar 3D, or Watercolour. From £1.99.</p>
+        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">Cape? Check. Superpowers? Obviously. Your dog or cat as a fully-kitted superhero — in stunning AI artwork. Oil Painting, Pixar 3D, or Comic Book. From £1.99.</p>
         <Link to="/upload" className="inline-block bg-black text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-800 transition">🦸 Create My Superhero Portrait →</Link>
       </section>
 

@@ -5,7 +5,7 @@ export const Route = createFileRoute("/royal-pet-portraits")({
   head: () => ({
     meta: [
       { title: "Royal Pet Portraits — Your Pet as Royalty | From £1.99 | Pawtoons" },
-      { name: "description", content: "Transform your pet into royalty with AI royal pet portraits. Crown jewels, regal poses, stunning artwork in Oil Painting, Pixar 3D or Watercolour. From £1.99." },
+      { name: "description", content: "Transform your pet into royalty with AI royal pet portraits. Crown jewels, regal poses, stunning artwork in Oil Painting, Pixar 3D or Comic Book. From £1.99." },
       { property: "og:title", content: "Royal Pet Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/royal-pet-portraits" },
     ],
@@ -42,9 +42,9 @@ function RoyalPetPortraitsPage() {
               <p className="text-sm text-gray-600">Vivid colours and expressive features. Your pet as the star of a royal animated film.</p>
             </div>
             <div className="bg-white p-6 rounded-xl">
-              <div className="text-4xl mb-3">🌸</div>
-              <h3 className="font-bold mb-2">Watercolour Royal</h3>
-              <p className="text-sm text-gray-600">Soft, elegant washes. A royal portrait with an artistic, painterly charm.</p>
+              <div className="text-4xl mb-3">💥</div>
+              <h3 className="font-bold mb-2">Comic Book Royal</h3>
+              <p className="text-sm text-gray-600">Bold outlines, vibrant colours. A royal portrait with graphic, pop-art flair.</p>
             </div>
           </div>
         </div>

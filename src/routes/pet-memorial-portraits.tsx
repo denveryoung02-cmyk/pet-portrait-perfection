@@ -5,7 +5,7 @@ export const Route = createFileRoute("/pet-memorial-portraits")({
   head: () => ({
     meta: [
       { title: "Pet Memorial Portraits — Honour Your Pet's Memory | Pawtoons" },
-      { name: "description", content: "Create a beautiful memorial portrait of your beloved pet. Timeless AI artwork in Oil Painting, Watercolour or Pixar 3D style. From £1.99. Instant download." },
+      { name: "description", content: "Create a beautiful memorial portrait of your beloved pet. Timeless AI artwork in Oil Painting, Comic Book or Pixar 3D style. From £1.99. Instant download." },
       { property: "og:title", content: "Pet Memorial Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/pet-memorial-portraits" },
     ],
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/pet-memorial-portraits")({
           "@type": "FAQPage",
           "mainEntity": [
             { "@type": "Question", "name": "Can I create a memorial portrait from an old photo?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Any clear photo works, including older photos. As long as your pet's face is visible, the AI can create a beautiful memorial portrait." } },
-            { "@type": "Question", "name": "What is the best portrait style for a pet memorial?", "acceptedAnswer": { "@type": "Answer", "text": "The Angel theme with Oil Painting or Watercolour style is most popular for memorials. The Royal theme is also a beautiful way to honour a beloved pet's memory." } },
+            { "@type": "Question", "name": "What is the best portrait style for a pet memorial?", "acceptedAnswer": { "@type": "Answer", "text": "The Angel theme with Oil Painting is most popular for memorials. The Royal theme is also a beautiful way to honour a beloved pet's memory." } },
           ],
         }),
       },
@@ -45,7 +45,7 @@ function PetMemorialPortraitsPage() {
             <div className="bg-white p-6 rounded-xl">
               <div className="text-4xl mb-3">😇</div>
               <h3 className="font-bold mb-2">Angel</h3>
-              <p className="text-sm text-gray-600">A gentle, serene portrait that honours their spirit. Beautiful in Watercolour or Oil Painting.</p>
+              <p className="text-sm text-gray-600">A gentle, serene portrait that honours their spirit. Beautiful in Oil Painting.</p>
             </div>
             <div className="bg-white p-6 rounded-xl">
               <div className="text-4xl mb-3">👑</div>
@@ -73,7 +73,7 @@ function PetMemorialPortraitsPage() {
         <div className="space-y-4">
           {[
             { q: "Can I use an older or lower-quality photo?", a: "Yes. Older photos work as long as your pet's face is reasonably visible and clear. The AI handles varying photo quality well." },
-            { q: "What is the best theme for a pet memorial portrait?", a: "The Angel theme is our most popular memorial choice. The Royal theme is also beautiful for a dignified tribute. Watercolour art style adds a soft, gentle quality many find comforting." },
+            { q: "What is the best theme for a pet memorial portrait?", a: "The Angel theme is our most popular memorial choice. The Royal theme is also beautiful for a dignified tribute. Oil Painting art style adds a soft, gentle quality many find comforting." },
             { q: "Can I create a memorial portrait as a gift for someone who has lost a pet?", a: "Yes, and it's a profoundly thoughtful gesture. Use a photo they've shared online, create the portrait, and give it as a physical framed gift or digital download." },
           ].map(({ q, a }) => (
             <details key={q} className="border border-gray-200 rounded-xl px-5 py-4">
