@@ -61,7 +61,19 @@ import ballerinaComic from "@/assets/gen-comic-ballerina-v1.webp";
 import flowerCrownComic from "@/assets/gen-comic-flower-crown-v1.webp";
 
 export const Route = createFileRoute("/upload")({
-  head: () => ({ meta: [{ title: "Create your Pawtoon — step by step" }] }),
+  head: () => ({
+    meta: [
+      { title: "Create your Pawtoon — step by step" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
+    ],
+    links: [
+      {
+        rel: "canonical",
+        href: "https://www.pawtoons.co/upload",
+      },
+    ],
+  }),
   component: CreateWizard,
   validateSearch: (search: Record<string, unknown>) => {
     return {
@@ -223,6 +235,7 @@ const ART_STYLES = [
   { id: "oil-painting", name: "Oil Painting", emoji: "🎨", desc: "Museum-quality oil painting, rich painterly brush strokes, dramatic lighting, gallery-grade composition" },
   { id: "pixar-3d", name: "Pixar/3D", emoji: "✨", desc: "Pixar 3D animation style, soft volumetric lighting, Disney character aesthetic, rounded forms, high detail render, warm family-friendly colours" },
   { id: "comic-book", name: "Comic Book", emoji: "💥", desc: "Bold pop art comic style with vibrant colours and dynamic energy" },
+  { id: "graffiti-splash", name: "Graffiti Splash", emoji: "🧨", desc: "Vibrant paint-splatter graffiti poster, spray-paint tags and street-art energy on a black background" },
 ];
 
 const STEPS = [

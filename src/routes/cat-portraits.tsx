@@ -6,12 +6,12 @@ export const Route = createFileRoute("/cat-portraits")({
     meta: [
       {
         title:
-          "Custom Cat Portraits from Your Photo | AI Art | From £1.99 | Pawtoons",
+          "Custom AI Cat Portraits from Photo | From £1.99 | Pawtoons",
       },
       {
         name: "description",
         content:
-          "Transform your cat's photo into beautiful AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book. Royal, Wizard, Angel & 9 more themes. Instant download from £1.99.",
+          "Transform your cat's photo into beautiful AI artwork in 60 seconds. Oil Painting, Pixar 3D or Comic Book. 12 themes. Instant download from £1.99.",
       },
       {
         property: "og:title",
@@ -26,6 +26,8 @@ export const Route = createFileRoute("/cat-portraits")({
         property: "og:url",
         content: "https://www.pawtoons.co/cat-portraits",
       },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [
       { rel: "canonical", href: "https://www.pawtoons.co/cat-portraits" },

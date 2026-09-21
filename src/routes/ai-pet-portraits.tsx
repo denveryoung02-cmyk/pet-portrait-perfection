@@ -6,7 +6,7 @@ export const Route = createFileRoute("/ai-pet-portraits")({
     meta: [
       {
         title:
-          "AI Pet Portraits — How It Works, Quality & Cost Guide | Pawtoons",
+          "AI Pet Portraits: How They Work, Quality & Cost Guide",
       },
       {
         name: "description",
@@ -21,6 +21,8 @@ export const Route = createFileRoute("/ai-pet-portraits")({
         property: "og:url",
         content: "https://www.pawtoons.co/ai-pet-portraits",
       },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [
       { rel: "canonical", href: "https://www.pawtoons.co/ai-pet-portraits" },

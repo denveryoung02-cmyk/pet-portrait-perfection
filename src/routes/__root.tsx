@@ -53,7 +53,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Pawtoons — Turn your pet into legendary art" },
-      { name: "description", content: "AI-powered custom caricatures of your pet on premium mugs, tees, posters and mouse mats." },
+      { name: "description", content: "Turn your pet's photo into stunning AI artwork in 60 seconds. Choose from 3 art styles and 12 themes. From £1.99 — instant digital download." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

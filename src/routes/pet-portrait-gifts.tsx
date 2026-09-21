@@ -8,10 +8,12 @@ export const Route = createFileRoute("/pet-portrait-gifts")({
       {
         name: "description",
         content:
-          "The most unique personalised gift for pet lovers. Custom AI pet portraits created in 60 seconds. From £1.99. Perfect for birthdays, Christmas, Mother's Day and more.",
+          "The most unique personalised gift for pet lovers. Custom AI pet portraits created in 60 seconds. From £1.99. Great for birthdays, Christmas, Mother's Day.",
       },
       { property: "og:title", content: "Personalised Pet Portrait Gifts | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/pet-portrait-gifts" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.pawtoons.co/pet-portrait-gifts" }],
     scripts: [

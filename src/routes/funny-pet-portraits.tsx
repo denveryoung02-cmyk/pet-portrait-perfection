@@ -8,6 +8,8 @@ export const Route = createFileRoute("/funny-pet-portraits")({
       { name: "description", content: "The funniest gift for pet lovers. Hilarious AI-generated funny pet portraits your friends won't stop sharing. Mafia Boss, Viking, Pirate & more. From £1.99." },
       { property: "og:title", content: "Funny Pet Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/funny-pet-portraits" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.pawtoons.co/funny-pet-portraits" }],
     scripts: [{ type: "application/ld+json", children: schemaToString(breadcrumbSchema([{ name: "Funny Pet Portraits", url: "https://www.pawtoons.co/funny-pet-portraits" }])) }],

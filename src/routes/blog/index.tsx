@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "Blog | Pawtoons" },
+      { title: "The Pawtoons Blog — AI Pet Portrait Guides & Ideas" },
       {
         name: "description",
         content:
@@ -12,6 +12,8 @@ export const Route = createFileRoute("/blog/")({
       { property: "og:title", content: "Blog | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/blog" },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.pawtoons.co/blog" }],
   }),

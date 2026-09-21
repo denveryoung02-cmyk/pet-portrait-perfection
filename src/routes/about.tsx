@@ -12,6 +12,8 @@ export const Route = createFileRoute("/about")({
       },
       { property: "og:title", content: "About Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/about" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.pawtoons.co/about" }],
     scripts: [

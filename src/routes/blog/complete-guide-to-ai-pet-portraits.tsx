@@ -11,7 +11,7 @@ export const Route = createFileRoute("/blog/complete-guide-to-ai-pet-portraits")
       {
         name: "description",
         content:
-          "Everything you need to know about AI pet portraits in 2026: how they work, what they cost, how to choose a service, and how to get the best results from your photo.",
+          "Everything you need to know about AI pet portraits in 2026: how they work, what they cost, and how to get the best results from your pet's photo.",
       },
       {
         property: "og:title",
@@ -29,6 +29,8 @@ export const Route = createFileRoute("/blog/complete-guide-to-ai-pet-portraits")
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [
       {

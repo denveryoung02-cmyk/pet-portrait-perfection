@@ -8,6 +8,8 @@ export const Route = createFileRoute("/pet-memorial-portraits")({
       { name: "description", content: "Create a beautiful memorial portrait of your beloved pet. Timeless AI artwork in Oil Painting, Comic Book or Pixar 3D style. From £1.99. Instant download." },
       { property: "og:title", content: "Pet Memorial Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/pet-memorial-portraits" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.pawtoons.co/pet-memorial-portraits" }],
     scripts: [

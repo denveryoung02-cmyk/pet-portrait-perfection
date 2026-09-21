@@ -140,6 +140,14 @@ export default {
 
     try {
       const url = new URL(request.url);
+
+      // Canonical host is www.pawtoons.co (matches sitemap.xml, robots.txt,
+      // canonical/og:url tags, and seo-schemas.ts) — redirect the apex domain.
+      if (url.hostname === "pawtoons.co") {
+        url.hostname = "www.pawtoons.co";
+        return Response.redirect(url.toString(), 301);
+      }
+
       if (request.method === "POST" && url.pathname === "/api/stripe/webhook") {
         return await handleStripeWebhook(request, cfEnv);
       }

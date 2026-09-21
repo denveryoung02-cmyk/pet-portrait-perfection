@@ -4,10 +4,12 @@ import { breadcrumbSchema, schemaToString } from "@/lib/seo-schemas";
 export const Route = createFileRoute("/royal-pet-portraits")({
   head: () => ({
     meta: [
-      { title: "Royal Pet Portraits — Your Pet as Royalty | From £1.99 | Pawtoons" },
+      { title: "Royal Pet Portraits — Your Pet as Royalty | Pawtoons" },
       { name: "description", content: "Transform your pet into royalty with AI royal pet portraits. Crown jewels, regal poses, stunning artwork in Oil Painting, Pixar 3D or Comic Book. From £1.99." },
       { property: "og:title", content: "Royal Pet Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/royal-pet-portraits" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.pawtoons.co/royal-pet-portraits" }],
     scripts: [

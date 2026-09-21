@@ -50,11 +50,11 @@ import flowerCrownComic from "@/assets/gen-comic-flower-crown-v1.webp";
 // under public/hero-pack-demo, not hot-linked from the hero-pack-assets
 // storage bucket or a signed URL — matches the existing public/before-after
 // convention for real marketing imagery instead of a dynamic user-content path.
-const kobiHdPortrait = "/hero-pack-demo/kobi-hd-portrait.png";
-const kobiPhoneWallpaper = "/hero-pack-demo/kobi-phone-wallpaper.png";
+const kobiHdPortrait = "/hero-pack-demo/kobi-hd-portrait.webp";
+const kobiPhoneWallpaper = "/hero-pack-demo/kobi-phone-wallpaper.webp";
 const kobiCharacterCard = "/hero-pack-demo/kobi-character-card.png";
 const kobiHeroCertificate = "/hero-pack-demo/kobi-hero-certificate.png";
-const buddyHdPortrait = "/hero-pack-demo/buddy-hd-portrait.png";
+const buddyHdPortrait = "/hero-pack-demo/buddy-hd-portrait.webp";
 const buddyCharacterCard = "/hero-pack-demo/buddy-character-card.png";
 
 // Owner+pet example — same public/ convention as hero-pack-demo above (real
@@ -72,7 +72,15 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Custom AI Pet Portraits From Your Photo | Pawtoons" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
       { name: "msvalidate.01", content: "4E19254887370F9CF869612EEADBCBF4" },
+    ],
+    links: [
+      {
+        rel: "canonical",
+        href: "https://www.pawtoons.co/",
+      },
     ],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(organizationSchema) },
@@ -106,9 +114,9 @@ const faqs = [
 ];
 
 const beforeAfterPairs = [
-  { label: "Pirate Captain", before: "/before-after/pair1-before.jpg.jpg", after: "/before-after/pair1-after.webp.png" },
-  { label: "Ballerina", before: "/before-after/pair2-before.jpg.jpg", after: "/before-after/pair2-after.webp.png" },
-  { label: "Royal Pet", before: "/before-after/pair3-before.jpg.jpg", after: "/before-after/pair3-after.webp.png" },
+  { label: "Pirate Captain", before: "/before-after/pair1-before.jpg.jpg", after: "/before-after/pair1-after.webp" },
+  { label: "Ballerina", before: "/before-after/pair2-before.jpg.jpg", after: "/before-after/pair2-after.webp" },
+  { label: "Royal Pet", before: "/before-after/pair3-before.jpg.jpg", after: "/before-after/pair3-after.webp" },
 ];
 
 function Home() {

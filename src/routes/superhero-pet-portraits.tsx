@@ -4,10 +4,12 @@ import { breadcrumbSchema, schemaToString } from "@/lib/seo-schemas";
 export const Route = createFileRoute("/superhero-pet-portraits")({
   head: () => ({
     meta: [
-      { title: "Superhero Pet Portraits from Photo | AI Art | From £1.99 | Pawtoons" },
+      { title: "Superhero Pet Portraits from Photo | From £1.99 | Pawtoons" },
       { name: "description", content: "Give your dog or cat superpowers. AI superhero pet portraits from your photo. Cape included. Oil Painting, Pixar 3D or Comic Book. From £1.99. Instant download." },
       { property: "og:title", content: "Superhero Pet Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/superhero-pet-portraits" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.pawtoons.co/superhero-pet-portraits" }],
     scripts: [{ type: "application/ld+json", children: schemaToString(breadcrumbSchema([{ name: "Superhero Pet Portraits", url: "https://www.pawtoons.co/superhero-pet-portraits" }])) }],

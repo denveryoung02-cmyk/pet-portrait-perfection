@@ -6,12 +6,12 @@ export const Route = createFileRoute("/dog-portraits")({
     meta: [
       {
         title:
-          "Custom Dog Portraits from Your Photo | AI Art | From £1.99 | Pawtoons",
+          "Custom AI Dog Portraits from Photo | From £1.99 | Pawtoons",
       },
       {
         name: "description",
         content:
-          "Turn your dog's photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book styles. Royal, Superhero, Viking & 9 more themes. Instant download from £1.99.",
+          "Turn your dog's photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D, or Comic Book. 12 themes to choose from. Instant download from £1.99.",
       },
       {
         property: "og:title",
@@ -27,6 +27,8 @@ export const Route = createFileRoute("/dog-portraits")({
         content: "https://www.pawtoons.co/dog-portraits",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [
       {

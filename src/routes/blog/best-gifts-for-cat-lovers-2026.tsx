@@ -5,12 +5,12 @@ export const Route = createFileRoute("/blog/best-gifts-for-cat-lovers-2026")({
   head: () => ({
     meta: [
       {
-        title: "21 Best Gifts for Cat Lovers in 2026 | Pawtoons",
+        title: "21 Best Gifts for Cat Lovers in 2026 | Pawtoons Blog",
       },
       {
         name: "description",
         content:
-          "21 thoughtful gift ideas for cat lovers in 2026 — from personalised AI portraits to cosy and quirky gifts. Something for every budget.",
+          "21 thoughtful gift ideas for cat lovers in 2026 — from personalised AI portraits to cosy, quirky gifts for every budget and every kind of cat owner.",
       },
       {
         property: "og:title",
@@ -27,6 +27,8 @@ export const Route = createFileRoute("/blog/best-gifts-for-cat-lovers-2026")({
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
+      { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],
     links: [
       {
