@@ -23,6 +23,7 @@ const ART_STYLE_LABELS: Record<string, string> = {
   "oil-painting": "Oil Painting",
   "pixar-3d": "Pixar 3D",
   "comic-book": "Comic Book",
+  "graffiti-splash": "Graffiti Splash",
   "watercolour": "Watercolour", // kept for historical orders placed before 2026-06-30
 };
 

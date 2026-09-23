@@ -10,7 +10,7 @@
 
 export type GenerationInput = {
   petType?: string;           // "golden retriever", "tabby cat", "pet" (fallback)
-  artStyleId?: string;        // "oil-painting" | "pixar-3d" | "comic-book"
+  artStyleId?: string;        // "oil-painting" | "pixar-3d" | "comic-book" | "graffiti-splash"
   themeId: string;            // "royal" | "mafia" | "viking" | ...
   themeName?: string;         // "Royal" — human readable
   personalityId: string;      // "noble-king" | "tiny-tyrant" | ...
@@ -25,6 +25,7 @@ export const ART_STYLE_PREFIX: Record<string, string> = {
   "oil-painting": "oil painting portrait, rich impasto brushwork, deep saturated colours, dramatic chiaroscuro lighting, old masters technique, canvas texture visible, professional fine art quality, museum-quality portrait painting, warm golden tones, masterful composition",
   "pixar-3d": "photorealistic pet portrait, natural fur and anatomy, mouth closed or gently open in a soft smile, no visible teeth, except the eyes: the eyes must be drawn 2x larger than a normal pet's eyes, anime-style oversized eyes, this is the single most important instruction",
   "comic-book": "bold comic book illustration, thick black ink outlines, Ben-Day dot halftone shading, Roy Lichtenstein pop art influence, primary colour palette with high contrast, dynamic action pose, vintage Marvel or DC panel energy, screen-printed poster quality, graphic and striking, speech bubble optional",
+  "graffiti-splash": "Transform this pet photo into a vibrant graffiti street-art pop art portrait. Background: bold multicolor paint splatters and ink drips exploding around the subject on a black background. Every image must also include at least 2 hand-style graffiti elements layered near the subject — for example a spray-paint drip tag, a stencil symbol (heart, star, crown, or lightning bolt), or scribbled marker tags with gender-neutral words like LEGEND, LOYAL, ICON, STAR, MVP, TOP DOG, BEST FRIEND, HERO, or ONE OF A KIND. Do NOT use gender-specific words (no BOY, GIRL, KING, QUEEN, PRINCE, PRINCESS, SIR). Keep the pet's actual fur color, markings, and facial features accurate and recognizable. Poster-quality, high contrast, street-art style.",
 };
 
 
@@ -105,7 +106,43 @@ const TRAIT_HINTS: Record<string, string> = {
   mischievous: "sly side-eye, hidden contraband paw",
 };
 
+// Used only when artStyleId === "graffiti-splash". The shared template below
+// always appends "No text" and a "clean background friendly to printing" line,
+// which contradict graffiti-splash's required tag words and black splatter
+// background — so this style gets its own template, same approach as
+// buildMultiSubjectPixar3DPrompt / buildMultiSubjectGraffitiPrompt in
+// multi-subject-generation.server.ts.
+function buildGraffitiSplashPrompt(input: GenerationInput): string {
+  const pet = input.petType?.trim() || "pet";
+  const petName = input.petName?.trim();
+  const themeStyle = THEME_STYLE[input.themeId] ?? `${input.themeName ?? input.themeId} themed`;
+  const personality =
+    PERSONALITY_HINTS[input.personalityId] ??
+    input.personalityDesc ??
+    input.personalityName ??
+    input.personalityId;
+  const traitText =
+    input.traits && input.traits.length
+      ? input.traits.map((t) => TRAIT_HINTS[t] ?? t).join(", ")
+      : "";
+
+  const lines = [
+    ART_STYLE_PREFIX["graffiti-splash"],
+    `Subject: a ${pet}${petName ? ` named ${petName}` : ""}, highly detailed.`,
+    `Theme flavour on the pet itself (costume, props, attitude): ${themeStyle} — the background must stay the black paint-splatter graffiti background described above.`,
+    `Character vibe: ${personality}.`,
+    traitText ? `Additional personality traits: ${traitText}.` : "",
+    petName ? `Include the name "${petName}" as one of the graffiti tags.` : "",
+    input.personalisationText ? `Include the text "${input.personalisationText}" as a spray-painted graffiti tag.` : "",
+    `Square 1:1 composition, centred subject, premium gifting product art.`,
+    `No watermarks, no logos.`,
+  ].filter(Boolean);
+
+  return lines.join(" ");
+}
+
 export function buildPrompt(input: GenerationInput): string {
+  if (input.artStyleId === "graffiti-splash") return buildGraffitiSplashPrompt(input);
   const pet = input.petType?.trim() || "pet";
   const artStylePrefix = input.artStyleId ? ART_STYLE_PREFIX[input.artStyleId] ?? "" : ART_STYLE_PREFIX["oil-painting"];
   const themeStyle = THEME_STYLE[input.themeId] ?? `${input.themeName ?? input.themeId} themed caricature`;

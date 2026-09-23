@@ -55,6 +55,7 @@ const ART_STYLES = [
   { id: "oil-painting", name: "Oil Painting", emoji: "🎨", desc: "Museum-quality oil painting, rich painterly brush strokes, dramatic lighting, gallery-grade composition" },
   { id: "pixar-3d", name: "Pixar/3D", emoji: "✨", desc: "Pixar 3D animation style, soft volumetric lighting, Disney character aesthetic, rounded forms, high detail render, warm family-friendly colours" },
   { id: "comic-book", name: "Comic Book", emoji: "💥", desc: "Bold pop art comic style with vibrant colours and dynamic energy" },
+  { id: "graffiti-splash", name: "Graffiti Splash", emoji: "🧨", desc: "Vibrant paint-splatter graffiti poster, spray-paint tags and street-art energy on a black background" },
 ];
 
 const STEPS = [

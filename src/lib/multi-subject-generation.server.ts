@@ -110,6 +110,33 @@ function buildMultiSubjectPixar3DPrompt(subjects: MultiSubjectSubject[]): string
     .join(" ");
 }
 
+// Used only when artStyleId === "graffiti-splash" — oil-painting, comic-book and
+// pixar-3d are unaffected, unchanged paths. Unlike buildMultiSubjectEditPrompt,
+// this weaves each subject's real name in as graffiti tag text (the single-subject
+// ART_STYLE_PREFIX["graffiti-splash"] text has no name data available to it, so it
+// falls back to a neutral word bank instead — see prompts.ts:28).
+function buildMultiSubjectGraffitiPrompt(subjects: MultiSubjectSubject[]): string {
+  const listed = subjects
+    .map((s, i) => `${i + 1}) ${s.subjectType === "person" ? "a person" : "a pet"} named ${s.name}`)
+    .join(" ");
+  const names = subjects
+    .map((s) => s.name.trim())
+    .filter((n) => n.length > 0)
+    .join(", ");
+
+  return [
+    `Transform this scene into a vibrant graffiti street-art pop art portrait. Background: bold multicolor paint splatters and ink drips exploding around the subjects on a black background.`,
+    `Combine the following subjects from the attached reference images into a single portrait, together in one cohesive scene: ${listed}`,
+    `Every image must also include at least 2 hand-style graffiti elements layered near the subjects — for example a spray-paint drip tag, a stencil symbol (heart, star, crown, or lightning bolt), or scribbled marker tags.`,
+    names
+      ? `Include the following name(s) as graffiti tag text where natural: ${names}. Use the provided name(s) instead of generic words. If no name is available for a subject, fall back to gender-neutral words (LEGEND, LOYAL, ICON, STAR, MVP, TOP DOG, BEST FRIEND, HERO) — never gender-specific words (no BOY, GIRL, KING, QUEEN, PRINCE, PRINCESS, SIR).`
+      : `Use gender-neutral graffiti tag words (LEGEND, LOYAL, ICON, STAR, MVP, TOP DOG, BEST FRIEND, HERO, ONE OF A KIND) — never gender-specific words (no BOY, GIRL, KING, QUEEN, PRINCE, PRINCESS, SIR).`,
+    `Keep every subject clearly recognisable and faithful to their reference photo — preserve each person's face and each pet's breed, fur colour and markings.`,
+    `High-quality digital illustration, premium gifting product art, square 1:1 composition, centred subjects, poster-quality, high contrast, street-art style.`,
+    `No watermarks, no logos.`,
+  ].join(" ");
+}
+
 export type GenerateMultiSubjectDeps = {
   supabaseAdmin: SupabaseClient<Database>;
   openaiApiKey: string;
@@ -153,11 +180,14 @@ export async function runMultiSubjectGeneration(
   // generatePawtoon (generations.functions.ts:68-91). uploaded_image_id
   // points at the first subject for traceability; the full subject list
   // lives in generation_params per the Step 1 migration comment.
-  // pixar-3d gets its own template (see buildMultiSubjectPixar3DPrompt comment
-  // for why) — oil-painting and comic-book are unaffected, unchanged path.
+  // pixar-3d and graffiti-splash each get their own template (see their
+  // builder function comments for why) — oil-painting and comic-book are
+  // unaffected, unchanged path.
   const prompt =
     input.artStyleId === "pixar-3d"
       ? buildMultiSubjectPixar3DPrompt(input.subjects)
+      : input.artStyleId === "graffiti-splash"
+      ? buildMultiSubjectGraffitiPrompt(input.subjects)
       : buildMultiSubjectEditPrompt(input.subjects, input.artStyleId);
   const { data: genRow, error: insErr } = await db
     .from("generations")
