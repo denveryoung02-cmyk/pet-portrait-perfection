@@ -44,6 +44,19 @@ import wizardComic from "@/assets/gen-comic-wizard-v1.webp";
 import ballerinaComic from "@/assets/gen-comic-ballerina-v1.webp";
 import flowerCrownComic from "@/assets/gen-comic-flower-crown-v1.webp";
 
+import royalGraffiti from "@/assets/gen-graffiti-royal-v1.webp";
+import superheroGraffiti from "@/assets/gen-graffiti-superhero-v1.webp";
+import mafiaGraffiti from "@/assets/gen-graffiti-mafia-v1.webp";
+import vikingGraffiti from "@/assets/gen-graffiti-viking-v1.webp";
+import astronautGraffiti from "@/assets/gen-graffiti-astronaut-v1.webp";
+import pirateGraffiti from "@/assets/gen-graffiti-pirate-v1.webp";
+import princessGraffiti from "@/assets/gen-graffiti-princess-v1.webp";
+import angelGraffiti from "@/assets/gen-graffiti-angel-v1.webp";
+import mermaidGraffiti from "@/assets/gen-graffiti-mermaid-v1.webp";
+import wizardGraffiti from "@/assets/gen-graffiti-wizard-v1.webp";
+import ballerinaGraffiti from "@/assets/gen-graffiti-ballerina-v1.webp";
+import flowerCrownGraffiti from "@/assets/gen-graffiti-flower-crown-v1.webp";
+
 // Hero Pack demo assets (Kobi & Buddy) — real generated output from
 // denveryoung02@gmail.com's own account, used deliberately so there is no
 // customer-consent issue displaying it publicly. Served as static files
@@ -65,7 +78,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Custom AI Pet Portraits From Your Photo | Pawtoons" },
-      { name: "description", content: "Turn your pet photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D or Comic Book. 12 themes. From £1.99. Instant digital download." },
+      { name: "description", content: "Turn your pet photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. 12 themes. From £1.99. Instant digital download." },
       { property: "og:title", content: "Custom AI Pet Portraits From Your Photo | Pawtoons" },
       { property: "og:description", content: "Turn your pet photo into AI art in 60 seconds. From £1.99. Instant download." },
       { property: "og:url", content: "https://www.pawtoons.co" },
@@ -93,18 +106,18 @@ export const Route = createFileRoute("/")({
 });
 
 const themes = [
-  { name: "Royal Pet", imgOil: royalV1, imgPixar: royalPixar, imgComic: royalComic, tag: "Crown jewels", alt: "AI royal pet portrait in oil painting style — dog wearing crown" },
-  { name: "Superhero Pet", imgOil: superheroGen, imgPixar: superheroPixar, imgComic: superheroComic, tag: "Cape included", alt: "AI superhero pet portrait — dog in cape, Pixar 3D style" },
-  { name: "Mafia Boss", imgOil: mafiaGen, imgPixar: mafiaPixar, imgComic: mafiaComic, tag: "Don't mess", alt: "AI mafia boss pet portrait — pet in formal suit" },
-  { name: "Viking Warrior", imgOil: vikingGen, imgPixar: vikingPixar, imgComic: vikingComic, tag: "Battle ready", alt: "AI viking warrior pet portrait — dog in battle armour" },
-  { name: "Astronaut Explorer", imgOil: astronautGen, imgPixar: astronautPixar, imgComic: astronautComic, tag: "To infinity", alt: "AI astronaut pet portrait — cat in space suit" },
-  { name: "Pirate Captain", imgOil: pirateGen, imgPixar: piratePixar, imgComic: pirateComic, tag: "Arrr-mazing", alt: "AI pirate captain pet portrait — pet with tricorn hat" },
-  { name: "Princess", imgOil: princessGen, imgPixar: princessPixar, imgComic: princessComic, tag: "Fairy tale", alt: "AI princess pet portrait in fairy tale style" },
-  { name: "Angel", imgOil: angelGen, imgPixar: angelPixar, imgComic: angelComic, tag: "Garden guardian", alt: "AI angel pet portrait with wings and halo" },
-  { name: "Mermaid", imgOil: mermaidGen, imgPixar: mermaidPixar, imgComic: mermaidComic, tag: "Under the sea", alt: "AI mermaid pet portrait — underwater scene" },
-  { name: "Wizard", imgOil: wizardGen, imgPixar: wizardPixar, imgComic: wizardComic, tag: "Magical", alt: "AI wizard pet portrait with staff and magical robes" },
-  { name: "Ballerina", imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgComic: ballerinaComic, tag: "Graceful", alt: "AI ballerina pet portrait in graceful dance pose" },
-  { name: "Flower Crown", imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgComic: flowerCrownComic, tag: "Boho vibes", alt: "AI flower crown pet portrait — boho meadow style" },
+  { name: "Royal Pet", imgOil: royalV1, imgPixar: royalPixar, imgComic: royalComic, imgGraffiti: royalGraffiti, tag: "Crown jewels", alt: "AI royal pet portrait in oil painting style — dog wearing crown" },
+  { name: "Superhero Pet", imgOil: superheroGen, imgPixar: superheroPixar, imgComic: superheroComic, imgGraffiti: superheroGraffiti, tag: "Cape included", alt: "AI superhero pet portrait — dog in cape, Pixar 3D style" },
+  { name: "Mafia Boss", imgOil: mafiaGen, imgPixar: mafiaPixar, imgComic: mafiaComic, imgGraffiti: mafiaGraffiti, tag: "Don't mess", alt: "AI mafia boss pet portrait — pet in formal suit" },
+  { name: "Viking Warrior", imgOil: vikingGen, imgPixar: vikingPixar, imgComic: vikingComic, imgGraffiti: vikingGraffiti, tag: "Battle ready", alt: "AI viking warrior pet portrait — dog in battle armour" },
+  { name: "Astronaut Explorer", imgOil: astronautGen, imgPixar: astronautPixar, imgComic: astronautComic, imgGraffiti: astronautGraffiti, tag: "To infinity", alt: "AI astronaut pet portrait — cat in space suit" },
+  { name: "Pirate Captain", imgOil: pirateGen, imgPixar: piratePixar, imgComic: pirateComic, imgGraffiti: pirateGraffiti, tag: "Arrr-mazing", alt: "AI pirate captain pet portrait — pet with tricorn hat" },
+  { name: "Princess", imgOil: princessGen, imgPixar: princessPixar, imgComic: princessComic, imgGraffiti: princessGraffiti, tag: "Fairy tale", alt: "AI princess pet portrait in fairy tale style" },
+  { name: "Angel", imgOil: angelGen, imgPixar: angelPixar, imgComic: angelComic, imgGraffiti: angelGraffiti, tag: "Garden guardian", alt: "AI angel pet portrait with wings and halo" },
+  { name: "Mermaid", imgOil: mermaidGen, imgPixar: mermaidPixar, imgComic: mermaidComic, imgGraffiti: mermaidGraffiti, tag: "Under the sea", alt: "AI mermaid pet portrait — underwater scene" },
+  { name: "Wizard", imgOil: wizardGen, imgPixar: wizardPixar, imgComic: wizardComic, imgGraffiti: wizardGraffiti, tag: "Magical", alt: "AI wizard pet portrait with staff and magical robes" },
+  { name: "Ballerina", imgOil: ballerinaGen, imgPixar: ballerinaPixar, imgComic: ballerinaComic, imgGraffiti: ballerinaGraffiti, tag: "Graceful", alt: "AI ballerina pet portrait in graceful dance pose" },
+  { name: "Flower Crown", imgOil: flowerCrownGen, imgPixar: flowerCrownPixar, imgComic: flowerCrownComic, imgGraffiti: flowerCrownGraffiti, tag: "Boho vibes", alt: "AI flower crown pet portrait — boho meadow style" },
 ];
 
 const faqs = [
@@ -738,13 +751,14 @@ function HowItWorksSection() {
 }
 
 function ThemesSection() {
-  const [styleFilter, setStyleFilter] = useState<"oil" | "pixar" | "comic-book">("oil");
+  const [styleFilter, setStyleFilter] = useState<"oil" | "pixar" | "comic-book" | "graffiti">("oil");
   const [showAllThemes, setShowAllThemes] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const getThemeImage = (theme: any) => {
     if (styleFilter === "pixar") return theme.imgPixar;
     if (styleFilter === "comic-book") return theme.imgComic;
+    if (styleFilter === "graffiti") return theme.imgGraffiti;
     return theme.imgOil;
   };
 
@@ -775,6 +789,7 @@ function ThemesSection() {
             { id: "oil" as const, label: "Oil Painting", emoji: "🎨" },
             { id: "pixar" as const, label: "Pixar/3D", emoji: "✨" },
             { id: "comic-book" as const, label: "Comic Book", emoji: "💥" },
+            { id: "graffiti" as const, label: "Graffiti Splash", emoji: "🧨" },
           ].map((style) => (
             <button
               key={style.id}

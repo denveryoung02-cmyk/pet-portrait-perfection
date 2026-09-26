@@ -10,6 +10,7 @@ const ART_STYLE_LABELS: Record<string, string> = {
   "oil-painting": "Oil Painting",
   "pixar-3d": "Pixar 3D",
   "comic-book": "Comic Book",
+  "graffiti-splash": "Graffiti Splash",
 };
 
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
