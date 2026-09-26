@@ -67,7 +67,7 @@ function AuthPage() {
     <div className="min-h-screen grid place-items-center bg-background px-4 sm:px-5 py-8 sm:py-10" style={{ background: "var(--gradient-warm)" }}>
       <div className="w-full max-w-md rounded-2xl sm:rounded-3xl bg-card border border-border p-6 sm:p-8 shadow-[var(--shadow-soft)]">
         <Link to="/" className="flex items-center gap-2 mb-6">
-          <div className="size-9 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground">🐾</div>
+          <div className="size-9 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground">🐾</div>
           <span className="font-display text-xl">Pawtoons<span className="text-primary">.</span></span>
         </Link>
         <h1 className="font-display text-2xl sm:text-3xl mb-1">{mode === "signin" ? "Welcome back" : "Create your account"}</h1>

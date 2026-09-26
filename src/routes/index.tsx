@@ -172,8 +172,13 @@ function Home() {
 
           <div className="mt-8 flex items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
             <div className="flex -space-x-2">
-              {[royalV1, superheroGen, astronautGen, vikingGen].map((src, i) => (
-                <img key={i} src={src} alt="" className="size-7 sm:size-9 rounded-full border-2 border-background object-cover" />
+              {[
+                { src: royalV1, alt: "Pet portrait in royal style" },
+                { src: superheroGen, alt: "Pet portrait in superhero style" },
+                { src: astronautGen, alt: "Pet portrait in astronaut style" },
+                { src: vikingGen, alt: "Pet portrait in viking style" },
+              ].map(({ src, alt }, i) => (
+                <img key={i} src={src} alt={alt} className="size-7 sm:size-9 rounded-full border-2 border-background object-cover" />
               ))}
             </div>
             <div>
@@ -447,9 +452,9 @@ function HeroComparisonPreview() {
   }, []);
 
   return (
-    <div className="mt-6 flex flex-row items-start justify-center gap-3 sm:gap-4">
+    <div className="mt-6 flex flex-row items-stretch justify-center gap-3 sm:gap-4">
       <div
-        className={`flex flex-col items-center gap-2 w-[130px] sm:w-[170px] transition-all duration-500 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        className={`flex flex-col items-center gap-2 w-[130px] sm:w-[170px] transition-all duration-500 ease-out motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
       >
         <Link
           to="/upload"
@@ -472,7 +477,7 @@ function HeroComparisonPreview() {
         <Link
           to="/upload"
           onClick={() => track("start_creating_clicked", { source: "hero_comparison_pet_button" })}
-          className="w-full text-center rounded-full px-3 py-2 text-[11px] sm:text-xs font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
+          className="w-full flex-1 flex items-center justify-center text-center rounded-full px-3 py-2 text-[11px] sm:text-xs font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
           style={{ background: "var(--gradient-primary)" }}
         >
           Create Your Hero →
@@ -480,7 +485,7 @@ function HeroComparisonPreview() {
       </div>
 
       <div
-        className={`flex flex-col items-center gap-2 w-[130px] sm:w-[170px] transition-all duration-500 ease-out delay-150 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        className={`flex flex-col items-center gap-2 w-[130px] sm:w-[170px] transition-all duration-500 ease-out delay-150 motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
       >
         <Link
           to="/create-group"
@@ -505,7 +510,7 @@ function HeroComparisonPreview() {
         <Link
           to="/create-group"
           onClick={() => track("start_creating_clicked", { source: "hero_comparison_group_button" })}
-          className="w-full text-center rounded-full px-3 py-2 text-[11px] sm:text-xs font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
+          className="w-full flex-1 flex items-center justify-center text-center rounded-full px-3 py-2 text-[11px] sm:text-xs font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.03]"
           style={{ background: "var(--gradient-primary)" }}
         >
           Create Family Portrait →
@@ -784,7 +789,7 @@ function ThemesSection() {
         </div>
 
         {/* Style Filter Tabs */}
-        <div className="flex gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-8">
           {[
             { id: "oil" as const, label: "Oil Painting", emoji: "🎨" },
             { id: "pixar" as const, label: "Pixar/3D", emoji: "✨" },

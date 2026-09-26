@@ -734,6 +734,7 @@ function StepUpload({
   file, fileName, uploadProgress, uploadError, dragOver, inputRef,
   setDragOver, onPick, onDrop, removeFile, petName, setPetName,
 }: any) {
+  const [petNameMissing, setPetNameMissing] = useState(false);
   return (
     <div className="grid lg:grid-cols-[1fr_360px] gap-6 sm:gap-8">
       <div>
@@ -747,10 +748,16 @@ function StepUpload({
             required
             maxLength={MAX_PET_NAME_LENGTH}
             value={petName}
-            onChange={(e) => setPetName(e.target.value)}
+            onChange={(e) => { setPetName(e.target.value); setPetNameMissing(false); }}
+            onBlur={(e) => setPetNameMissing(e.target.value.trim() === "")}
+            aria-invalid={petNameMissing}
+            aria-describedby={petNameMissing ? "pet-name-error" : undefined}
             placeholder="e.g. Charlie"
             className="w-full rounded-xl border border-input bg-background px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {petNameMissing && (
+            <p id="pet-name-error" role="alert" className="text-xs font-medium text-destructive mt-1.5">Add your pet's name to continue</p>
+          )}
           <p className="text-xs text-muted-foreground mt-1.5">Their Hero Pack, certificate, and character card will use this name.</p>
         </div>
 

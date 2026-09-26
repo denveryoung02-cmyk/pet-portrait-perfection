@@ -24,7 +24,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <aside className={`${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 fixed lg:sticky top-0 left-0 z-40 h-screen w-[260px] bg-card border-r border-border transition-transform`}>
           <div className="p-5 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
-              <div className="size-9 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground">🐾</div>
+              <div className="size-9 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground">🐾</div>
               <span className="font-display text-lg">Pawtoons<span className="text-primary">.</span></span>
             </Link>
             <button onClick={() => setOpen(false)} className="lg:hidden p-2"><X className="size-5" /></button>
@@ -47,7 +47,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
           <div className="absolute bottom-0 inset-x-0 p-4 border-t border-border">
             <div className="flex items-center gap-3 mb-3">
-              <div className="size-9 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground font-semibold text-sm">
+              <div className="size-9 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground font-semibold text-sm">
                 {(user?.email ?? "?")[0].toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">

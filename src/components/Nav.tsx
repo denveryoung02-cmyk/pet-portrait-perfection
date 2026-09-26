@@ -29,7 +29,7 @@ export function Nav() {
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "backdrop-blur-xl bg-background/80 border-b border-border/60" : "bg-transparent"}`}>
       <div className="mx-auto max-w-7xl px-5 md:px-8 h-16 md:h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="size-9 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground font-display text-lg shadow-[var(--shadow-soft)] group-hover:rotate-12 transition-transform">🐾</div>
+          <div className="size-9 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground font-display text-lg shadow-[var(--shadow-soft)] group-hover:rotate-12 transition-transform">🐾</div>
           <span className="font-display text-xl md:text-2xl font-semibold tracking-tight">Pawtoons<span className="text-primary">.</span></span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
@@ -43,7 +43,7 @@ export function Nav() {
           {user ? (
             <div className="relative" ref={menuRef}>
               <button onClick={() => setMenuOpen((o) => !o)} className="flex items-center gap-2 rounded-full bg-secondary px-2 py-1.5 pr-3 hover:bg-secondary/70 transition">
-                <div className="size-7 rounded-full bg-[var(--gradient-primary)] grid place-items-center text-primary-foreground text-xs font-semibold">
+                <div className="size-7 rounded-full bg-[image:var(--gradient-primary)] grid place-items-center text-primary-foreground text-xs font-semibold">
                   {(user.email ?? "?")[0].toUpperCase()}
                 </div>
                 <span className="hidden sm:inline-block text-sm font-medium max-w-[120px] truncate">{user.user_metadata?.full_name ?? user.email}</span>
@@ -61,7 +61,7 @@ export function Nav() {
           ) : (
             <Link to="/auth" className="text-sm font-semibold text-muted-foreground hover:text-foreground">Sign in</Link>
           )}
-          <Link to="/upload" className="rounded-full bg-foreground text-background px-4 md:px-5 py-2.5 text-sm font-semibold hover:bg-primary transition-colors shadow-[var(--shadow-soft)]">
+          <Link to="/upload" className="whitespace-nowrap rounded-full bg-foreground text-background px-4 md:px-5 py-2.5 text-sm font-semibold hover:bg-primary transition-colors shadow-[var(--shadow-soft)]">
             Start Creating
           </Link>
         </div>

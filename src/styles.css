@@ -132,6 +132,10 @@
   0%, 100% { transform: rotate(-1.5deg); }
   50% { transform: rotate(1.5deg); }
 }
+/* Reduced motion: entrance fades/slides render in their final state immediately */
+@media (prefers-reduced-motion: reduce) {
+  [class*="animate-[fade-"] { animation: none !important; }
+}
 /* Hero Pack reveal (src/routes/hero-pack.tsx) — matches design-reference/Pawtoons-Hero-Pack-Reveal-Prototype.html */
 @keyframes hero-pack-glow-pulse {
   0%, 100% { opacity: 0.35; transform: scale(0.94); }
