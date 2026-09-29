@@ -222,7 +222,7 @@ function AIPetPortraitGuidePage() {
               },
               {
                 title: "Choose a style and theme",
-                body: "Style determines the artistic medium (oil painting, comic book illustration, 3D animation). Theme determines the creative concept (royal, superhero, viking, and so on).",
+                body: "Style determines the artistic medium (oil painting, comic book illustration, 3D animation, graffiti street art). Theme determines the creative concept (royal, superhero, viking, and so on).",
               },
               {
                 title: "AI generation",
@@ -345,7 +345,7 @@ function AIPetPortraitGuidePage() {
         <h2 className="text-3xl font-bold mb-4">Choosing an Art Style</h2>
         <p className="text-gray-700 mb-4">
           Most AI pet portrait services offer a handful of art styles. The
-          three most common — and the three Pawtoons offers — are:
+          three most common are below — Pawtoons offers all three, plus Graffiti Splash for vivid street-art colour:
         </p>
         <div className="space-y-4">
           <div className="border-l-4 border-gray-200 pl-4">

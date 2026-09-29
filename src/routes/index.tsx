@@ -259,7 +259,7 @@ function Home() {
           <div className="mt-14 grid md:grid-cols-3 gap-6">
             {[
               { emoji: "⚡", text: "Ready in 60 seconds — see your portrait before you pay" },
-              { emoji: "🎨", text: "3 art styles, 12 themes — find the perfect match for your pet" },
+              { emoji: "🎨", text: "4 art styles, 12 themes — find the perfect match for your pet" },
               { emoji: "💝", text: "From £1.99 — the most affordable custom pet portrait available" },
             ].map((item) => (
               <div key={item.emoji} className="rounded-3xl bg-card p-7 border border-border shadow-[var(--shadow-soft)] flex gap-4 items-start">

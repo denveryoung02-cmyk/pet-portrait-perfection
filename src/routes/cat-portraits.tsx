@@ -11,7 +11,7 @@ export const Route = createFileRoute("/cat-portraits")({
       {
         name: "description",
         content:
-          "Transform your cat's photo into beautiful AI artwork in 60 seconds. Oil Painting, Pixar 3D or Comic Book. 12 themes. Instant download from £1.99.",
+          "Transform your cat's photo into beautiful AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. 12 themes. Instant download from £1.99.",
       },
       {
         property: "og:title",
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/cat-portraits")({
       {
         property: "og:description",
         content:
-          "Stunning AI cat portraits from your photo. 3 art styles, 12 themes. From £1.99. Ready in 60 seconds.",
+          "Stunning AI cat portraits from your photo. 4 art styles, 12 themes. From £1.99. Ready in 60 seconds.",
       },
       {
         property: "og:url",
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/cat-portraits")({
           "@type": "Product",
           "name": "Custom AI Cat Portrait — Digital Download",
           "description":
-            "AI-generated custom cat portrait from your photo. Oil Painting, Pixar 3D, or Comic Book style. 12 themes including Royal, Wizard, Angel, Mermaid. Instant download from £1.99.",
+            "AI-generated custom cat portrait from your photo. Oil Painting, Pixar 3D, Comic Book, or Graffiti Splash style. 12 themes including Royal, Wizard, Angel, Mermaid. Instant download from £1.99.",
           "brand": { "@type": "Brand", "name": "Pawtoons" },
           "offers": {
             "@type": "AggregateOffer",
@@ -188,7 +188,7 @@ function CatPortraitsPage() {
       {/* Art styles */}
       <section className="py-12 px-4 max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-8">
-          Three Art Styles for Your Cat Portrait
+          Art Styles for Your Cat Portrait
         </h2>
         <div className="grid md:grid-cols-3 gap-6 text-center">
           <div className="p-6">

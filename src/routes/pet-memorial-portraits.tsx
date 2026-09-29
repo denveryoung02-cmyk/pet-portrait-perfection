@@ -5,7 +5,7 @@ export const Route = createFileRoute("/pet-memorial-portraits")({
   head: () => ({
     meta: [
       { title: "Pet Memorial Portraits — Honour Your Pet's Memory | Pawtoons" },
-      { name: "description", content: "Create a beautiful memorial portrait of your beloved pet. Timeless AI artwork in Oil Painting, Comic Book or Pixar 3D style. From £1.99. Instant download." },
+      { name: "description", content: "Create a beautiful memorial portrait of your beloved pet. Timeless AI artwork in Oil Painting, Comic Book, Pixar 3D or Graffiti Splash style. From £1.99. Instant download." },
       { property: "og:title", content: "Pet Memorial Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/pet-memorial-portraits" },
       { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },

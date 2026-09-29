@@ -166,7 +166,7 @@ function AIPetPortraitsPage() {
           <ol className="space-y-3 mb-6">
             {[
               "Analyses your pet's facial features, colouring, fur patterns, and expression",
-              "Applies the chosen art style — oil painting techniques, 3D rendering, or bold comic-book linework",
+              "Applies the chosen art style — oil painting techniques, 3D rendering, bold comic-book linework, or graffiti street-art splashes",
               "Incorporates the selected theme — a royal costume, superhero cape, viking armour, and so on",
               "Generates a high-resolution image that captures your pet's likeness in the new style",
             ].map((step, i) => (
@@ -304,7 +304,7 @@ function AIPetPortraitsPage() {
             {[
               { icon: "⚡", title: "60-second generation", body: "The fastest AI pet portrait service available." },
               { icon: "💷", title: "From £1.99", body: "The most affordable quality AI pet portrait. Introductory price." },
-              { icon: "🎨", title: "3 art styles × 12 themes", body: "36 unique combinations. More variety than any competitor." },
+              { icon: "🎨", title: "4 art styles × 12 themes", body: "48 unique combinations. More variety than any competitor." },
               { icon: "👀", title: "Preview before you pay", body: "See your portrait before checkout. Pay only when you love it." },
               { icon: "🔄", title: "Regenerate up to 3×", body: "Not happy with the first result? Regenerate for free." },
               { icon: "⬇️", title: "Instant download", body: "High-resolution file delivered the moment you pay." },

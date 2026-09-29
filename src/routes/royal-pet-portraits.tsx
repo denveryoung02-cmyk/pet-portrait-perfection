@@ -5,7 +5,7 @@ export const Route = createFileRoute("/royal-pet-portraits")({
   head: () => ({
     meta: [
       { title: "Royal Pet Portraits — Your Pet as Royalty | Pawtoons" },
-      { name: "description", content: "Transform your pet into royalty with AI royal pet portraits. Crown jewels, regal poses, stunning artwork in Oil Painting, Pixar 3D or Comic Book. From £1.99." },
+      { name: "description", content: "Turn your pet into royalty with AI royal pet portraits. Crown jewels and regal poses in Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. From £1.99." },
       { property: "og:title", content: "Royal Pet Portraits | Pawtoons" },
       { property: "og:url", content: "https://www.pawtoons.co/royal-pet-portraits" },
       { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
@@ -31,7 +31,7 @@ function RoyalPetPortraitsPage() {
 
       <section className="py-12 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-6">Three Royal Art Styles</h2>
+          <h2 className="text-3xl font-bold text-center mb-6">Royal Art Styles</h2>
           <div className="grid md:grid-cols-3 gap-6 text-center">
             <div className="bg-white p-6 rounded-xl">
               <div className="text-4xl mb-3">🎨</div>

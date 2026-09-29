@@ -11,7 +11,7 @@ export const Route = createFileRoute("/dog-portraits")({
       {
         name: "description",
         content:
-          "Turn your dog's photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D, or Comic Book. 12 themes to choose from. Instant download from £1.99.",
+          "Turn your dog's photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. 12 themes to choose from. Instant download from £1.99.",
       },
       {
         property: "og:title",
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/dog-portraits")({
       {
         property: "og:description",
         content:
-          "Stunning custom dog portraits from your photo. 3 art styles, 12 themes. From £1.99. Created by AI in 60 seconds.",
+          "Stunning custom dog portraits from your photo. 4 art styles, 12 themes. From £1.99. Created by AI in 60 seconds.",
       },
       {
         property: "og:url",
@@ -44,7 +44,7 @@ export const Route = createFileRoute("/dog-portraits")({
           "@type": "Product",
           "name": "Custom AI Dog Portrait — Digital Download",
           "description":
-            "AI-generated custom dog portrait from your photo. Choose from Oil Painting, Pixar 3D, or Comic Book. 12 themes including Royal, Superhero, Viking. Instant download from £1.99.",
+            "AI-generated custom dog portrait from your photo. Choose from Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. 12 themes including Royal, Superhero, Viking. Instant download from £1.99.",
           "brand": { "@type": "Brand", "name": "Pawtoons" },
           "offers": {
             "@type": "AggregateOffer",
@@ -85,7 +85,7 @@ export const Route = createFileRoute("/dog-portraits")({
               "name": "Can I get a portrait of my dog in a superhero costume?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Superhero is one of our most popular themes. Your dog becomes a fully caped superhero with your choice of art style — Oil Painting, Pixar 3D, or Comic Book.",
+                "text": "Yes! Superhero is one of our most popular themes. Your dog becomes a fully caped superhero with your choice of art style — Oil Painting, Pixar 3D, Comic Book or Graffiti Splash.",
               },
             },
             {
@@ -127,8 +127,8 @@ function DogPortraitsPage() {
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
           Upload one photo of your dog. Our AI transforms it into stunning custom
-          artwork in 60 seconds. Choose from Oil Painting, Pixar 3D, or
-          Comic Book — and 12 epic themes. Instant digital download from £1.99.
+          artwork in 60 seconds. Choose from Oil Painting, Pixar 3D, Comic Book
+          or Graffiti Splash — and 12 epic themes. Instant digital download from £1.99.
         </p>
         <Link
           to="/upload"
@@ -158,10 +158,11 @@ function DogPortraitsPage() {
             </div>
             <div className="bg-white p-6 rounded-2xl text-center">
               <div className="text-3xl mb-3">🎨</div>
-              <h3 className="font-bold text-lg mb-2">3 Art Styles</h3>
+              <h3 className="font-bold text-lg mb-2">4 Art Styles</h3>
               <p className="text-gray-600">
                 Oil Painting for a classic feel. Pixar 3D for fun and vibrant.
                 Comic Book for something bold and full of energy.
+                Graffiti Splash for vivid street-art colour.
               </p>
             </div>
             <div className="bg-white p-6 rounded-2xl text-center">
@@ -183,7 +184,7 @@ function DogPortraitsPage() {
           Choose Your Dog's Portrait Style
         </h2>
         <p className="text-center text-gray-600 mb-8">
-          12 unique themes, each available in 3 art styles. That's 36 ways to
+          12 unique themes, each available in 4 art styles. That's 48 ways to
           turn your dog into a legend.
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
@@ -231,7 +232,7 @@ function DogPortraitsPage() {
               {
                 n: "02",
                 title: "Pick a theme and art style",
-                body: "Choose from 12 themes and 3 art styles. Royal? Superhero? Viking? Mix and match to find the perfect look for your dog's personality.",
+                body: "Choose from 12 themes and 4 art styles. Royal? Superhero? Viking? Mix and match to find the perfect look for your dog's personality.",
               },
               {
                 n: "03",
