@@ -190,7 +190,7 @@ function CatPortraitsPage() {
         <h2 className="text-3xl font-bold text-center mb-8">
           Art Styles for Your Cat Portrait
         </h2>
-        <div className="grid md:grid-cols-3 gap-6 text-center">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
           <div className="p-6">
             <div className="text-4xl mb-3">🎨</div>
             <h3 className="font-bold text-lg mb-2">Oil Painting</h3>
@@ -213,6 +213,14 @@ function CatPortraitsPage() {
             <p className="text-gray-600 text-sm">
               Bold outlines, vibrant colours, dynamic energy. Perfect for a
               cat with big personality and even bigger attitude.
+            </p>
+          </div>
+          <div className="p-6">
+            <div className="text-4xl mb-3">🧨</div>
+            <h3 className="font-bold text-lg mb-2">Graffiti Splash</h3>
+            <p className="text-gray-600 text-sm">
+              Spray-paint tags and paint splatter on a black background. Perfect
+              for a cat with serious street-art energy.
             </p>
           </div>
         </div>

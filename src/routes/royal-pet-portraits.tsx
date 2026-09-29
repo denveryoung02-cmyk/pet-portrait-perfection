@@ -32,7 +32,7 @@ function RoyalPetPortraitsPage() {
       <section className="py-12 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-6">Royal Art Styles</h2>
-          <div className="grid md:grid-cols-3 gap-6 text-center">
+          <div className="grid sm:grid-cols-2 gap-6 text-center">
             <div className="bg-white p-6 rounded-xl">
               <div className="text-4xl mb-3">🎨</div>
               <h3 className="font-bold mb-2">Oil Painting Royal</h3>
@@ -47,6 +47,11 @@ function RoyalPetPortraitsPage() {
               <div className="text-4xl mb-3">💥</div>
               <h3 className="font-bold mb-2">Comic Book Royal</h3>
               <p className="text-sm text-gray-600">Bold outlines, vibrant colours. A royal portrait with graphic, pop-art flair.</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl">
+              <div className="text-4xl mb-3">🧨</div>
+              <h3 className="font-bold mb-2">Graffiti Splash Royal</h3>
+              <p className="text-sm text-gray-600">Spray-paint tags and paint splatter on black. Street-art royalty with serious attitude.</p>
             </div>
           </div>
         </div>
