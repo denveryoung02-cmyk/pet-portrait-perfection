@@ -136,7 +136,7 @@ export const checkBundleReady = createServerFn({ method: "POST" })
       status = await getBundlePortraitStatus(data.orderId, userId);
     }
 
-    if (status.ready) {
+    if (status.settled) {
       await sendBundleReadyEmailIfNeeded(data.orderId, userId, status.portraits, env);
     }
 
@@ -144,8 +144,10 @@ export const checkBundleReady = createServerFn({ method: "POST" })
   });
 
 /**
- * Sends the "your 3 extra styles are ready" email the first time an order's
- * bundle finishes, guarded by orders.bundle_email_sent. The flag is only set
+ * Sends the bundle email the first time an order's bundle settles — every
+ * extra either completed or out of retries. If some failed, the email says so
+ * and asks the customer to reply, rather than staying silent. Guarded by
+ * orders.bundle_email_sent. The flag is only set
  * after a successful send, so a failed send is retried on a later poll
  * (unless that poll is also the one where ready first became true).
  */
@@ -168,7 +170,8 @@ async function sendBundleReadyEmailIfNeeded(
   const items = portraits
     .filter((p): p is BundlePortrait & { downloadUrl: string } => !!p.downloadUrl)
     .map((p) => ({ label: p.artStyleLabel, downloadUrl: p.downloadUrl }));
-  if (items.length === 0) return;
+  const failedLabels = portraits.filter((p) => p.status === "failed").map((p) => p.artStyleLabel);
+  if (items.length === 0 && failedLabels.length === 0) return;
 
   try {
     const { data: authData } = await supabaseAdmin.auth.admin.getUserById(userId);
@@ -184,6 +187,7 @@ async function sendBundleReadyEmailIfNeeded(
       to: customerEmail,
       name: authData.user?.user_metadata?.full_name ?? null,
       items,
+      failedLabels,
       resendApiKey: resendKey,
       orderId,
       petName: heroProfile?.pet_name ?? null,

@@ -69,14 +69,40 @@ export async function sendBundleReadyEmail(opts: {
   to: string;
   name: string | null;
   items: { label: string; downloadUrl: string }[];
+  /** Styles that failed every retry — named honestly in the email. */
+  failedLabels?: string[];
   resendApiKey: string;
   orderId?: string;
   petName?: string | null;
 }): Promise<void> {
-  const { to, name, items, resendApiKey, orderId, petName } = opts;
+  const { to, name, items, failedLabels = [], resendApiKey, orderId, petName } = opts;
   const displayName = name?.split(" ")[0] ?? "there";
   const petPossessive = petName ? `${petName}'s` : "your pet's";
   const heroPackUrl = orderId ? `https://www.pawtoons.co/hero-pack?order=${orderId}` : null;
+
+  const total = items.length + failedLabels.length;
+  // "A", "A and B", "A, B and C"
+  const failedList = failedLabels.length > 1
+    ? `${failedLabels.slice(0, -1).join(", ")} and ${failedLabels[failedLabels.length - 1]}`
+    : (failedLabels[0] ?? "");
+  const failedNoun = failedLabels.length === 1 ? "portrait" : "portraits";
+  const isAre = items.length === 1 ? "is" : "are";
+  let subject: string;
+  let heading: string;
+  let intro: string;
+  if (failedLabels.length === 0) {
+    subject = `Your ${total} extra Pawtoon styles are ready 🐾`;
+    heading = `Your ${total} extra styles are ready!`;
+    intro = `The other ${total} styles from your Pawtoons bundle have finished generating. Click below to download each full-resolution image — links are valid for 1 hour.`;
+  } else if (items.length > 0) {
+    subject = `${items.length} of your ${total} extra Pawtoon styles ${isAre} ready 🐾`;
+    heading = `${items.length} of your ${total} extra styles ${isAre} ready`;
+    intro = `We couldn't create your ${failedList} ${failedNoun} — sorry about that. Reply to this email and we'll sort it out for you. ${items.length === 1 ? "The other one is" : "The rest are"} ready below — links are valid for 1 hour.`;
+  } else {
+    subject = "About your extra Pawtoon styles";
+    heading = "We couldn't create your extra styles";
+    intro = `Sorry — we couldn't create your ${failedList} ${failedNoun}. Reply to this email and we'll sort it out for you.`;
+  }
 
   const linksHtml = items
     .map(
@@ -94,9 +120,9 @@ export async function sendBundleReadyEmail(opts: {
         <span style="font-size: 28px;">🐾</span>
         <span style="font-size: 20px; font-weight: 700; margin-left: 8px; letter-spacing: -0.5px;">Pawtoons</span>
       </div>
-      <h1 style="font-size: 26px; font-weight: 700; margin: 0 0 16px; line-height: 1.2;">Your 3 extra styles are ready!</h1>
+      <h1 style="font-size: 26px; font-weight: 700; margin: 0 0 16px; line-height: 1.2;">${heading}</h1>
       <p style="color: #555; margin: 0 0 8px;">Hi ${displayName},</p>
-      <p style="color: #555; margin: 0 0 28px;">The other 3 styles from your Pawtoons bundle have finished generating. Click below to download each full-resolution image — links are valid for 1 hour.</p>
+      <p style="color: #555; margin: 0 0 28px;">${intro}</p>
       ${linksHtml}
       ${heroPackUrl ? `<p style="color: #555; font-size: 13px; margin: 8px 0 0;">Don't forget — ${petPossessive} Hero Pack is ready to view too: <a href="${heroPackUrl}" style="color: #000; font-weight: 600; text-decoration: underline;">View your Hero Pack →</a></p>` : ""}
       <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;"/>
@@ -113,7 +139,7 @@ export async function sendBundleReadyEmail(opts: {
     body: JSON.stringify({
       from: "Pawtoons <hello@pawtoons.co>",
       to: [to],
-      subject: "Your 2 extra Pawtoon styles are ready 🐾",
+      subject,
       html,
     }),
   });
