@@ -111,8 +111,9 @@ const CheckBundleInput = z.object({
 });
 
 /**
- * Polled by the success page every 10 s. On each call it generates ONE missing
- * bundle style (if any remain), then returns status for all portraits.
+ * Polled by the success page, one call at a time. On each call it generates ONE
+ * bundle style (a missing one, or a retry of a failed/killed one) unless another
+ * is already mid-generation, then returns status for all portraits.
  * Splitting into one-per-invocation keeps each Worker call within the 128 MB
  * memory limit — two sequential generations in one invocation exceeds it.
  */
@@ -124,8 +125,8 @@ export const checkBundleReady = createServerFn({ method: "POST" })
 
     // Verify ownership and get current status.
     let status = await getBundlePortraitStatus(data.orderId, userId);
-    if (!status.ready && status.portraits.length < 3) {
-      // Generate the next missing style in this invocation (one at a time).
+    if (!status.settled) {
+      // Generate the next missing or retryable style in this invocation (one at a time).
       try {
         await generateNextBundlePortrait(data.orderId, userId, env);
       } catch (err) {

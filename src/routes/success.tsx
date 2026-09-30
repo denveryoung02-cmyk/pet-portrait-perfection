@@ -37,7 +37,7 @@ function Success() {
   const [orderType, setOrderType] = useState<"single_pet" | "multi_subject" | null>(null);
   const [wantsBundle, setWantsBundle] = useState(false);
   const [bundlePortraits, setBundlePortraits] = useState<BundlePortrait[]>([]);
-  const [bundleReady, setBundleReady] = useState(false);
+  const [bundleSettled, setBundleSettled] = useState(false);
   const [heroPackReady, setHeroPackReady] = useState(false);
 
   useEffect(() => {
@@ -84,30 +84,40 @@ function Success() {
     confirmAndReveal();
   }, [generationId, sessionId]);
 
-  // Poll bundle status every 10 s. Each checkBundleReady call generates one
-  // missing style if any remain (one per invocation to stay within CF memory limit).
+  // Poll bundle status 10 s after each call RETURNS. Each checkBundleReady call
+  // can run a ~60 s generation, so a fixed interval would overlap calls — and
+  // overlapping generations can exceed the Worker's 128 MB memory limit.
   useEffect(() => {
-    if (!orderId || !wantsBundle || bundleReady) return;
-    const interval = setInterval(async () => {
+    if (!orderId || !wantsBundle || bundleSettled) return;
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const poll = async () => {
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData.session?.access_token;
-        if (!token) return;
-        const res = await checkBundleReady({
-          data: { orderId },
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res?.portraits?.length > 0) setBundlePortraits(res.portraits);
-        if (res?.ready) {
-          setBundleReady(true);
-          clearInterval(interval);
+        if (token) {
+          const res = await checkBundleReady({
+            data: { orderId },
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (cancelled) return;
+          if (res?.portraits?.length > 0) setBundlePortraits(res.portraits);
+          if (res?.settled) {
+            setBundleSettled(true);
+            return;
+          }
         }
       } catch {
         // best-effort — keep polling
       }
-    }, 10000);
-    return () => clearInterval(interval);
-  }, [orderId, wantsBundle, bundleReady]);
+      if (!cancelled) timer = setTimeout(poll, 10000);
+    };
+    timer = setTimeout(poll, 10000);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [orderId, wantsBundle, bundleSettled]);
 
   // Poll for the Hero Pack (certificate/card/wallpaper) every 10s, same
   // shape as the bundle poller above. generateHeroPack (confirmCheckout /
