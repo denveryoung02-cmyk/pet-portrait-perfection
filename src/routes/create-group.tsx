@@ -49,7 +49,7 @@ const MAX_PEOPLE = 3;
 const MAX_PETS = 3;
 const MAX_NAME_LENGTH = 40;
 
-// Same 3 styles/copy as upload.tsx's ART_STYLES (upload.tsx:237-241) — copied,
+// Same 4 styles/copy as upload.tsx's ART_STYLES (upload.tsx:237-241) — copied,
 // not imported, since that const isn't exported from upload.tsx.
 const ART_STYLES = [
   { id: "oil-painting", name: "Oil Painting", emoji: "🎨", desc: "Museum-quality oil painting, rich painterly brush strokes, dramatic lighting, gallery-grade composition" },

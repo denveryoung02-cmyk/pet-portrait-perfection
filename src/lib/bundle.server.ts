@@ -3,7 +3,7 @@ import { buildPrompt, type GenerationInput } from "@/services/prompts";
 import { bakeWatermark } from "@/lib/watermark.server";
 import type { CloudflareEnv } from "@/lib/env.server";
 
-const ALL_ART_STYLES = ["oil-painting", "pixar-3d", "comic-book"] as const;
+const ALL_ART_STYLES = ["oil-painting", "pixar-3d", "comic-book", "graffiti-splash"] as const;
 type ArtStyle = (typeof ALL_ART_STYLES)[number];
 
 const ART_STYLE_LABELS: Record<string, string> = {
@@ -332,6 +332,6 @@ export async function getBundlePortraitStatus(orderId: string, userId: string): 
     }),
   );
 
-  const ready = portraits.length === 2 && portraits.every(p => p.status === "completed");
+  const ready = portraits.length === 3 && portraits.every(p => p.status === "completed");
   return { ready, portraits };
 }

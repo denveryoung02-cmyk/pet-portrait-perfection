@@ -124,7 +124,7 @@ export const checkBundleReady = createServerFn({ method: "POST" })
 
     // Verify ownership and get current status.
     let status = await getBundlePortraitStatus(data.orderId, userId);
-    if (!status.ready && status.portraits.length < 2) {
+    if (!status.ready && status.portraits.length < 3) {
       // Generate the next missing style in this invocation (one at a time).
       try {
         await generateNextBundlePortrait(data.orderId, userId, env);
@@ -143,7 +143,7 @@ export const checkBundleReady = createServerFn({ method: "POST" })
   });
 
 /**
- * Sends the "your 2 extra styles are ready" email the first time an order's
+ * Sends the "your 3 extra styles are ready" email the first time an order's
  * bundle finishes, guarded by orders.bundle_email_sent. The flag is only set
  * after a successful send, so a failed send is retried on a later poll
  * (unless that poll is also the one where ready first became true).

@@ -28,9 +28,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     const params = new URLSearchParams({
       "payment_method_types[0]": "card",
       "line_items[0][price_data][currency]": "gbp",
-      "line_items[0][price_data][product_data][name]": isBundle ? "Pawtoons — All 3 Styles Bundle" : "Pawtoons — Digital Download",
+      "line_items[0][price_data][product_data][name]": isBundle ? "Pawtoons — All 4 Styles Bundle" : "Pawtoons — Digital Download",
       "line_items[0][price_data][product_data][description]": isBundle
-        ? "Oil Painting, Pixar 3D & Comic Book portraits of your pet. Instant digital delivery."
+        ? "Oil Painting, Pixar 3D, Comic Book & Graffiti Splash portraits of your pet. Instant digital delivery."
         : "Instant digital delivery of your AI pet portrait. High-resolution PNG.",
       "line_items[0][price_data][unit_amount]": isBundle ? "499" : "199",
       "line_items[0][quantity]": "1",

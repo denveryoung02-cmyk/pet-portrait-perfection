@@ -94,9 +94,9 @@ export async function sendBundleReadyEmail(opts: {
         <span style="font-size: 28px;">🐾</span>
         <span style="font-size: 20px; font-weight: 700; margin-left: 8px; letter-spacing: -0.5px;">Pawtoons</span>
       </div>
-      <h1 style="font-size: 26px; font-weight: 700; margin: 0 0 16px; line-height: 1.2;">Your 2 extra styles are ready!</h1>
+      <h1 style="font-size: 26px; font-weight: 700; margin: 0 0 16px; line-height: 1.2;">Your 3 extra styles are ready!</h1>
       <p style="color: #555; margin: 0 0 8px;">Hi ${displayName},</p>
-      <p style="color: #555; margin: 0 0 28px;">The other 2 styles from your Pawtoons bundle have finished generating. Click below to download each full-resolution image — links are valid for 1 hour.</p>
+      <p style="color: #555; margin: 0 0 28px;">The other 3 styles from your Pawtoons bundle have finished generating. Click below to download each full-resolution image — links are valid for 1 hour.</p>
       ${linksHtml}
       ${heroPackUrl ? `<p style="color: #555; font-size: 13px; margin: 8px 0 0;">Don't forget — ${petPossessive} Hero Pack is ready to view too: <a href="${heroPackUrl}" style="color: #000; font-weight: 600; text-decoration: underline;">View your Hero Pack →</a></p>` : ""}
       <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;"/>

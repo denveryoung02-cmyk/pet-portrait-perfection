@@ -108,10 +108,10 @@ function Checkout() {
               />
               <div>
                 <div className="text-sm font-semibold">
-                  Get all 3 styles — <span className="text-primary">£4.99</span>
-                  <span className="ml-2 text-xs font-normal text-muted-foreground line-through">£5.97</span>
+                  Get all 4 styles — <span className="text-primary">£4.99</span>
+                  <span className="ml-2 text-xs font-normal text-muted-foreground line-through">£7.96</span>
                 </div>
-                <div className="text-xs text-muted-foreground mt-0.5">Oil Painting, Pixar 3D &amp; Comic Book versions of your portrait. Save £1.98.</div>
+                <div className="text-xs text-muted-foreground mt-0.5">Oil Painting, Pixar 3D, Comic Book &amp; Graffiti Splash versions of your portrait. Save £2.97.</div>
               </div>
             </label>
 
@@ -157,16 +157,16 @@ function Checkout() {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-xs sm:text-sm">{addBundle ? "Pawtoons — All 3 Styles Bundle" : "Pawtoons Digital Portrait"}</div>
+                <div className="font-semibold text-xs sm:text-sm">{addBundle ? "Pawtoons — All 4 Styles Bundle" : "Pawtoons Digital Portrait"}</div>
                 <div className="text-[10px] sm:text-xs text-muted-foreground">
-                  {addBundle ? "Oil Painting + Pixar 3D + Comic Book · instant download" : "High-resolution PNG · instant download"}
+                  {addBundle ? "Oil Painting + Pixar 3D + Comic Book + Graffiti Splash · instant download" : "High-resolution PNG · instant download"}
                 </div>
                 <div className="text-[10px] sm:text-xs text-muted-foreground mt-1">🔒 Watermark removed instantly after payment</div>
               </div>
             </div>
             <div className="space-y-2 text-xs sm:text-sm border-t border-border pt-3 sm:pt-4">
               {addBundle ? (
-                <div className="flex justify-between"><span className="text-muted-foreground">All 3 Styles Bundle</span><span>£4.99</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">All 4 Styles Bundle</span><span>£4.99</span></div>
               ) : (
                 <div className="flex justify-between"><span className="text-muted-foreground">Portrait</span><span>£1.99</span></div>
               )}

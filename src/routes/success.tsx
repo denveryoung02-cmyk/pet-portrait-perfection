@@ -184,7 +184,7 @@ function Success() {
               <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight">Your Pawtoon is ready!</h1>
               <p className="text-sm sm:text-base text-muted-foreground">
                 {wantsBundle
-                  ? "Payment confirmed. Your first portrait is ready now — the other 2 styles are generating."
+                  ? "Payment confirmed. Your first portrait is ready now — the other 3 styles are generating."
                   : "Payment confirmed. Your high-resolution portrait is ready to download."}
               </p>
             </div>
@@ -246,11 +246,11 @@ function Success() {
             {/* Bundle section */}
             {wantsBundle && (
               <div className="rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-6 text-left space-y-4">
-                <h3 className="font-display text-base sm:text-lg">Your 2 extra styles</h3>
+                <h3 className="font-display text-base sm:text-lg">Your 3 extra styles</h3>
                 {bundlePortraits.length === 0 ? (
                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
                     <span className="animate-spin text-lg inline-block">✨</span>
-                    <span>Generating your other 2 styles — this takes a few minutes. This page updates automatically.</span>
+                    <span>Generating your other 3 styles — this takes a few minutes. This page updates automatically.</span>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -293,7 +293,7 @@ function Success() {
                         )}
                       </div>
                     ))}
-                    {bundlePortraits.length < 2 && (
+                    {bundlePortraits.length < 3 && (
                       <div className="rounded-xl border border-border overflow-hidden">
                         <div className="aspect-square bg-secondary grid place-items-center">
                           <div className="text-center p-3">
