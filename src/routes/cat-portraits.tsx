@@ -46,7 +46,7 @@ export const Route = createFileRoute("/cat-portraits")({
             "@type": "AggregateOffer",
             "priceCurrency": "GBP",
             "lowPrice": "1.99",
-            "highPrice": "3.99",
+            "highPrice": "4.99",
             "availability": "https://schema.org/InStock",
           },
         }),
@@ -267,7 +267,7 @@ function CatPortraitsPage() {
             },
             {
               q: "How much does a custom cat portrait cost?",
-              a: "From £1.99 for a single portrait. Two portraits for £3.99. These are introductory prices for early customers.",
+              a: "From £1.99 for a single portrait. All 4 styles for £4.99. These are introductory prices for early customers.",
             },
             {
               q: "Can I get a cat memorial portrait?",

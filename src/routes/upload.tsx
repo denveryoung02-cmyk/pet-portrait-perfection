@@ -76,8 +76,8 @@ import flowerCrownGraffiti from "@/assets/gen-graffiti-flower-crown-v1.webp";
 export const Route = createFileRoute("/upload")({
   head: () => ({
     meta: [
-      { title: "Create Your AI Pet Portrait — Upload a Photo | Pawtoons" },
-      { name: "description", content: "Upload your pet's photo, pick Oil Painting, Pixar 3D, Comic Book or Graffiti Splash, and choose from 12 themes. Ready in 60 seconds, from £1.99." },
+      { title: "Upload Your Pet Photo & Create Your AI Portrait | Pawtoons" },
+      { name: "description", content: "Upload a photo and get an AI pet portrait in Oil Painting, Pixar 3D, Comic Book or Graffiti Splash style from £1.99. Instant preview before you pay." },
       { property: "og:image", content: "https://www.pawtoons.co/og-default.jpg" },
       { name: "twitter:image", content: "https://www.pawtoons.co/og-default.jpg" },
     ],

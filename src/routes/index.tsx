@@ -767,6 +767,8 @@ function ThemesSection() {
     return theme.imgOil;
   };
 
+  const styleAltLabel = { oil: "Oil Painting", pixar: "Pixar 3D", "comic-book": "Comic Book", graffiti: "Graffiti Splash" }[styleFilter];
+
   useEffect(() => {
     if (!showAllThemes || !gridRef.current) return;
     requestAnimationFrame(() => {
@@ -819,7 +821,7 @@ function ThemesSection() {
               className={`group relative rounded-3xl overflow-hidden bg-card aspect-[4/5] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card)] transition-all hover:-translate-y-1${i >= 6 ? (showAllThemes ? "" : " hidden md:block") : ""}`}
               style={{ animationDelay: `${i * 80}ms` }}
             >
-              <img src={getThemeImage(t)} alt={t.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+              <img src={getThemeImage(t)} alt={`${t.name} — ${styleAltLabel} style AI pet portrait example`}className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
               <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
                 <div className="text-[10px] uppercase tracking-wider text-white/70">{t.tag}</div>
                 <div className="text-white font-display text-lg">{t.name}</div>

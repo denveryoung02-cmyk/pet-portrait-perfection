@@ -11,7 +11,7 @@ export const Route = createFileRoute("/dog-portraits")({
       {
         name: "description",
         content:
-          "Turn your dog's photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. 12 themes to choose from. Instant download from £1.99.",
+          "Turn your dog's photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. 12 themes. Instant download from £1.99.",
       },
       {
         property: "og:title",
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/dog-portraits")({
             "@type": "AggregateOffer",
             "priceCurrency": "GBP",
             "lowPrice": "1.99",
-            "highPrice": "3.99",
+            "highPrice": "4.99",
             "availability": "https://schema.org/InStock",
           },
         }),

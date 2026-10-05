@@ -99,7 +99,7 @@ function AboutPage() {
         <p className="text-gray-700">
           Portraits are instant digital downloads, suitable for printing, framing,
           sharing on social media, or using as wallpapers. Single portrait: £1.99.
-          Two portraits: £3.99. Introductory pricing for early customers.
+          All 4 styles: £4.99. Introductory pricing for early customers.
         </p>
       </section>
 

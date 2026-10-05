@@ -50,7 +50,7 @@ export const homepageProductSchema = {
     "@type": "AggregateOffer",
     "priceCurrency": "GBP",
     "lowPrice": "1.99",
-    "highPrice": "3.99",
+    "highPrice": "4.99",
     "offerCount": "2",
     "availability": "https://schema.org/InStock",
     "seller": {
@@ -93,7 +93,7 @@ export const homepageFAQSchema = {
       "name": "How much does a custom AI pet portrait cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pawtoons AI pet portraits start from £1.99 for a single portrait or £3.99 for two portraits. This is an introductory price for early customers.",
+        "text": "Pawtoons AI pet portraits start from £1.99 for a single portrait, or £4.99 for all 4 styles. This is an introductory price for early customers.",
       },
     },
     {
