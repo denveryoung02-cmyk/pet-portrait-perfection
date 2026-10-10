@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { breadcrumbSchema, schemaToString } from "@/lib/seo-schemas";
+import { ChristmasBanner } from "@/components/ChristmasBanner";
 
 export const Route = createFileRoute("/dog-portraits")({
   head: () => ({
@@ -115,6 +116,7 @@ export const Route = createFileRoute("/dog-portraits")({
 function DogPortraitsPage() {
   return (
     <main className="min-h-screen">
+      <ChristmasBanner />
       {/* Hero */}
       <section className="py-16 px-4 text-center max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">

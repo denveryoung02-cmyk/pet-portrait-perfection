@@ -39,6 +39,7 @@ function Success() {
   const [bundlePortraits, setBundlePortraits] = useState<BundlePortrait[]>([]);
   const [bundleSettled, setBundleSettled] = useState(false);
   const [heroPackReady, setHeroPackReady] = useState(false);
+  const [petName, setPetName] = useState<string | null>(null);
 
   useEffect(() => {
     if (!generationId || !sessionId) {
@@ -73,6 +74,7 @@ function Success() {
         if (res.orderId) setOrderId(res.orderId);
         if (res.wantsBundle) setWantsBundle(true);
         if (res.orderType) setOrderType(res.orderType);
+        if (res.petName) setPetName(res.petName);
         track("payment_completed", { bundle: !!res.wantsBundle });
       } catch {
         setError("Something went wrong confirming your purchase.");
@@ -205,6 +207,17 @@ function Success() {
                 <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-border shadow-lg">
                   <img src={previewUrl} alt="Your Pawtoon" className="w-full h-auto" />
                 </div>
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Want {petName ? `${petName}’s` : "your pet’s"} portrait on something more than a screen?{" "}
+                  <a
+                    href="https://www.etsy.com/shop/Foreverlai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-foreground"
+                  >
+                    Turn it into a Christmas mug, canvas or tote →
+                  </a>
+                </p>
               </div>
             )}
 

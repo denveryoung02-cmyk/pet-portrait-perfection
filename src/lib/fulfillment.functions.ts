@@ -55,6 +55,7 @@ export const confirmCheckout = createServerFn({ method: "POST" })
       orderType: session.orderType,
     });
     const downloadUrl = await signCleanDownloadUrl(generationId);
+    const petName = (gen.generation_params as { petName?: string } | null)?.petName ?? null;
 
     // Hero Pack (certificate/card/wallpaper) only applies to the single-pet
     // flow — multi-subject orders never generate one.
@@ -85,7 +86,6 @@ export const confirmCheckout = createServerFn({ method: "POST" })
           const emailDownloadUrl = await signCleanDownloadUrl(generationId, 86400);
           console.log("[email/confirmCheckout] emailDownloadUrl generated:", !!emailDownloadUrl);
           if (emailDownloadUrl) {
-            const petName = (gen.generation_params as { petName?: string } | null)?.petName ?? null;
             await sendOrderConfirmationEmail({
               to: customerEmail,
               name: authData.user?.user_metadata?.full_name ?? null,
@@ -103,7 +103,7 @@ export const confirmCheckout = createServerFn({ method: "POST" })
       console.error("[email/confirmCheckout] Failed to send order confirmation email:", emailErr);
     }
 
-    return { paid: true as const, downloadUrl, orderId, wantsBundle: session.wantsBundle, orderType: session.orderType };
+    return { paid: true as const, downloadUrl, orderId, wantsBundle: session.wantsBundle, orderType: session.orderType, petName };
   });
 
 const CheckBundleInput = z.object({

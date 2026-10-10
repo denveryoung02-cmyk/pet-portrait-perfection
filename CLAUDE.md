@@ -7,6 +7,13 @@
 - Never use words like "probably" or "possibly"
 - Deploy to staging only (`npm run deploy:staging`) unless explicitly told otherwise
 
+## Standard Rules (Den's baseline — same across all projects)
+- **Clarify-first rule:** if a request is underspecified — goal, scope, or what "done" looks like isn't clear — restate my interpretation or ask a direct question before doing any real work. Don't guess at intent and proceed, even for small asks.
+- **No-BS clause:** if a fix or feature isn't worth the complexity it adds, say so before building it.
+- **Loop reminder:** if a task repeats the same step across multiple items, suggest a loop/batch instead of doing them one by one, and explain why in plain English. Ask first if unsure whether it applies.
+- **New-project check:** if a project doesn't have its own CLAUDE.md yet, say so explicitly and offer to create one from `C:\Projects\shared\CLAUDE-TEMPLATE.md` before starting any work.
+- **Done-checklist** — before presenting any fix as finished: verified against current docs/specs (not memory); no unnecessary complexity added beyond what was asked; tested where testing is possible, stated plainly where it isn't.
+
 ## Project
 Pawtoons — AI pet portrait service. Upload photo → select theme → pay £1.99 → instant digital download.
 
@@ -83,7 +90,7 @@ Site verified on both Google Search Console (URL prefix) and Bing Webmaster Tool
 ## Rules
 - No guessing — read the relevant files first and state facts only before suggesting any fix. Never use words like "probably" or "possibly". If cause is unknown, read more files until it is known.
 - One fix at a time, targeted edits only, never rewrite full files
-- Digital download only — no physical products, no shipping
+- Digital download only — no physical products sold or fulfilled by Pawtoons itself; outbound links to partner shops (e.g. Foreverlai on Etsy) are fine
 - Price: £1.99
 - All previews watermarked until payment confirmed
 - Mobile-first (320px+)
@@ -133,7 +140,7 @@ These rules exist to reduce unnecessary token usage. Follow them strictly.
 - Funnel events: fire-and-forget inserts to funnel_events table in Supabase
 - Worker CPU limit: 30,000ms CPU time (network I/O is free, doesn't count toward limit)
 - Wall-clock limit: 120s per Worker invocation (duration_ms: 120000 in wrangler.jsonc / wrangler.staging.jsonc) — separate from the 30,000ms CPU-time limit on the line above; do not confuse the two.
-- Pawtoons is digital-only — no physical products, no shipping, no merchandise
+- Pawtoons is digital-only — sells and fulfils no physical products, shipping or merchandise itself; outbound links to partner shops (e.g. Foreverlai on Etsy, linked from /success) are fine and are not a conflict
 
 ### Diff output rules
 - Summarise changes in a table — don't reproduce unchanged code

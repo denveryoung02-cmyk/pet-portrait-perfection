@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { organizationSchema, websiteSchema, homepageProductSchema, homepageFAQSchema } from "@/lib/seo-schemas";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { ChristmasBanner } from "@/components/ChristmasBanner";
 import { useState, useEffect, useRef } from "react";
 import { track } from "@/lib/analytics";
 
@@ -135,6 +136,7 @@ const beforeAfterPairs = [
 function Home() {
   return (
     <div className="min-h-screen bg-background">
+      <ChristmasBanner />
       <Nav />
 
       {/* HERO */}

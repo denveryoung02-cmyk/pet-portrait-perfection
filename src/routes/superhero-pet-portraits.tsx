@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { breadcrumbSchema, schemaToString } from "@/lib/seo-schemas";
+import { ChristmasBanner } from "@/components/ChristmasBanner";
 
 export const Route = createFileRoute("/superhero-pet-portraits")({
   head: () => ({
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/superhero-pet-portraits")({
 function SuperheroPetPortraitsPage() {
   return (
     <main className="min-h-screen">
+      <ChristmasBanner />
       <section className="py-16 px-4 text-center max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6"><Link to="/">Home</Link><span className="mx-2">/</span><span>Superhero Pet Portraits</span></nav>
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Superhero Pet Portraits — Your Pet Saves the Day</h1>
