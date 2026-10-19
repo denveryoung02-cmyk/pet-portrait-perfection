@@ -79,7 +79,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Custom AI Pet Portraits From Your Photo | Pawtoons" },
-      { name: "description", content: "Turn your pet photo into stunning AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. 12 themes. From £1.99. Instant digital download." },
+      { name: "description", content: "Turn your pet's photo into stunning AI artwork in 60 seconds. 4 art styles, 12 themes. From £1.99. Instant digital download." },
       { property: "og:title", content: "Custom AI Pet Portraits From Your Photo | Pawtoons" },
       { property: "og:description", content: "Turn your pet photo into AI art in 60 seconds. From £1.99. Instant download." },
       { property: "og:url", content: "https://www.pawtoons.co" },

@@ -12,7 +12,7 @@ export const Route = createFileRoute("/cat-portraits")({
       {
         name: "description",
         content:
-          "Transform your cat's photo into beautiful AI artwork in 60 seconds. Oil Painting, Pixar 3D, Comic Book or Graffiti Splash. 12 themes. Instant download from £1.99.",
+          "Transform your cat's photo into beautiful AI artwork in 60 seconds. 4 art styles, 12 themes. Instant download from £1.99.",
       },
       {
         property: "og:title",
