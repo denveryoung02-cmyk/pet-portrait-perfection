@@ -829,7 +829,7 @@ function StepUpload({
 
       <aside className="rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-6 h-fit">
         <h3 className="font-display text-base sm:text-lg mb-1">📸 Photo tips</h3>
-        <p className="text-xs text-muted-foreground mb-3 sm:mb-4">Better photos = better Pawtoons.</p>
+        <p className="text-xs text-muted-foreground mb-3 sm:mb-4">Your portrait is made from your own photo, so a clear, well-lit shot with their face showing helps it look like them.</p>
         <Tip ok text="Clear, well-lit face" />
         <Tip ok text="Eyes visible" />
         <Tip ok text="Close-up shot" />
@@ -1502,33 +1502,6 @@ function SocialShowcase() {
             </div>
           </article>
         ))}
-      </div>
-
-      {/* Live reaction ticker */}
-      <div className="mt-8 overflow-hidden rounded-2xl bg-secondary/60 border border-border py-3">
-        <div className="flex gap-8 whitespace-nowrap animate-[marquee_28s_linear_infinite]">
-          {[
-            "💬 @mia_p: 'I cried laughing'",
-            "♥ 312 just liked Cleo's Pawtoon",
-            "🎉 New Pawtoon every 7 seconds",
-            "💬 @james: 'Downloaded instantly and shared it everywhere — my friends are obsessed 🐾'",
-            "🔥 Trending: Mafia theme",
-            "💬 @nina: 'Better than my actual headshots'",
-            "♥ 1.2k loved Thor's portrait",
-            "💬 @emma_l: 'Set it as my phone wallpaper immediately ✨'",
-          ].concat([
-            "💬 @mia_p: 'I cried laughing'",
-            "♥ 312 just liked Cleo's Pawtoon",
-            "🎉 New Pawtoon every 7 seconds",
-            "💬 @james: 'Downloaded instantly and shared it everywhere — my friends are obsessed 🐾'",
-            "🔥 Trending: Mafia theme",
-            "💬 @nina: 'Better than my actual headshots'",
-            "♥ 1.2k loved Thor's portrait",
-            "💬 @emma_l: 'Set it as my phone wallpaper immediately ✨'",
-          ]).map((t, i) => (
-            <span key={i} className="text-sm font-medium">{t}</span>
-          ))}
-        </div>
       </div>
     </section>
   );

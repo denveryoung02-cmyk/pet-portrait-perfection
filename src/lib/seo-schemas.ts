@@ -69,7 +69,7 @@ export const homepageFAQSchema = {
       "name": "How long does the AI take to create a pet portrait?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "About 60 seconds. You will see your portrait preview before checkout.",
+        "text": "Just a few minutes from upload to download, so there's no waiting weeks for your portrait. You'll see a watermarked preview before you pay.",
       },
     },
     {
@@ -85,7 +85,7 @@ export const homepageFAQSchema = {
       "name": "Can I edit or redo the AI pet portrait?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes — you can regenerate up to 3 times for free before placing your order.",
+        "text": "You'll see a watermarked preview of your portrait before you pay. If a generation fails, you can tap Retry generation to try again.",
       },
     },
     {
