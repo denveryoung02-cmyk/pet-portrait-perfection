@@ -104,6 +104,14 @@ export const Route = createFileRoute("/blog/best-gifts-for-cat-lovers-2026")({
                 "text": "Consider a personalised portrait of their cat, a quality cat bed or scratching post, a treat subscription box, or a cosy cat-themed item for their home.",
               },
             },
+            {
+              "@type": "Question",
+              "name": "What's a good gift for a new cat owner?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Practical items work best for new owners — an automatic feeder, a scratching post, or a grooming kit. A custom portrait is also a lovely way to celebrate a new addition to the family.",
+              },
+            },
           ],
         }),
       },
