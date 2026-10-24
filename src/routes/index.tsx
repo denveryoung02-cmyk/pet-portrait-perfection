@@ -122,9 +122,9 @@ const themes = [
 ];
 
 const faqs = [
-  { q: "How long does the AI take?", a: "About 60 seconds. You'll see your caricature preview before checkout." },
-  { q: "What photos work best?", a: "Bright, well-lit photos where your pet's face is clearly visible. JPG or PNG, under 10MB." },
-  { q: "Can I edit the caricature?", a: "Yes — you can regenerate up to 3 times for free before placing your order." },
+  { q: "How long does the AI take to create a pet portrait?", a: "Just a few minutes from upload to download, so there's no waiting weeks for your portrait. You'll see a watermarked preview before you pay." },
+  { q: "What photos work best for an AI pet portrait?", a: "Bright, well-lit photos where your pet's face is clearly visible. JPG or PNG, under 10MB." },
+  { q: "Can I edit or redo the AI pet portrait?", a: "You'll see a watermarked preview of your portrait before you pay. If a generation fails, you can tap Retry generation to try again." },
 ];
 
 const beforeAfterPairs = [
@@ -184,7 +184,7 @@ function Home() {
               ))}
             </div>
             <div>
-              <div className="text-foreground font-semibold text-xs sm:text-sm">★★★★★ Loved by pet owners everywhere · Free to preview</div>
+              <div className="text-foreground font-semibold text-xs sm:text-sm">Free to preview</div>
             </div>
           </div>
         </div>
@@ -260,9 +260,9 @@ function Home() {
           </div>
           <div className="mt-14 grid md:grid-cols-3 gap-6">
             {[
-              { emoji: "⚡", text: "Ready in 60 seconds — see your portrait before you pay" },
+              { emoji: "⚡", text: "Ready in minutes, not weeks — see your portrait before you pay" },
               { emoji: "🎨", text: "4 art styles, 12 themes — find the perfect match for your pet" },
-              { emoji: "💝", text: "From £1.99 — the most affordable custom pet portrait available" },
+              { emoji: "💝", text: "From £1.99 for your own custom pet portrait" },
             ].map((item) => (
               <div key={item.emoji} className="rounded-3xl bg-card p-7 border border-border shadow-[var(--shadow-soft)] flex gap-4 items-start">
                 <div className="text-3xl shrink-0">{item.emoji}</div>
@@ -697,7 +697,7 @@ function HowItWorksSection() {
   const [mode, setMode] = useState<"pet" | "family">("pet");
 
   const petSteps = [
-    { n: "01", title: "Upload photo", desc: "Drag in any clear photo of your pet. We handle the rest.", emoji: "📸" },
+    { n: "01", title: "Upload photo", desc: "Pop in a clear photo of your own pet — your portrait is made from it.", emoji: "📸" },
     { n: "02", title: "AI creates caricature", desc: "Pick a theme — Royal, Superhero, Viking — and watch the magic.", emoji: "✨" },
     { n: "03", title: "Download instantly", desc: "Pay once, download your high-quality Hero Pack immediately.", emoji: "⚡" },
   ];

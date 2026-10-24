@@ -69,7 +69,7 @@ export const homepageFAQSchema = {
       "name": "How long does the AI take to create a pet portrait?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "About 60 seconds. You will see your portrait preview before checkout.",
+        "text": "Just a few minutes from upload to download, so there's no waiting weeks for your portrait. You'll see a watermarked preview before you pay.",
       },
     },
     {
@@ -77,7 +77,7 @@ export const homepageFAQSchema = {
       "name": "What photos work best for an AI pet portrait?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Bright, well-lit photos where your pet's face is clearly visible. JPG or PNG format, under 10MB. Front-facing photos give the best results.",
+        "text": "Bright, well-lit photos where your pet's face is clearly visible. JPG or PNG, under 10MB.",
       },
     },
     {
@@ -85,47 +85,7 @@ export const homepageFAQSchema = {
       "name": "Can I edit or redo the AI pet portrait?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes — you can regenerate up to 3 times for free before placing your order.",
-      },
-    },
-    {
-      "@type": "Question",
-      "name": "How much does a custom AI pet portrait cost?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Pawtoons AI pet portraits start from £1.99 for a single portrait, or £4.99 for all 4 styles. This is an introductory price for early customers.",
-      },
-    },
-    {
-      "@type": "Question",
-      "name": "What file format will I receive?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You receive a high-resolution digital download immediately after payment. The file is print-ready and suitable for printing, gifting, phone wallpapers, or sharing on social media.",
-      },
-    },
-    {
-      "@type": "Question",
-      "name": "Can I get an AI portrait of any type of pet?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Pawtoons works with any pet — dogs, cats, rabbits, hamsters, birds, and more. Simply upload a clear photo of your pet's face.",
-      },
-    },
-    {
-      "@type": "Question",
-      "name": "What art styles are available?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Four art styles are available: Oil Painting (rich, classical), Pixar/3D (fun and colourful), Comic Book (bold and graphic), and Graffiti Splash (vibrant street art). Each style works with all 12 portrait themes.",
-      },
-    },
-    {
-      "@type": "Question",
-      "name": "What portrait themes can I choose from?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Pawtoons offers 12 themes: Royal, Superhero, Viking Warrior, Pirate Captain, Wizard, Ballerina, Astronaut Explorer, Princess, Angel, Mermaid, Mafia Boss, and Flower Crown.",
+        "text": "You'll see a watermarked preview of your portrait before you pay. If a generation fails, you can tap Retry generation to try again.",
       },
     },
   ],
