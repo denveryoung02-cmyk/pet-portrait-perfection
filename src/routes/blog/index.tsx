@@ -22,6 +22,14 @@ export const Route = createFileRoute("/blog/")({
 
 const posts = [
   {
+    to: "/blog/christmas-gifts-for-pet-lovers-2026" as const,
+    title: "15 Christmas Gift Ideas for Pet Lovers in 2026",
+    excerpt:
+      "15 Christmas gift ideas for pet lovers in 2026, from cosy beds and puzzle toys to a custom pet portrait made from their own photo.",
+    date: "October 2026",
+    readTime: "4 min read",
+  },
+  {
     to: "/blog/best-gifts-for-dog-lovers-2026" as const,
     title: "21 Best Gifts for Dog Lovers in 2026",
     excerpt:

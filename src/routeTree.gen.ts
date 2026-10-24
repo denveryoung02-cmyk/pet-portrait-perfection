@@ -30,6 +30,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogCompleteGuideToAiPetPortraitsRouteImport } from './routes/blog/complete-guide-to-ai-pet-portraits'
+import { Route as BlogChristmasGiftsForPetLovers2026RouteImport } from './routes/blog/christmas-gifts-for-pet-lovers-2026'
 import { Route as BlogBestGiftsForDogLovers2026RouteImport } from './routes/blog/best-gifts-for-dog-lovers-2026'
 import { Route as BlogBestGiftsForCatLovers2026RouteImport } from './routes/blog/best-gifts-for-cat-lovers-2026'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -145,6 +146,12 @@ const BlogCompleteGuideToAiPetPortraitsRoute =
     path: '/blog/complete-guide-to-ai-pet-portraits',
     getParentRoute: () => rootRouteImport,
   } as any)
+const BlogChristmasGiftsForPetLovers2026Route =
+  BlogChristmasGiftsForPetLovers2026RouteImport.update({
+    id: '/blog/christmas-gifts-for-pet-lovers-2026',
+    path: '/blog/christmas-gifts-for-pet-lovers-2026',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BlogBestGiftsForDogLovers2026Route =
   BlogBestGiftsForDogLovers2026RouteImport.update({
     id: '/blog/best-gifts-for-dog-lovers-2026',
@@ -221,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/blog/best-gifts-for-cat-lovers-2026': typeof BlogBestGiftsForCatLovers2026Route
   '/blog/best-gifts-for-dog-lovers-2026': typeof BlogBestGiftsForDogLovers2026Route
+  '/blog/christmas-gifts-for-pet-lovers-2026': typeof BlogChristmasGiftsForPetLovers2026Route
   '/blog/complete-guide-to-ai-pet-portraits': typeof BlogCompleteGuideToAiPetPortraitsRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/favorites': typeof AuthenticatedDashboardFavoritesRoute
@@ -251,6 +259,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/blog/best-gifts-for-cat-lovers-2026': typeof BlogBestGiftsForCatLovers2026Route
   '/blog/best-gifts-for-dog-lovers-2026': typeof BlogBestGiftsForDogLovers2026Route
+  '/blog/christmas-gifts-for-pet-lovers-2026': typeof BlogChristmasGiftsForPetLovers2026Route
   '/blog/complete-guide-to-ai-pet-portraits': typeof BlogCompleteGuideToAiPetPortraitsRoute
   '/blog': typeof BlogIndexRoute
   '/dashboard/favorites': typeof AuthenticatedDashboardFavoritesRoute
@@ -284,6 +293,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/blog/best-gifts-for-cat-lovers-2026': typeof BlogBestGiftsForCatLovers2026Route
   '/blog/best-gifts-for-dog-lovers-2026': typeof BlogBestGiftsForDogLovers2026Route
+  '/blog/christmas-gifts-for-pet-lovers-2026': typeof BlogChristmasGiftsForPetLovers2026Route
   '/blog/complete-guide-to-ai-pet-portraits': typeof BlogCompleteGuideToAiPetPortraitsRoute
   '/blog/': typeof BlogIndexRoute
   '/_authenticated/dashboard/favorites': typeof AuthenticatedDashboardFavoritesRoute
@@ -317,6 +327,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/blog/best-gifts-for-cat-lovers-2026'
     | '/blog/best-gifts-for-dog-lovers-2026'
+    | '/blog/christmas-gifts-for-pet-lovers-2026'
     | '/blog/complete-guide-to-ai-pet-portraits'
     | '/blog/'
     | '/dashboard/favorites'
@@ -347,6 +358,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog/best-gifts-for-cat-lovers-2026'
     | '/blog/best-gifts-for-dog-lovers-2026'
+    | '/blog/christmas-gifts-for-pet-lovers-2026'
     | '/blog/complete-guide-to-ai-pet-portraits'
     | '/blog'
     | '/dashboard/favorites'
@@ -379,6 +391,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/blog/best-gifts-for-cat-lovers-2026'
     | '/blog/best-gifts-for-dog-lovers-2026'
+    | '/blog/christmas-gifts-for-pet-lovers-2026'
     | '/blog/complete-guide-to-ai-pet-portraits'
     | '/blog/'
     | '/_authenticated/dashboard/favorites'
@@ -410,6 +423,7 @@ export interface RootRouteChildren {
   UploadRoute: typeof UploadRoute
   BlogBestGiftsForCatLovers2026Route: typeof BlogBestGiftsForCatLovers2026Route
   BlogBestGiftsForDogLovers2026Route: typeof BlogBestGiftsForDogLovers2026Route
+  BlogChristmasGiftsForPetLovers2026Route: typeof BlogChristmasGiftsForPetLovers2026Route
   BlogCompleteGuideToAiPetPortraitsRoute: typeof BlogCompleteGuideToAiPetPortraitsRoute
   BlogIndexRoute: typeof BlogIndexRoute
 }
@@ -563,6 +577,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogCompleteGuideToAiPetPortraitsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/christmas-gifts-for-pet-lovers-2026': {
+      id: '/blog/christmas-gifts-for-pet-lovers-2026'
+      path: '/blog/christmas-gifts-for-pet-lovers-2026'
+      fullPath: '/blog/christmas-gifts-for-pet-lovers-2026'
+      preLoaderRoute: typeof BlogChristmasGiftsForPetLovers2026RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/best-gifts-for-dog-lovers-2026': {
       id: '/blog/best-gifts-for-dog-lovers-2026'
       path: '/blog/best-gifts-for-dog-lovers-2026'
@@ -688,6 +709,8 @@ const rootRouteChildren: RootRouteChildren = {
   UploadRoute: UploadRoute,
   BlogBestGiftsForCatLovers2026Route: BlogBestGiftsForCatLovers2026Route,
   BlogBestGiftsForDogLovers2026Route: BlogBestGiftsForDogLovers2026Route,
+  BlogChristmasGiftsForPetLovers2026Route:
+    BlogChristmasGiftsForPetLovers2026Route,
   BlogCompleteGuideToAiPetPortraitsRoute:
     BlogCompleteGuideToAiPetPortraitsRoute,
   BlogIndexRoute: BlogIndexRoute,
