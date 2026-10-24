@@ -104,6 +104,14 @@ export const Route = createFileRoute("/blog/best-gifts-for-dog-lovers-2026")({
                 "text": "Consider a personalised portrait of their dog, a quality dog bed or blanket, a subscription box for their dog, or an experience like a dog-friendly day out together.",
               },
             },
+            {
+              "@type": "Question",
+              "name": "What's a good gift for a new dog owner?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Practical items work best for new owners — a slow feeder bowl, training course, or grooming kit. A custom portrait is also a lovely way to celebrate a new addition to the family.",
+              },
+            },
           ],
         }),
       },
